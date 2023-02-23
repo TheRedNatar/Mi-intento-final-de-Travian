@@ -107,6 +107,25 @@ defmodule SatelliteTest do
     )
   end
 
+
+  @tag :tmp_dir
+  test "ServersTable.upsert_server upserts servers in ServersTable", %{
+    server_id: server_id,
+    tmp_dir: mnesia_dir
+  } do
+    today = Date.utc_today()
+    yesterday = Date.add(today, -1)
+    install(mnesia_dir)
+
+    assert(:ok == Satellite.ServersTable.upsert_server(server_id))
+    assert({:ok, [server_id]} == Satellite.ServersTable.get_servers())
+    assert({:ok, [server_id]} == Satellite.ServersTable.get_servers(today))
+    assert({:ok, []} == Satellite.ServersTable.get_servers(yesterday))
+  end
+
+
+
+
   defp install(mnesia_dir) do
     dir = File.mkdir_p!(mnesia_dir <> "/mnesia_dir")
     Application.put_env(:mnesia, :dir, dir)
