@@ -110,32 +110,4 @@ defmodule Satellite.MedusaTable do
         target_date_row == target_date,
         do: row
   end
-
-  # QLC for the query?
-  @spec get_unique_servers() :: {:ok, [TTypes.server_id()]} | {:error, any()}
-  def get_unique_servers() do
-    pattern = {@table_name, :_, :_, :_, :_}
-
-    func = fn -> :mnesia.match_object(pattern) end
-    result = for res <- :mnesia.activity(:transaction, func), uniq: true, do: elem(res, 2)
-    {:ok, result}
-  end
-
-  @spec get_unique_servers(target_date :: Date.t()) ::
-          {:ok, [TTypes.server_id()]} | {:error, any()}
-  def get_unique_servers(target_date) do
-    pattern = {@table_name, :_, :_, target_date, :_}
-
-    func = fn -> :mnesia.match_object(pattern) end
-    result = for res <- :mnesia.activity(:transaction, func), uniq: true, do: elem(res, 2)
-    {:ok, result}
-  end
-
-  # -include_lib("stdlib/include/qlc.hrl").
-
-  # select_distinct()->
-  #     QH = qlc:q( [K || {_TName, K, _V} <- mnesia:table(test)], {unique, true}),
-  #     F = fun() -> qlc:eval(QH) end,
-  #     {atomic, Result} = mnesia:transaction(F),
-  #     Result.
 end

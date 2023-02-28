@@ -32,30 +32,21 @@ defmodule Satellite.ServersTable do
     :mnesia.create_table(@table_name, options)
   end
 
-  @spec upsert_server(server_id :: TTypes.server_id()) :: :ok | {:error, any()}
-  def upsert_server(server_id) do
+  @spec upsert_server!(server_id :: TTypes.server_id()) :: :ok
+  def upsert_server!(server_id) do
 
     now = DateTime.now!("Etc/UTC")
     f = fn -> :mnesia.write({@table_name, server_id, now}) end
-
-    case :mnesia.activity({:transaction, 10}, f) do
-      :ok -> :ok
-      {:atomic, :ok} -> :ok
-      {:aborted, reason} -> {:error, reason}
-    end
+    :mnesia.activity({:transaction, 10}, f)
   end
 
-  @spec get_servers(target_date :: Date.t()) :: {:ok, [TTypes.server_id()]} | {:error, any()}
-  def get_servers(target_date \\ Date.utc_today()) do
+  @spec get_servers!(target_date :: Date.t()) :: [TTypes.server_id()]
+  def get_servers!(target_date \\ Date.utc_today()) do
 
     all = {@table_name, :_, :_}
     f = fn -> :mnesia.match_object(all) end
-
-    case :mnesia.activity({:transaction, 10}, f) do
-      res -> {:ok, filter_servers(res, target_date)}
-      {:atomic, res} -> {:ok, filter_servers(res, target_date)}
-      {:aborted, reason} -> {:error, reason}
-    end
+    servers = :mnesia.activity({:transaction, 10}, f)
+    filter_servers(servers, target_date)
   end
 
   defp same_date(date1, date2), do: Date.compare(date1, date2) == :eq
