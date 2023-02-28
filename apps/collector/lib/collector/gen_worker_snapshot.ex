@@ -194,6 +194,7 @@ defmodule Collector.GenWorker.Snapshot do
           type_collection: :snapshot_server_metadata,
           server_id: server_id
         })
+
         {:error, reason}
 
       {:step_9, {:error, reason}} ->
@@ -203,8 +204,8 @@ defmodule Collector.GenWorker.Snapshot do
           type_collection: :snapshot_server_metadata,
           server_id: server_id
         })
-        {:error, reason}
 
+        {:error, reason}
     end
   end
 

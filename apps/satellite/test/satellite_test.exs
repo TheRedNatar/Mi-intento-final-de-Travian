@@ -86,7 +86,6 @@ defmodule SatelliteTest do
     )
   end
 
-
   @tag :tmp_dir
   test "ServersTable.upsert_server! upserts servers in ServersTable", %{
     server_id: server_id,
@@ -101,9 +100,6 @@ defmodule SatelliteTest do
     assert([server_id] == Satellite.ServersTable.get_servers!(today))
     assert([] == Satellite.ServersTable.get_servers!(yesterday))
   end
-
-
-
 
   defp install(mnesia_dir) do
     dir = File.mkdir_p!(mnesia_dir <> "/mnesia_dir")

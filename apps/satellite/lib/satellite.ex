@@ -5,7 +5,8 @@ defmodule Satellite do
 
   @spec install(nodes :: [atom()]) :: :ok | {:error, any()}
   def install(nodes) do
-      :rpc.multicall(nodes, :application, :stop, [:mnesia])
+    :rpc.multicall(nodes, :application, :stop, [:mnesia])
+
     with(
       {:step_1, :ok} <- {:step_1, :mnesia.delete_schema(nodes)},
       {:step_2, :ok} <- {:step_2, :mnesia.create_schema(nodes)},
