@@ -34,3 +34,7 @@ erl_crash.dump
 
 # Ignore assets folder
 /apps/front/priv/static/assets
+
+# Ignore test folders
+/apps/*/tmp
+/apps/*/ok

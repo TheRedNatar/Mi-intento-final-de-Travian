@@ -67,27 +67,6 @@ defmodule SatelliteTest do
   end
 
   @tag :tmp_dir
-  test "MedusaTable.get_unique_servers returns the unique servers in medusa_table", %{
-    medusa_rows: mr = [_one, two],
-    server_id: server_id,
-    tmp_dir: mnesia_dir
-  } do
-    install(mnesia_dir)
-    new_server_id = "https://ts16.x1.asia.travian.com"
-    new_player_id = "#{new_server_id}--P--New"
-    new_two = Map.put(two, :server_id, new_server_id) |> Map.put(:player_id, new_player_id)
-
-    assert([:ok, :ok] == Satellite.MedusaTable.insert_predictions(mr))
-    assert({:ok, [server_id]} == Satellite.MedusaTable.get_unique_servers())
-    assert([:ok] == Satellite.MedusaTable.insert_predictions([new_two]))
-
-    {:ok, output} = Satellite.MedusaTable.get_unique_servers()
-
-    expected = [new_server_id, server_id]
-    for x <- expected, do: assert(x in output)
-  end
-
-  @tag :tmp_dir
   test "MedusaTable.get_predictions_by_server fetch only rows based on target_date with Date.utc_today as default",
        %{
          medusa_rows: [one, two],
@@ -105,6 +84,21 @@ defmodule SatelliteTest do
     assert(
       [yesterday_row] == Satellite.MedusaTable.get_predictions_by_server(server_id, yesterday)
     )
+  end
+
+  @tag :tmp_dir
+  test "ServersTable.upsert_server! upserts servers in ServersTable", %{
+    server_id: server_id,
+    tmp_dir: mnesia_dir
+  } do
+    today = Date.utc_today()
+    yesterday = Date.add(today, -1)
+    install(mnesia_dir)
+
+    assert(:ok == Satellite.ServersTable.upsert_server!(server_id))
+    assert([server_id] == Satellite.ServersTable.get_servers!())
+    assert([server_id] == Satellite.ServersTable.get_servers!(today))
+    assert([] == Satellite.ServersTable.get_servers!(yesterday))
   end
 
   defp install(mnesia_dir) do

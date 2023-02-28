@@ -2,7 +2,7 @@ defmodule Front.MedusaController do
   use Front, :controller
 
   def index(conn, _params) do
-    {:ok, servers} = Satellite.MedusaTable.get_unique_servers()
+    servers = Satellite.ServersTable.get_servers!(Date.utc_today())
     render(conn, "index.html", servers: servers)
   end
 

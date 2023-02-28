@@ -122,7 +122,12 @@ defmodule Collector.GenWorker.Snapshot do
          )},
       GenServer.cast(Collector.GenCollector, {:players_snapshot_computed, server_id, self()}),
       {:step_8, :ok} <- {:step_8, store_server_metadata_if_needed(root_folder, server_id)},
-      GenServer.cast(Collector.GenCollector, {:server_metadata_computed, server_id, self()})
+      GenServer.cast(Collector.GenCollector, {:server_metadata_computed, server_id, self()}),
+      {:step_9, :ok} <- {:step_9, Satellite.ServersTable.upsert_server!(server_id)},
+      Logger.debug(%{
+        msg: "Collector step 9, store server_id in ServersTable",
+        server_id: server_id
+      })
     ) do
       Logger.info(%{
         msg: "Collector snapshot success",
@@ -185,6 +190,16 @@ defmodule Collector.GenWorker.Snapshot do
       {:step_8, {:error, reason}} ->
         Logger.info(%{
           msg: "Collector unable to store server_metadata",
+          reason: reason,
+          type_collection: :snapshot_server_metadata,
+          server_id: server_id
+        })
+
+        {:error, reason}
+
+      {:step_9, {:error, reason}} ->
+        Logger.info(%{
+          msg: "Collector unable to store server_id in ServersTable",
           reason: reason,
           type_collection: :snapshot_server_metadata,
           server_id: server_id
