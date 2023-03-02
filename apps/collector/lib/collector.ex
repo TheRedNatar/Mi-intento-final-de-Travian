@@ -80,10 +80,22 @@ defmodule Collector do
   def server_metadata_from_format(encoded_server_metadata),
     do: :erlang.binary_to_term(encoded_server_metadata)
 
+
+  @spec agg_server_to_format(agg_server :: Collector.AggServer.t()) :: binary()
+  def agg_server_to_format(agg_server),
+    do: :erlang.term_to_binary(agg_server, [:compressed, :deterministic])
+
+  @spec agg_server_from_format(encoded_agg_server :: binary()) :: Collector.AggServer.t()
+  def agg_server_from_format(encoded_agg_server), do: :erlang.binary_to_term(encoded_agg_server)
+
+
+
   def snapshot_options(), do: {"snapshot", ".c6bert"}
   def snapshot_errors_options(), do: {"snapshot_errors", ".c6bert"}
   def raw_snapshot_options(), do: {"raw_snapshot", ".c6bert"}
   def metadata_options(), do: {"metadata", ".bert"}
   def server_metadata_options(), do: {"server_metadata", ".bert"}
   def players_snapshot_options(), do: {"players_snapshot", ".c6bert"}
+
+  def agg_server_options(), do: {"agg_server", ".c6bert"}
 end

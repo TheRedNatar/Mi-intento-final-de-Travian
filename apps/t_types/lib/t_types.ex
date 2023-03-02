@@ -165,4 +165,21 @@ defmodule TTypes do
 
   @spec distance401(x1 :: float(), y1 :: float(), x2 :: float(), y2 :: float()) :: float()
   def distance401(x1, y1, x2, y2), do: distance(401, 401, x1, y1, x2, y2)
+
+  
+  @spec get_metadata_from_server_id(server_id :: server_id()) :: {:ok, {String.t(), String.t(), String.t()}} | {:error, :not_splitable}
+  def get_metadata_from_server_id(server_id) do
+    case String.split(server_id, ".") do
+      [contraction, speed_string, region | _] -> {:ok, {contraction, speed_string, region}}
+      _ -> {:error, :not_splitable}
+    end
+  end
+
+  @spec speed_string_to_int(string_speed :: String.t()) :: pos_integer()
+  def speed_string_to_int(<<"x", speed::binary>>), do: String.to_integer(speed)
+
+  @spec speed_int_to_string(int_speed :: pos_integer()) :: String.t()
+  def speed_int_to_string(int_speed), do: "x" <> Integer.to_string(int_speed)
+
+
 end
