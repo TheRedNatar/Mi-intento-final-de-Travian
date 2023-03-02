@@ -60,7 +60,7 @@ defmodule TTypes do
   @typedoc "This attribute defines if the village is a capital."
   @type is_capital() :: boolean() | nil
 
-  @typedoc "If the server is type `Conquer`, this attribute defines if the village is a city?."
+  @typedoc "If the server is type `Conquer`, this attribute defines if the village is a [city](https://blog.travian.com/2014/04/cities-the-evolution-of-villages)."
   @type is_city() :: boolean() | nil
 
   @typedoc "Row information in the snapshot."
