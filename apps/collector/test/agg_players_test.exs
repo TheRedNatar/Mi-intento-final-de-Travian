@@ -2,6 +2,39 @@ defmodule Collector.AggPlayersTest do
   use ExUnit.Case
 
 
+
+
+
+
+
+  test "AggPlayers.process() while init defines de estimated_tribe and estimated starting_date " do
+    target_dt = DateTime.utc_now()
+    player_id = "p1"
+    server_id = "server1"
+
+new_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 2, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
+
+      init_agg_players = [p1, p2] = Collector.AggPlayers.process(target_dt, server_id, new_player_snapshot) |> Enum.sort_by(&(&1.player_id))
+
+      for agg_player <- init_agg_players, do: assert(is_struct(agg_player, Collector.AggPlayers))
+
+      IO.inspect(init_agg_players)
+
+      assert(p1.target_dt == target_dt)
+      assert(p1.server_id == server_id)
+      assert(p1.estimated_starting_date == DateTime.to_date(target_dt))
+      assert(p1.estimated_tribe == 2)
+
+      assert(p2.target_dt == target_dt)
+      assert(p2.server_id == server_id)
+      assert(p2.estimated_starting_date == DateTime.to_date(target_dt))
+      assert(p2.estimated_tribe == 3)
+  end
+
+
   test "AggPlayers.increment() defines a village as conquered if it is new for the player and it was owned by another player in the previous snapshot and the value of new_village_conquered is the count of these villages" do
     target_dt = DateTime.utc_now()
     player_id = "p1"
