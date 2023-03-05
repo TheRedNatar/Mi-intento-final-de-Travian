@@ -7,7 +7,52 @@ defmodule Collector.AggPlayersTest do
 
 
 
-  test "AggPlayers.process() while init defines de estimated_tribe and estimated starting_date " do
+  test "AggPlayers.process() generate a new increment for no new players or create an init for the new ones" do
+    target_dt = DateTime.utc_now()
+    new_target_dt = DateTime.add(target_dt, 3600*24)
+    server_id = "server1"
+
+new_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p2", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 4, village_id: "p4", village_server_id: 19996, village_name: "a3", player_id: "p3", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}
+    ]
+prev_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 2, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
+
+
+      init_agg_players = Collector.AggPlayers.process(target_dt, server_id, prev_player_snapshot)
+      new_agg_players = [p1, p2, p3] = Collector.AggPlayers.process(new_target_dt, server_id, new_player_snapshot, prev_player_snapshot, init_agg_players) |> Enum.sort_by(&(&1.player_id))
+
+
+      for agg_player <- new_agg_players, do: assert(is_struct(agg_player, Collector.AggPlayers))
+
+
+      assert(p1.target_dt == new_target_dt)
+      assert(p1.server_id == server_id)
+      assert(p1.estimated_starting_date == DateTime.to_date(target_dt))
+      assert(p1.estimated_tribe == 2)
+      last_inc_p1 = hd(p1.increment)
+      assert(last_inc_p1.lost_village_conquered == 1)
+
+      assert(p2.target_dt == new_target_dt)
+      assert(p2.server_id == server_id)
+      assert(p2.estimated_starting_date == DateTime.to_date(target_dt))
+      assert(p2.estimated_tribe == 3)
+      last_inc_p2 = hd(p2.increment)
+      assert(last_inc_p2.population_increase_by_conquered == 964)
+
+      assert(p3.target_dt == new_target_dt)
+      assert(p3.server_id == server_id)
+      assert(p3.estimated_starting_date == DateTime.to_date(new_target_dt))
+      assert(p3.estimated_tribe == 4)
+  end
+
+
+  test "AggPlayers.process() while init defines de estimated_tribe and estimated starting_date for all the players" do
     target_dt = DateTime.utc_now()
     player_id = "p1"
     server_id = "server1"
@@ -20,8 +65,6 @@ new_player_snapshot = [
       init_agg_players = [p1, p2] = Collector.AggPlayers.process(target_dt, server_id, new_player_snapshot) |> Enum.sort_by(&(&1.player_id))
 
       for agg_player <- init_agg_players, do: assert(is_struct(agg_player, Collector.AggPlayers))
-
-      IO.inspect(init_agg_players)
 
       assert(p1.target_dt == target_dt)
       assert(p1.server_id == server_id)
