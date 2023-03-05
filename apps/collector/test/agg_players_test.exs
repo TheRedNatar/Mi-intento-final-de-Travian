@@ -92,7 +92,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.new_village_conquered == 1)
@@ -111,7 +111,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.new_village_founded == 1)
@@ -129,7 +129,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p1", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.lost_village_destroyed == 2)
@@ -149,7 +149,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p1", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.lost_village_conquered == 1)
@@ -168,7 +168,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.total_villages == 3)
@@ -187,7 +187,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.total_population == 2161)
@@ -207,7 +207,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_increase == 36)
@@ -227,7 +227,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_increase_by_founded == 1200)
@@ -247,7 +247,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p2", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_increase_by_conquered == 2164)
@@ -267,7 +267,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_decrease == 61)
@@ -287,7 +287,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_decrease_by_conquered == 964)
@@ -306,7 +306,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 950, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.population_decrease_by_destroyed == 950)
@@ -326,7 +326,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.n_villages_with_population_increase == 2)
@@ -346,7 +346,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.n_villages_with_population_decrease == 1)
@@ -366,7 +366,7 @@ prev_player_snapshot = [
       %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
       %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
 
-      inc = Collector.AggPlayers.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, player_id, new_player_snapshot, prev_player_snapshot)
       assert(is_struct(inc, Collector.AggPlayers.Increment))
       assert(inc.target_dt == target_dt)
       assert(inc.n_villages_with_population_stuck == 2)
@@ -401,7 +401,7 @@ expected_output =
       lost_village_destroyed: nil
     }
 
-      inc = Collector.AggPlayers.increment(target_dt, new_player_snapshot)
+      inc = Collector.AggPlayers.Increment.increment(target_dt, new_player_snapshot)
       assert(expected_output == inc)
   end
 
