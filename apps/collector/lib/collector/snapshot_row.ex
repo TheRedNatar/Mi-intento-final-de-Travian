@@ -1,6 +1,6 @@
 defmodule Collector.SnapshotRow do
   @enforce_keys [
-    :grid_position,
+    :map_id,
     :x,
     :y,
     :tribe,
@@ -21,7 +21,7 @@ defmodule Collector.SnapshotRow do
   ]
 
   defstruct [
-    :grid_position,
+    :map_id,
     :x,
     :y,
     :tribe,
@@ -42,7 +42,7 @@ defmodule Collector.SnapshotRow do
   ]
 
   @type t :: %__MODULE__{
-          grid_position: TTypes.grid_position(),
+          map_id: TTypes.map_id(),
           x: TTypes.x(),
           y: TTypes.y(),
           tribe: TTypes.tribe_integer(),
@@ -65,12 +65,12 @@ defmodule Collector.SnapshotRow do
   @spec apply(server_id :: TTypes.server_id(), TTypes.snapshot_row()) :: t()
   def apply(
         server_id,
-        {grid_position, x_position, y_position, tribe, village_server_id, village_name,
+        {map_id, x_position, y_position, tribe, village_server_id, village_name,
          player_server_id, player_name, alliance_server_id, alliance_name, population, region,
          is_capital, is_city, victory_points}
       ) do
     %__MODULE__{
-      grid_position: grid_position,
+      map_id: map_id,
       x: x_position,
       y: y_position,
       tribe: tribe,
