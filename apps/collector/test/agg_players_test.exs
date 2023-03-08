@@ -7,10 +7,111 @@ defmodule Collector.AggPlayersTest do
     target_date = Date.utc_today()
     server_id = "server1"
 
-    assert(
-      {:error, {"unable to open the file", :enoent}} ==
-        Collector.AggPlayers.run(root_folder, server_id, target_date)
-    )
+    {atom_error, {string_agg_open, _}} =
+      Collector.AggPlayers.run(root_folder, server_id, target_date)
+
+    assert(atom_error == :error)
+    assert(string_agg_open == "Unable to open target_date snapshot")
+  end
+
+  @tag :tmp_dir
+  test "AggPlayers.run() if there is previous snapshot but not previous agg_players returns error",
+       %{tmp_dir: root_folder} do
+    target_date = Date.utc_today()
+    prev_date = Date.add(target_date, -1)
+    server_id = "server1"
+
+    new_player_snapshot = [
+      %Collector.SnapshotRow{
+        map_id: 20,
+        x: -181,
+        y: 200,
+        tribe: 2,
+        village_id: "v1",
+        village_server_id: 19995,
+        village_name: "n1",
+        player_id: "p1",
+        player_server_id: 361,
+        player_name: "opc",
+        alliance_id: "a1",
+        alliance_server_id: 8,
+        alliance_name: "WW",
+        population: 961,
+        region: nil,
+        is_capital: false,
+        is_city: nil,
+        victory_points: nil
+      },
+      %Collector.SnapshotRow{
+        map_id: 49,
+        x: -152,
+        y: 200,
+        tribe: 1,
+        village_id: "p2",
+        village_server_id: 19702,
+        village_name: "a2",
+        player_id: "p2",
+        player_server_id: 416,
+        player_name: "opc",
+        alliance_id: "a1",
+        alliance_server_id: 8,
+        alliance_name: "WW",
+        population: 964,
+        region: nil,
+        is_capital: false,
+        is_city: nil,
+        victory_points: nil
+      },
+      %Collector.SnapshotRow{
+        map_id: 30,
+        x: -151,
+        y: 180,
+        tribe: 3,
+        village_id: "p3",
+        village_server_id: 19996,
+        village_name: "a3",
+        player_id: "p2",
+        player_server_id: 361,
+        player_name: "laskdj",
+        alliance_id: "a1",
+        alliance_server_id: 8,
+        alliance_name: "alskj",
+        population: 1200,
+        region: nil,
+        is_capital: false,
+        is_city: nil,
+        victory_points: nil
+      },
+      %Collector.SnapshotRow{
+        map_id: 30,
+        x: -151,
+        y: 180,
+        tribe: 4,
+        village_id: "p4",
+        village_server_id: 19996,
+        village_name: "a3",
+        player_id: "p3",
+        player_server_id: 361,
+        player_name: "laskdj",
+        alliance_id: "a1",
+        alliance_server_id: 8,
+        alliance_name: "alskj",
+        population: 1200,
+        region: nil,
+        is_capital: false,
+        is_city: nil,
+        victory_points: nil
+      }
+    ]
+
+    assert(:ok == Collector.store(root_folder, server_id, new_player_snapshot, prev_date))
+    assert(:ok == Collector.store(root_folder, server_id, new_player_snapshot, target_date))
+
+    {atom_error, {string_agg_open, _}} =
+      Collector.AggPlayers.run(root_folder, server_id, target_date)
+
+    assert(atom_error == :error)
+    assert(string_agg_open == "Unable to open prev_date agg_players")
   end
 
   @tag :tmp_dir
@@ -692,7 +793,6 @@ defmodule Collector.AggPlayersTest do
 
   test "AggPlayers.process() while init defines de estimated_tribe and estimated starting_date for all the players" do
     target_dt = DateTime.utc_now()
-    player_id = "p1"
     server_id = "server1"
 
     new_player_snapshot = [
@@ -1268,7 +1368,7 @@ defmodule Collector.AggPlayersTest do
     assert(inc.lost_village_conquered == 1)
   end
 
-  test "AggPlayers.increment() defines total_villages as the count of the villages in the new snapshot " do
+  test "AggPlayers.increment() defines total_villages as the count of the villages owned by the player in the new snapshot " do
     target_dt = DateTime.utc_now()
     player_id = "p1"
 
@@ -1281,7 +1381,7 @@ defmodule Collector.AggPlayersTest do
         village_id: "v1",
         village_server_id: 19995,
         village_name: "n1",
-        player_id: "p1",
+        player_id: "p2",
         player_server_id: 361,
         player_name: "opc",
         alliance_id: "a1",
@@ -1388,10 +1488,10 @@ defmodule Collector.AggPlayersTest do
 
     assert(is_struct(inc, Collector.AggPlayers.Increment))
     assert(inc.target_dt == target_dt)
-    assert(inc.total_villages == 3)
+    assert(inc.total_villages == 2)
   end
 
-  test "AggPlayers.increment() defines total_population as the sum of village's populations in the new snapshot" do
+  test "AggPlayers.increment() defines total_population as the sum of village's populations owned by the player in the new snapshot" do
     target_dt = DateTime.utc_now()
     player_id = "p1"
 
@@ -1404,7 +1504,7 @@ defmodule Collector.AggPlayersTest do
         village_id: "v1",
         village_server_id: 19995,
         village_name: "n1",
-        player_id: "p1",
+        player_id: "p2",
         player_server_id: 361,
         player_name: "opc",
         alliance_id: "a1",
@@ -1422,6 +1522,26 @@ defmodule Collector.AggPlayersTest do
         y: 180,
         tribe: 3,
         village_id: "p3",
+        village_server_id: 19996,
+        village_name: "a3",
+        player_id: "p1",
+        player_server_id: 361,
+        player_name: "laskdj",
+        alliance_id: "a1",
+        alliance_server_id: 8,
+        alliance_name: "alskj",
+        population: 1200,
+        region: nil,
+        is_capital: false,
+        is_city: nil,
+        victory_points: nil
+      },
+      %Collector.SnapshotRow{
+        map_id: 30,
+        x: -151,
+        y: 180,
+        tribe: 3,
+        village_id: "v5",
         village_server_id: 19996,
         village_name: "a3",
         player_id: "p1",
@@ -1511,7 +1631,7 @@ defmodule Collector.AggPlayersTest do
 
     assert(is_struct(inc, Collector.AggPlayers.Increment))
     assert(inc.target_dt == target_dt)
-    assert(inc.total_population == 2161)
+    assert(inc.total_population == 2400)
   end
 
   test "AggPlayers.increment() defines population_increase as the sum of village's populations increment if this increment is positive" do

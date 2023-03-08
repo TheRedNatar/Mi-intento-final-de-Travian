@@ -78,9 +78,11 @@ defmodule Collector.AggPlayers.Increment do
     tuples_of_villages_keeped =
       create_tuples(player_id, new_player_snapshot, prev_player_snapshot)
 
+    new_own_villages = for row <- new_player_snapshot, row.player_id == player_id, do: row
+
     %__MODULE__{
       target_dt: target_dt,
-      total_population: sum_pop(new_player_snapshot),
+      total_population: sum_pop(new_own_villages),
       population_increase:
         Enum.filter(tuples_of_villages_keeped, fn {_v_id, pop_inc} -> pop_inc > 0 end)
         |> Enum.map(&elem(&1, 1))
@@ -100,7 +102,7 @@ defmodule Collector.AggPlayers.Increment do
       population_decrease_by_destroyed:
         Enum.filter(prev_player_snapshot, &(&1.village_id in village_ids_lost_destroyed))
         |> sum_pop(),
-      total_villages: length(new_player_snapshot),
+      total_villages: length(new_own_villages),
       n_villages_with_population_increase:
         Enum.filter(tuples_of_villages_keeped, fn {_v_id, pop_inc} -> pop_inc > 0 end)
         |> Enum.count(),

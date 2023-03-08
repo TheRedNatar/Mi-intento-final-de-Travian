@@ -60,14 +60,17 @@ defmodule Collector.AggPlayers do
           :ok | {:error, any()}
   def run(root_folder, server_id, target_date) do
     with(
-      {:ok, new_snapshot} <- Collector.open(root_folder, server_id, target_date),
-      {{:ok, prev_snapshot}, {:ok, prev_agg_players}} <-
-        open_option_prev_common_data(root_folder, server_id)
+      {:a, {:ok, new_snapshot}} <- {:a, Collector.open(root_folder, server_id, target_date)},
+      prev_date = get_prev_date(root_folder, server_id, target_date),
+      {:b, {:ok, prev_snapshot}} <-
+        {:b, open_option(prev_date, fn -> Collector.open(root_folder, server_id, prev_date) end)},
+      {:c, {:ok, prev_agg_players}} <-
+        {:c, open_option(prev_date, fn -> open(root_folder, server_id, prev_date) end)}
     ) do
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
-      case {prev_snapshot, prev_agg_players} do
-        {nil, nil} ->
+      case prev_date do
+        nil ->
           agg_players = process(target_dt, server_id, new_snapshot)
           store(root_folder, server_id, agg_players, target_date)
 
@@ -77,19 +80,32 @@ defmodule Collector.AggPlayers do
 
           store(root_folder, server_id, agg_players, target_date)
       end
+    else
+      {:a, {:error, reason}} -> {:error, {"Unable to open target_date snapshot", reason}}
+      {:b, {:error, reason}} -> {:error, {"Unable to open prev_date snapshot", reason}}
+      {:c, {:error, reason}} -> {:error, {"Unable to open prev_date agg_players", reason}}
     end
   end
 
-  defp open_option_prev_common_data(root_folder, server_id) do
+  defp open_option(nil, _open_function), do: {:ok, nil}
+
+  defp open_option(_target_date, open_function) do
+    open_function.()
+  end
+
+  defp get_prev_date(root_folder, server_id, target_date) do
     case Storage.list_dates(root_folder, server_id, Collector.snapshot_options()) do
-      [_target_date] ->
-        {{:ok, nil}, {:ok, nil}}
+      [] ->
+        nil
 
-      available_snapshot_dates ->
-        [_target_date, prev_date | _] = Enum.sort(available_snapshot_dates, {:desc, Date})
-
-        {Collector.open(root_folder, server_id, prev_date),
-         open(root_folder, server_id, prev_date)}
+      dates ->
+        case dates
+             |> Enum.filter(fn d -> Date.compare(target_date, d) == :gt end)
+             |> Enum.sort({:desc, Date})
+             |> Enum.take(1) do
+          [] -> nil
+          [prev_date] -> prev_date
+        end
     end
   end
 

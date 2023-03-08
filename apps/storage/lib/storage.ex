@@ -167,9 +167,8 @@ defmodule Storage do
   end
 
   defp filename_to_date(
-         filename =
-           <<"date_", s_year::binary-size(4), s_month::binary-size(2), s_day::binary-size(2),
-             _::binary>>
+         <<"date_", s_year::binary-size(4), s_month::binary-size(2), s_day::binary-size(2),
+           _::binary>>
        ) do
     year = String.to_integer(s_year)
     month = String.to_integer(s_month)
