@@ -97,7 +97,7 @@ defmodule Collector do
         ) :: :ok | {:error, any()}
   def store(root_folder, server_id, snapshot, target_date) do
     encoded = snapshot_to_format(snapshot)
-    Storage.store(root_folder, server_id, snapshot_options, encoded, target_date)
+    Storage.store(root_folder, server_id, snapshot_options(), encoded, target_date)
   end
 
   def snapshot_options(), do: {"snapshot", ".c6bert"}
