@@ -9,6 +9,27 @@ defmodule StorageTest do
     %{server_id: "https://ts8.x1.europe.travian.com", flow_options: flow_options}
   end
 
+
+  @tag :tmp_dir
+  test "list_dates returns a list of dates available for a given flow_options", %{
+    tmp_dir: tmp_dir,
+    flow_options: flow_options = {flow_name, flow_extension}
+  } do
+    identifier = "server_1"
+    root_folder = tmp_dir
+    content = "alishdoifjasldjflk "
+
+    target_date = Date.utc_today()
+    yesterday = Date.add(target_date, -1)
+
+    assert([] == Storage.list_dates(root_folder, identifier, flow_options))
+    :ok = Storage.store(root_folder, identifier, flow_options, content, target_date)
+    assert([target_date] == Storage.list_dates(root_folder, identifier, flow_options))
+    :ok = Storage.store(root_folder, identifier, flow_options, content, yesterday)
+    assert([target_date, yesterday] == Storage.list_dates(root_folder, identifier, flow_options) |> Enum.sort({:desc, Date}))
+  end
+
+
   @tag :tmp_dir
   test "file is stored in the right path as global if :global as identifier", %{
     tmp_dir: tmp_dir,
