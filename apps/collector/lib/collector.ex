@@ -80,7 +80,8 @@ defmodule Collector do
   def server_metadata_from_format(encoded_server_metadata),
     do: :erlang.binary_to_term(encoded_server_metadata)
 
-  @spec open(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) :: {:ok, [TTypes.enriched_row()]} | {:error, any()}
+  @spec open(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
+          {:ok, [TTypes.enriched_row()]} | {:error, any()}
   def open(root_folder, server_id, target_date) do
     case Storage.open(root_folder, server_id, snapshot_options(), target_date) do
       {:ok, {_, encoded}} -> {:ok, snapshot_from_format(encoded)}
@@ -88,7 +89,12 @@ defmodule Collector do
     end
   end
 
-  @spec store(root_folder :: String.t(), server_id :: TTypes.server_id(), snapshot :: [TTypes.enriched_row()], target_date :: Date.t()) :: :ok | {:error, any()}
+  @spec store(
+          root_folder :: String.t(),
+          server_id :: TTypes.server_id(),
+          snapshot :: [TTypes.enriched_row()],
+          target_date :: Date.t()
+        ) :: :ok | {:error, any()}
   def store(root_folder, server_id, snapshot, target_date) do
     encoded = snapshot_to_format(snapshot)
     Storage.store(root_folder, server_id, snapshot_options, encoded, target_date)
