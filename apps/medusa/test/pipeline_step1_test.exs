@@ -4,7 +4,7 @@ defmodule Medusa.Pipeline.Step1Test do
 
   test "Analice one village" do
     input = {~D[2022-01-02], [%{
-        grid_position: 1,
+        map_id: 1,
         x: 1,
         y: 2,
         tribe: 1,
@@ -37,7 +37,7 @@ defmodule Medusa.Pipeline.Step1Test do
   test "Analice two village of the same player" do
 
     input = {~D[2022-01-02], [%{
-        grid_position: 1,
+        map_id: 1,
         x: 1,
         y: 2,
         tribe: 1,
@@ -49,7 +49,7 @@ defmodule Medusa.Pipeline.Step1Test do
         alliance_name: "alliance_name",
         population: 39
       }, %{
-        grid_position: 3,
+        map_id: 3,
         x: 0,
         y: 2,
         tribe: 2,

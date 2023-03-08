@@ -4,7 +4,7 @@ defmodule PlayersSnapshotTest do
   test "PlayersSnapshot.group group all the enriched_rows by player and adds extra fields" do
     input = [
       %Collector.SnapshotRow{
-        grid_position: 20,
+        map_id: 20,
         x: -181,
         y: 200,
         tribe: 2,
@@ -24,7 +24,7 @@ defmodule PlayersSnapshotTest do
         victory_points: nil
       },
       %Collector.SnapshotRow{
-        grid_position: 49,
+        map_id: 49,
         x: -152,
         y: 200,
         tribe: 1,
@@ -44,7 +44,7 @@ defmodule PlayersSnapshotTest do
         victory_points: nil
       },
       %Collector.SnapshotRow{
-        grid_position: 30,
+        map_id: 30,
         x: -151,
         y: 180,
         tribe: 3,
