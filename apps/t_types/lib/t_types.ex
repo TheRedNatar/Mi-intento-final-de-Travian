@@ -33,7 +33,7 @@ defmodule TTypes do
   @typedoc "Alliance's name. It can be modified during the server time."
   @type alliance_name :: String.t()
 
-  @type villages_attrs_inmutable :: x() | y() | grid_position() | region()
+  @type villages_attrs_inmutable :: x() | y() | map_id() | region()
   @type villages_attrs_mutable :: tribe_integer() | population()
 
   @typedoc "Attribute related to the `village`"
@@ -49,7 +49,7 @@ defmodule TTypes do
   @type y :: integer()
 
   @typedoc "Number of the field in the grid. It starts counting from the top left of the grid."
-  @type grid_position :: pos_integer()
+  @type map_id :: pos_integer()
 
   @typedoc "If the server is type `Conquer`, this attribute defines the region where the village is."
   @type region() :: String.t() | nil
@@ -65,7 +65,7 @@ defmodule TTypes do
 
   @typedoc "Row information in the snapshot."
   @type snapshot_row :: {
-          grid_position(),
+          map_id(),
           x(),
           y(),
           tribe_integer(),
@@ -83,7 +83,7 @@ defmodule TTypes do
         }
 
   @type enriched_row :: %{
-          grid_position: grid_position(),
+          map_id: map_id(),
           x: x(),
           y: y(),
           tribe: tribe_integer(),
