@@ -2,6 +2,105 @@ defmodule Collector.AggPlayersTest do
   use ExUnit.Case
 
 
+  @tag :tmp_dir
+  test "AggPlayers.run() returns unable to open the file if there is no snapshot of target_date", %{tmp_dir: root_folder} do
+    target_date = Date.utc_today()
+    server_id = "server1"
+
+    assert({:error, {"unable to open the file", :enoent}} == Collector.AggPlayers.run(root_folder, server_id, target_date))
+  end
+
+  @tag :tmp_dir
+  test "AggPlayers.run() generates an init agg_players table if there is no previous increment", %{tmp_dir: root_folder} do
+    target_date = Date.utc_today()
+    server_id = "server1"
+
+    new_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p2", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 4, village_id: "p4", village_server_id: 19996, village_name: "a3", player_id: "p3", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}
+    ]
+
+    encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
+
+    assert(:ok == Storage.store(root_folder, server_id, Collector.snapshot_options(), encoded_snapshot, target_date))
+    assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
+    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+    for agg_player <- agg_players, do: assert(is_struct(agg_player, Collector.AggPlayers))
+  end
+
+  @tag :tmp_dir
+  test "AggPlayers.run() generates an agg_players table using the last increment", %{tmp_dir: root_folder} do
+    target_date = Date.utc_today()
+    yesterday = Date.add(target_date, -1)
+    server_id = "server1"
+
+    new_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p2", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 4, village_id: "p4", village_server_id: 19996, village_name: "a3", player_id: "p3", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}
+    ]
+
+    prev_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 2, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
+
+    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+
+    assert(:ok == Storage.store(root_folder, server_id, Collector.snapshot_options(), prev_encoded_snapshot, yesterday))
+    assert(:ok == Collector.AggPlayers.run(root_folder, server_id, yesterday))
+    assert(:ok == Storage.store(root_folder, server_id, Collector.snapshot_options(), new_encoded_snapshot, target_date))
+    assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
+    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    [p1, p2, p3] = Enum.sort_by(agg_players, &(&1.player_id))
+
+    assert(length(p1.increment) == 2)
+    assert(length(p2.increment) == 2)
+    assert(length(p3.increment) == 1)
+
+  end
+
+  @tag :tmp_dir
+  test "AggPlayers.run() generates an agg_players table even if a previous snapshot and/or previous increment is missing, it compute the difference between the 2 lastest snapshots", %{tmp_dir: root_folder} do
+    target_date = Date.utc_today()
+    yesterday2 = Date.add(target_date, -2)
+    server_id = "server1"
+
+    new_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 1, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p2", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 4, village_id: "p4", village_server_id: 19996, village_name: "a3", player_id: "p3", player_server_id: 361, player_name: "laskdj", alliance_id: "a1", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}
+    ]
+
+    prev_player_snapshot = [
+      %Collector.SnapshotRow{grid_position: 20, x: -181, y: 200, tribe: 2, village_id: "v1", village_server_id: 19995, village_name: "n1", player_id: "p1", player_server_id: 361, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 961, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 49, x: -152, y: 200, tribe: 2, village_id: "p2", village_server_id: 19702, village_name: "a2", player_id: "p1", player_server_id: 416, player_name: "opc", alliance_id: "a1", alliance_server_id: 8, alliance_name: "WW", population: 964, region: nil, is_capital: false, is_city: nil, victory_points: nil},
+      %Collector.SnapshotRow{grid_position: 30, x: -151, y: 180, tribe: 3, village_id: "p3", village_server_id: 19996, village_name: "a3", player_id: "p2", player_server_id: 361, player_name: "laskdj", alliance_id: "a2", alliance_server_id: 8, alliance_name: "alskj", population: 1200, region: nil, is_capital: false, is_city: nil, victory_points: nil}]
+
+    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+
+    assert(:ok == Storage.store(root_folder, server_id, Collector.snapshot_options(), prev_encoded_snapshot, yesterday2))
+    assert(:ok == Collector.AggPlayers.run(root_folder, server_id, yesterday2))
+    assert(:ok == Storage.store(root_folder, server_id, Collector.snapshot_options(), new_encoded_snapshot, target_date))
+    assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
+    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    [p1, p2, p3] = Enum.sort_by(agg_players, &(&1.player_id))
+
+    assert(length(p1.increment) == 2)
+    assert(hd(p1.increment).population_decrease_by_conquered == 964)
+    assert(length(p2.increment) == 2)
+    assert(hd(p2.increment).population_increase_by_conquered == 964)
+    assert(length(p3.increment) == 1)
+    assert(hd(p3.increment).population_increase_by_conquered == nil)
+  end
 
 
 
