@@ -65,9 +65,9 @@ defmodule Collector.SnapshotRow do
   @spec apply(server_id :: TTypes.server_id(), TTypes.snapshot_row()) :: t()
   def apply(
         server_id,
-        {map_id, x_position, y_position, tribe, village_server_id, village_name,
-         player_server_id, player_name, alliance_server_id, alliance_name, population, region,
-         is_capital, is_city, victory_points}
+        {map_id, x_position, y_position, tribe, village_server_id, village_name, player_server_id,
+         player_name, alliance_server_id, alliance_name, population, region, is_capital, is_city,
+         victory_points}
       ) do
     %__MODULE__{
       map_id: map_id,
