@@ -1,6 +1,4 @@
 defmodule Collector.AggPlayers do
-  require Logger
-
   @enforce_keys [
     :target_dt,
     :server_id,
