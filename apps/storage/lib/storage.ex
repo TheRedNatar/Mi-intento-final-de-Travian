@@ -150,4 +150,29 @@ defmodule Storage do
     diff = Date.diff(end_date, start_date)
     for i <- diff..0, do: Date.add(start_date, i)
   end
+
+  @spec list_dates(
+          root_folder :: String.t(),
+          identifier :: dest_identifier(),
+          flow_options :: flow_options
+        ) :: [Date.t()]
+  def list_dates(root_folder, identifier, {flow_name, _}) do
+    dir_path = gen_server_path(root_folder, identifier)
+    flow_path = "#{dir_path}/#{flow_name}"
+
+    case File.exists?(dir_path) do
+      false -> []
+      true -> File.ls!(flow_path) |> Enum.map(&filename_to_date/1)
+    end
+  end
+
+  defp filename_to_date(
+         <<"date_", s_year::binary-size(4), s_month::binary-size(2), s_day::binary-size(2),
+           _::binary>>
+       ) do
+    year = String.to_integer(s_year)
+    month = String.to_integer(s_month)
+    day = String.to_integer(s_day)
+    Date.new!(year, month, day)
+  end
 end
