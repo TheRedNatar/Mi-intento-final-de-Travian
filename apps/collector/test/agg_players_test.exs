@@ -104,8 +104,8 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    assert(:ok == Collector.store(root_folder, server_id, new_player_snapshot, prev_date))
-    assert(:ok == Collector.store(root_folder, server_id, new_player_snapshot, target_date))
+    assert(:ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, prev_date))
+    assert(:ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, target_date))
 
     {atom_error, {string_agg_open, _}} =
       Collector.AggPlayers.run(root_folder, server_id, target_date)

@@ -58,10 +58,10 @@ defmodule Collector.AggPlayers do
           :ok | {:error, any()}
   def run(root_folder, server_id, target_date) do
     with(
-      {:a, {:ok, new_snapshot}} <- {:a, Collector.open(root_folder, server_id, target_date)},
+      {:a, {:ok, new_snapshot}} <- {:a, Collector.Snapshot.open(root_folder, server_id, target_date)},
       prev_date = get_prev_date(root_folder, server_id, target_date),
       {:b, {:ok, prev_snapshot}} <-
-        {:b, open_option(prev_date, fn -> Collector.open(root_folder, server_id, prev_date) end)},
+        {:b, open_option(prev_date, fn -> Collector.Snapshot.open(root_folder, server_id, prev_date) end)},
       {:c, {:ok, prev_agg_players}} <-
         {:c, open_option(prev_date, fn -> open(root_folder, server_id, prev_date) end)}
     ) do
