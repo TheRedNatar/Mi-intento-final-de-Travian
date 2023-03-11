@@ -1,5 +1,4 @@
 defmodule Collector.RawSnapshot do
-
   def options(), do: {"raw_snapshot", ".c6bert"}
 
   defp raw_snapshot_to_format(raw_snapshot),
@@ -17,7 +16,6 @@ defmodule Collector.RawSnapshot do
     end
   end
 
-
   @spec store(
           root_folder :: String.t(),
           server_id :: TTypes.server_id(),
@@ -32,14 +30,14 @@ defmodule Collector.RawSnapshot do
   @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
           :ok | {:error, any()}
   def run(root_folder, server_id, target_date) do
-	    with(
-	      {:a, {:ok, raw_snapshot}} <- {:a, :travianmap.get_map(server_id)},
-	      {:b, :ok} <- {:b, store(root_folder, server_id, raw_snapshot, target_date)}
-	    ) do
-	      :ok
-	      else
+    with(
+      {:a, {:ok, raw_snapshot}} <- {:a, :travianmap.get_map(server_id)},
+      {:b, :ok} <- {:b, store(root_folder, server_id, raw_snapshot, target_date)}
+    ) do
+      :ok
+    else
       {:a, {:error, reason}} -> {:error, {"Unable to fetch server from Travian", reason}}
       {:b, {:error, reason}} -> {:error, {"Unable to store raw_snapshot", reason}}
-      end
+    end
   end
 end
