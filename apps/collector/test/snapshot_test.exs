@@ -1,4 +1,4 @@
-defmodule Collector.AggPlayersTest do
+defmodule Collector.SnapshotTest do
   use ExUnit.Case
 
   test "Snapshot.process_rows() transform the raw_snapshot rows to a list of Snapshot structs and creates the *_id fields" do
