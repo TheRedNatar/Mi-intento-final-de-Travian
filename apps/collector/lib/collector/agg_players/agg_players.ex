@@ -119,19 +119,51 @@ defmodule Collector.AggPlayers do
           yesterday_agg_players :: [t()]
         ) :: [t()]
   def process(target_dt, server_id, new_snapshot, prev_snapshot, prev_agg_players) do
-    uniq_players = for row <- new_snapshot, uniq: true, do: row.player_id
+    player_villages = common_villages(new_snapshot, prev_snapshot)
     find_player = fn player_id -> Enum.find(prev_agg_players, &(&1.player_id == player_id)) end
 
-    for player_id <- uniq_players,
+    for player_id <- Map.keys(player_villages),
         do:
-          group_compute_update(
+          compute_update(
             target_dt,
             server_id,
             player_id,
             new_snapshot,
             prev_snapshot,
-            find_player.(player_id)
+            find_player.(player_id),
+	    Map.fetch!(player_villages, player_id)
           )
+  end
+
+
+  @spec common_villages(new_snapshot :: [Collector.Snapshot.t()], prev_snapshot :: [Collector.Snapshot.t()]) :: %{TTypes.player_id() => [TTypes.village_id, ...]}
+  def common_villages(new_snapshot, prev_snapshot) do
+    new_snapshot ++ prev_snapshot
+    |> Enum.group_by(&(&1.player_id), &(&1.village_id))
+    |> Enum.map(fn {player_id, village_ids} -> {player_id, Enum.uniq(village_ids)} end)
+    |> Map.new()
+  end
+
+  defp compute_update(target_dt, server_id, player_id, new_snapshot, _prev_snapshot, nil, _village_ids) do
+    rows = Enum.filter(new_snapshot, &(&1.player_id == player_id))
+    init_struct(target_dt, server_id, player_id, rows)
+  end
+
+  defp compute_update(target_dt, _, player_id, new_snapshot, prev_snapshot, prev_agg, village_ids) do
+    new_player_snapshot = Enum.filter(new_snapshot, &(&1.village_id in village_ids))
+    prev_player_snapshot = Enum.filter(prev_snapshot, &(&1.village_id in village_ids))
+
+    new_increment =
+      Collector.AggPlayers.Increment.increment(
+        target_dt,
+        player_id,
+        new_player_snapshot,
+        prev_player_snapshot
+      )
+
+    prev_agg
+    |> Map.put(:target_dt, target_dt)
+    |> Map.update!(:increment, fn list_of_increments -> [new_increment | list_of_increments] end)
   end
 
   defp group_compute_update(target_dt, server_id, player_id, new_snapshot, _prev_snapshot, nil) do
