@@ -139,7 +139,8 @@ defmodule Collector.Snapshot do
     end
   end
 
-  @spec process_rows(raw_snapshot :: String.t(), server_id :: TTypes.server_id()) :: {[t()], [any()]}
+  @spec process_rows(raw_snapshot :: String.t(), server_id :: TTypes.server_id()) ::
+          {[t()], [any()]}
   def process_rows(raw_snapshot, server_id) do
     {raw_rows, error_rows} =
       :travianmap.parse_map(raw_snapshot, :no_filter)
