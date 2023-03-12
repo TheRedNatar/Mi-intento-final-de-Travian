@@ -125,7 +125,9 @@ defmodule Storage do
   defp gen_server_path(root_folder, :global), do: "#{root_folder}/global"
 
   defp gen_server_path(root_folder, server_id),
-    do: "#{root_folder}/servers/#{TTypes.server_id_to_path(server_id)}"
+    do: "#{gen_servers_path(root_folder)}/#{TTypes.server_id_to_path(server_id)}"
+
+  defp gen_servers_path(root_folder), do: "#{root_folder}/servers"
 
   @spec gen_flow_filename(
           dir_path :: binary(),
@@ -163,6 +165,20 @@ defmodule Storage do
     case File.exists?(dir_path) do
       false -> []
       true -> File.ls!(flow_path) |> Enum.map(&filename_to_date/1)
+    end
+  end
+
+  @spec list_servers(root_folder :: String.t()) :: [TTypes.server_id()]
+  def list_servers(root_folder) do
+    servers_path = gen_servers_path(root_folder)
+
+    with(
+      true <- File.exists?(servers_path),
+      true <- File.dir?(servers_path)
+    ) do
+      for server_id_path <- File.ls!(servers_path), do: TTypes.server_id_from_path(server_id_path)
+    else
+      _ -> []
     end
   end
 
