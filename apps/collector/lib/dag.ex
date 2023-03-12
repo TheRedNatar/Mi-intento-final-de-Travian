@@ -109,6 +109,16 @@ defmodule Collector.DAG do
     :ok
   end
 
+  @spec full_flow_reload!(root_folder :: String.t()) :: :ok
+  def full_flow_reload!(root_folder) do
+    Storage.list_servers(root_folder)
+    |> Flow.from_enumerable(max_demand: 1)
+    |> Flow.map(fn server_id -> reload(root_folder, server_id) end)
+    |> Enum.to_list()
+
+    :ok
+  end
+
   defp retry(f, min, max, attemps) when min <= max do
     retry(f, min, max, attemps, 0, nil)
   end
