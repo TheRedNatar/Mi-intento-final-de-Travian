@@ -12,7 +12,7 @@ defmodule StorageTest do
   @tag :tmp_dir
   test "list_dates returns a list of dates available for a given flow_options", %{
     tmp_dir: tmp_dir,
-    flow_options: flow_options = {flow_name, flow_extension}
+    flow_options: flow_options
   } do
     identifier = "server_1"
     root_folder = tmp_dir
@@ -273,6 +273,35 @@ defmodule StorageTest do
 
     assert(true == Storage.exist?(root_folder, identifier, flow_options, :unique))
     assert(true == Storage.exist?(root_folder, identifier, flow_options, date))
+  end
+
+  @tag :tmp_dir
+  test "list_servers list all the servers under root_folder", %{
+    tmp_dir: root_folder
+  } do
+    server_id_1 = "https://ts3.x1.arabics.travian.com"
+    server_id_2 = "https://ts5.x1.international.travian.com"
+    server_id_3 = "https://gos.x2.international.travian.com"
+    server_id_4 = "https://ts2.x1.international.travian.com"
+
+    content = "alishdoifjasldjflk"
+    target_date = Date.utc_today()
+
+    assert([] == Storage.list_servers(root_folder))
+    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_2, content, target_date))
+    assert(["https://ts5.x1.international.travian.com"] == Storage.list_servers(root_folder))
+    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_1, content, target_date))
+    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_3, content, target_date))
+    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_4, content, target_date))
+
+    assert(
+      [
+        "https://gos.x2.international.travian.com",
+        "https://ts2.x1.international.travian.com",
+        "https://ts3.x1.arabics.travian.com",
+        "https://ts5.x1.international.travian.com"
+      ] == Storage.list_servers(root_folder) |> Enum.sort()
+    )
   end
 
   defp check_f({date1, content1}, {date2, content2}) do
