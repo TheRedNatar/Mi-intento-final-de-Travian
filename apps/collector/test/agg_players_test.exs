@@ -3,7 +3,7 @@ defmodule Collector.AggPlayersTest do
 
   test "AggPlayers.common_villages() return a map with player_id as key and a list of village_ids that are owned on the new snapshot or were owned in the previous snapshot by the player" do
     new_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -23,7 +23,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -43,7 +43,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -63,7 +63,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -86,7 +86,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -106,7 +106,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -126,7 +126,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -146,7 +146,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -199,7 +199,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -219,7 +219,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -239,7 +239,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -259,7 +259,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -303,7 +303,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -323,7 +323,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -343,7 +343,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -363,7 +363,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -412,7 +412,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -432,7 +432,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -452,7 +452,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -472,7 +472,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -495,7 +495,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -515,7 +515,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -535,7 +535,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -604,7 +604,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -624,7 +624,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -647,7 +647,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -667,7 +667,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -736,7 +736,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -756,7 +756,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -776,7 +776,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -796,7 +796,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -819,7 +819,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -839,7 +839,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -859,7 +859,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -953,7 +953,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -973,7 +973,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -993,7 +993,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1013,7 +1013,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1036,7 +1036,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1056,7 +1056,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1076,7 +1076,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1144,7 +1144,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1164,7 +1164,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1184,7 +1184,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1204,7 +1204,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1227,7 +1227,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1247,7 +1247,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1267,7 +1267,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1329,7 +1329,7 @@ defmodule Collector.AggPlayersTest do
     server_id = "server1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1349,7 +1349,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1369,7 +1369,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1414,7 +1414,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1434,7 +1434,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1454,7 +1454,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1477,7 +1477,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1497,7 +1497,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1517,7 +1517,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1557,7 +1557,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1577,7 +1577,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1597,7 +1597,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1620,7 +1620,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1640,7 +1640,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1680,7 +1680,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1703,7 +1703,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1723,7 +1723,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1743,7 +1743,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1783,7 +1783,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1803,7 +1803,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1826,7 +1826,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1846,7 +1846,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1866,7 +1866,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1906,7 +1906,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1926,7 +1926,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -1946,7 +1946,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -1969,7 +1969,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -1989,7 +1989,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2029,7 +2029,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2049,7 +2049,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2069,7 +2069,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2092,7 +2092,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2112,7 +2112,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2132,7 +2132,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2172,7 +2172,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2192,7 +2192,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2212,7 +2212,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2235,7 +2235,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2255,7 +2255,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2295,7 +2295,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2315,7 +2315,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2335,7 +2335,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2358,7 +2358,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2378,7 +2378,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2418,7 +2418,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2438,7 +2438,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2458,7 +2458,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2481,7 +2481,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2501,7 +2501,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2521,7 +2521,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2561,7 +2561,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2581,7 +2581,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2601,7 +2601,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2624,7 +2624,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2644,7 +2644,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2664,7 +2664,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2704,7 +2704,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2724,7 +2724,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2744,7 +2744,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2767,7 +2767,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2787,7 +2787,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2807,7 +2807,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2847,7 +2847,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2867,7 +2867,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2890,7 +2890,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2910,7 +2910,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -2930,7 +2930,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -2970,7 +2970,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -2990,7 +2990,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3010,7 +3010,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3033,7 +3033,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3053,7 +3053,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3073,7 +3073,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3113,7 +3113,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3133,7 +3133,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3153,7 +3153,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3176,7 +3176,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3196,7 +3196,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3216,7 +3216,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3256,7 +3256,7 @@ defmodule Collector.AggPlayersTest do
     player_id = "p1"
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3276,7 +3276,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3296,7 +3296,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3319,7 +3319,7 @@ defmodule Collector.AggPlayersTest do
     ]
 
     prev_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3339,7 +3339,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3359,7 +3359,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,
@@ -3398,7 +3398,7 @@ defmodule Collector.AggPlayersTest do
     target_dt = DateTime.utc_now()
 
     new_player_snapshot = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 20,
         x: -181,
         y: 200,
@@ -3418,7 +3418,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 49,
         x: -152,
         y: 200,
@@ -3438,7 +3438,7 @@ defmodule Collector.AggPlayersTest do
         is_city: nil,
         victory_points: nil
       },
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
         map_id: 30,
         x: -151,
         y: 180,

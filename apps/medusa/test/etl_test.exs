@@ -17,7 +17,7 @@ defmodule Medusa.ETLTest do
 
     
     snp_today = [
-	%Collector.SnapshotRow{
+	%Collector.Snapshot{
 	  alliance_id: "https://czsk.x1.czsk.travian.com--A--26",
 	  alliance_server_id: 26,
 	  alliance_name: "ZBL",
@@ -37,7 +37,7 @@ defmodule Medusa.ETLTest do
 	  x: -200,
 	  y: 200
 },
-	%Collector.SnapshotRow{
+	%Collector.Snapshot{
 	  alliance_id: "https://czsk.x1.czsk.travian.com--A--26",
 	  alliance_server_id: 26,
 	  alliance_name: "ZBL",
@@ -57,7 +57,7 @@ defmodule Medusa.ETLTest do
 	  x: -199,
 	  y: 200
 	},
-	%Collector.SnapshotRow{
+	%Collector.Snapshot{
 	  alliance_id: "https://czsk.x1.czsk.travian.com--A--18",
 	  alliance_server_id: 18,
 	  alliance_name: "00A",
@@ -77,7 +77,7 @@ defmodule Medusa.ETLTest do
 	  x: -128,
 	  y: 200
 	},
-	%Collector.SnapshotRow{
+	%Collector.Snapshot{
 	  alliance_id: "https://czsk.x1.czsk.travian.com--A--26",
 	  alliance_server_id: 26,
 	  alliance_name: "ZBL",
@@ -100,7 +100,7 @@ defmodule Medusa.ETLTest do
       ]
     
     snp_yesterday = [
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
 	alliance_id: "https://czsk.x1.czsk.travian.com--A--26",
 	alliance_server_id: 26,
 	alliance_name: "ZBL",
@@ -121,7 +121,7 @@ defmodule Medusa.ETLTest do
 	y: 200
 },
       
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
 	alliance_id: "https://czsk.x1.czsk.travian.com--A--18",
 	alliance_server_id: 18,
 	alliance_name: "00A",
@@ -143,7 +143,7 @@ defmodule Medusa.ETLTest do
       },
       
       
-      %Collector.SnapshotRow{
+      %Collector.Snapshot{
 	alliance_id: "https://czsk.x1.czsk.travian.com--A--26",
 	alliance_server_id: 26,
 	alliance_name: "ZBL",

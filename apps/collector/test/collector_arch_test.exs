@@ -174,7 +174,7 @@ defmodule CollectorArchTest do
     target_date = Date.utc_today()
     assert(Supervisor.count_children(Collector.Supervisor.Worker)[:workers] == 0)
 
-    {:ok, {pid, ref}} =
+    {:ok, {pid, ref, ^server_id}} =
       Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
 
     assert(Supervisor.count_children(Collector.Supervisor.Worker)[:workers] == 1)
