@@ -10,13 +10,12 @@ defmodule CollectorArchTest do
   test "If you are subscribed and the collection starts, you will received and start_event", %{
     tmp_dir: root_folder
   } do
-
     # We don't want to start the collection, just the event
     Application.put_env(:collector, :min, 200_000)
     Application.put_env(:collector, :max, 300_000)
-    
+
     Application.put_env(:collector, :root_folder, root_folder)
-    
+
     assert(is_reference(Collector.subscribe()))
     assert(:ok = Collector.collect())
     assert_receive({:collector_event, :collection_started}, 5_000)
@@ -24,36 +23,46 @@ defmodule CollectorArchTest do
     Application.start(:collector)
   end
 
-
   test "If you are subscribed and the collection ends, you will received and end_event", %{
     server_id: server_id
-    } do
+  } do
     pid = :c.pid(0, 250, 0)
     ref = make_ref()
 
     target_date = Date.utc_today()
     subscriptions = [self()]
     active_p = %{pid => {ref, server_id}}
-    state = %Collector.GenCollector{target_date: target_date, subscriptions: subscriptions, active_p: active_p}
 
-    {:noreply, new_state, {:continue, :is_finished}} = Collector.GenCollector.handle_cast({{:error, "some_error"}, server_id, pid}, state)
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: subscriptions,
+      active_p: active_p
+    }
+
+    {:noreply, new_state, {:continue, :is_finished}} =
+      Collector.GenCollector.handle_cast({{:error, "some_error"}, server_id, pid}, state)
+
     assert(new_state.active_p == %{})
     Collector.GenCollector.handle_continue(:is_finished, new_state)
     assert_receive({:collector_event, :collection_finished}, 5_000)
   end
 
-
-  test "If you are subscribed and the collection of a server_id finish, you will received and server_id end event", %{
-    server_id: server_id
-  } do
-
+  test "If you are subscribed and the collection of a server_id finish, you will received and server_id end event",
+       %{
+         server_id: server_id
+       } do
     pid = :c.pid(0, 250, 0)
     ref = make_ref()
 
     target_date = Date.utc_today()
     subscriptions = [self()]
     active_p = %{pid => {ref, server_id}}
-    state = %Collector.GenCollector{target_date: target_date, subscriptions: subscriptions, active_p: active_p}
+
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: subscriptions,
+      active_p: active_p
+    }
 
     Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
     assert_receive({:collector_event, {:ok, ^server_id}}, 5_000)
@@ -62,10 +71,10 @@ defmodule CollectorArchTest do
   end
 
   # Server_Id process behaviours
-  test "If a server_id process finish its collection ok or with {error, reason}, remove it from the active_p list", %{
-    server_id: server_id
-  } do
-
+  test "If a server_id process finish its collection ok or with {error, reason}, remove it from the active_p list",
+       %{
+         server_id: server_id
+       } do
     pid = :c.pid(0, 250, 0)
     pid2 = :c.pid(0, 250, 1)
     ref = make_ref()
@@ -74,15 +83,23 @@ defmodule CollectorArchTest do
     target_date = Date.utc_today()
     subscriptions = []
     active_p = %{pid => {ref, server_id}, pid2 => {ref2, server_id}}
-    state = %Collector.GenCollector{target_date: target_date, subscriptions: subscriptions, active_p: active_p}
 
-    {:noreply, new_state, {:continue, :is_finished}} = Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: subscriptions,
+      active_p: active_p
+    }
+
+    {:noreply, new_state, {:continue, :is_finished}} =
+      Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
+
     assert(new_state.active_p == %{pid2 => {ref2, server_id}})
   end
 
-  test "If a server_id process crash during its collection, relaunch it and update the active_p with the new pid", %{
-    server_id: server_id
-  } do
+  test "If a server_id process crash during its collection, relaunch it and update the active_p with the new pid",
+       %{
+         server_id: server_id
+       } do
     pid = :c.pid(0, 250, 0)
     ref = make_ref()
 
@@ -90,9 +107,16 @@ defmodule CollectorArchTest do
     subscriptions = [self()]
     active_p = %{pid => {ref, server_id}}
     down_msg = {:DOWN, ref, :process, pid, :error}
-    state = %Collector.GenCollector{target_date: target_date, subscriptions: subscriptions, active_p: active_p}
 
-    {:noreply, new_state, {:continue, :is_finished}} = Collector.GenCollector.handle_info(down_msg, state)
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: subscriptions,
+      active_p: active_p
+    }
+
+    {:noreply, new_state, {:continue, :is_finished}} =
+      Collector.GenCollector.handle_info(down_msg, state)
+
     [pid2] = Map.keys(new_state.active_p)
     {ref2, server_id2} = Map.get(new_state.active_p, pid2)
     assert(server_id == server_id2)
@@ -105,7 +129,6 @@ defmodule CollectorArchTest do
   test "A collection ends where the last active_p process finish", %{
     server_id: server_id
   } do
-
     pid = :c.pid(0, 250, 0)
     pid2 = :c.pid(0, 250, 1)
     ref = make_ref()
@@ -114,12 +137,22 @@ defmodule CollectorArchTest do
     target_date = Date.utc_today()
     subscriptions = [self()]
     active_p = %{pid => {ref, server_id}, pid2 => {ref2, server_id}}
-    state = %Collector.GenCollector{target_date: target_date, subscriptions: subscriptions, active_p: active_p}
 
-    {:noreply, new_state, {:continue, :is_finished}} = Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: subscriptions,
+      active_p: active_p
+    }
+
+    {:noreply, new_state, {:continue, :is_finished}} =
+      Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
+
     Collector.GenCollector.handle_continue(:is_finished, new_state)
     refute_receive({:collector_event, :collection_finished}, 5_000)
-    {:noreply, new_state2, {:continue, :is_finished}} = Collector.GenCollector.handle_cast({:ok, server_id, pid2}, new_state)
+
+    {:noreply, new_state2, {:continue, :is_finished}} =
+      Collector.GenCollector.handle_cast({:ok, server_id, pid2}, new_state)
+
     assert(new_state2.active_p == %{})
     Collector.GenCollector.handle_continue(:is_finished, new_state2)
     assert_receive({:collector_event, :collection_finished}, 5_000)
@@ -152,7 +185,6 @@ defmodule CollectorArchTest do
 
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
   end
-
 
   # GenWorker tests
   @tag :tmp_dir

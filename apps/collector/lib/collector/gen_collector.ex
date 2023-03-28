@@ -91,7 +91,10 @@ defmodule Collector.GenCollector do
         {:noreply, new_state}
 
       {:ok, urls} ->
-	Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, :collection_started}) end)
+        Enum.each(state.subscriptions, fn x ->
+          send(x, {:collector_event, :collection_started})
+        end)
+
         root_folder = Application.fetch_env!(:collector, :root_folder)
         target_date = Date.utc_today()
 
