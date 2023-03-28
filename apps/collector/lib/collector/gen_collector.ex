@@ -135,7 +135,7 @@ defmodule Collector.GenCollector do
     root_folder = Application.fetch_env!(:collector, :root_folder)
 
     case Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date) do
-      {:ok, {pid, ref}} ->
+      {:ok, {pid, ref, ^server_id}} ->
         new_ap = Map.put(new_ap, pid, {ref, server_id})
         new_state = Map.put(state, :active_p, new_ap)
         {:noreply, new_state, {:continue, :is_finished}}

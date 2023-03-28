@@ -18,7 +18,7 @@ defmodule Collector.Supervisor.Worker do
           server_id :: TTypes.server_id(),
           target_date :: Date.t()
         ) ::
-          {:ok, {pid(), reference()}} | {:error, any()}
+          {:ok, {pid(), reference(), TTypes.server_id()}} | {:error, any()}
   def start_child(root_folder, server_id, target_date) do
     attemps = Application.get_env(:collector, :attemps, 3)
     min = Application.get_env(:collector, :min, 1_000)
@@ -35,7 +35,7 @@ defmodule Collector.Supervisor.Worker do
     case DynamicSupervisor.start_child(__MODULE__, child_spec) do
       {:ok, pid} ->
         ref = Process.monitor(pid)
-        {:ok, {pid, ref}}
+        {:ok, {pid, ref, server_id}}
 
       {:error, reason} ->
         Logger.error(%{

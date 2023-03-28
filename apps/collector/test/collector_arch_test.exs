@@ -1,6 +1,8 @@
 defmodule CollectorArchTest do
   use ExUnit.Case
 
+  @moduletag :capture_log
+
   setup_all do
     %{server_id: "https://ts5.x1.europe.travian.com"}
   end
