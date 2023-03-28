@@ -38,6 +38,7 @@ defmodule Collector.GenCollector do
   @impl true
   def handle_continue(:is_finished, state = %__MODULE__{active_p: active_p})
       when map_size(active_p) == 0 do
+    Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, :collection_finished}) end)
     collection_hour = Application.fetch_env!(:collector, :collection_hour)
     wait_time = Collector.Utils.time_until_collection(collection_hour)
     tref = :erlang.send_after(wait_time, self(), :collect)
@@ -64,8 +65,10 @@ defmodule Collector.GenCollector do
     Process.demonitor(ref, [:flush])
     new_state = Map.put(state, :active_p, new_ap)
 
+    Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, {result, server_id}}) end)
+
     Logger.info(%{
-      msg: "Collection finished in #{result} for #{server_id} at #{state.target_date}",
+      msg: "Collection finished for #{server_id} at #{state.target_date}",
       server_id: server_id,
       target_date: state.target_date,
       result: result
@@ -88,6 +91,7 @@ defmodule Collector.GenCollector do
         {:noreply, new_state}
 
       {:ok, urls} ->
+	Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, :collection_started}) end)
         root_folder = Application.fetch_env!(:collector, :root_folder)
         target_date = Date.utc_today()
 
@@ -119,7 +123,7 @@ defmodule Collector.GenCollector do
   end
 
   def handle_info(
-        {:DOWN, _ref, :process, pid, :normal},
+        {:DOWN, _ref, :process, pid, _reason},
         state = %__MODULE__{active_p: ap, target_date: target_date}
       )
       when is_map_key(ap, pid) do
