@@ -15,8 +15,7 @@ defmodule Collector.Application do
     }
 
     children = [
-      Collector.Supervisor.Snapshot,
-      Collector.Supervisor.Metadata,
+      Collector.Supervisor.Worker,
       gen_collector
     ]
 

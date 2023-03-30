@@ -3,11 +3,6 @@ defmodule Collector do
   Documentation for `Collector`.
   """
 
-  @typedoc """
-  Url with http/https included
-  """
-  @type url :: String.t()
-
   @doc """
   Launch the collection process
   """
@@ -20,16 +15,6 @@ defmodule Collector do
   """
   @spec subscribe() :: reference()
   def subscribe(), do: Collector.GenCollector.subscribe()
-
-  @spec etl_snapshot(root_folder :: binary(), server_id :: TTypes.server_id()) ::
-          :ok | {:error, any()}
-  def etl_snapshot(root_folder, server_id),
-    do: Collector.GenWorker.Snapshot.etl(root_folder, server_id)
-
-  @spec etl_metadata(root_folder :: binary(), server_id :: TTypes.server_id()) ::
-          :ok | {:error, any()}
-  def etl_metadata(root_folder, server_id),
-    do: Collector.GenWorker.Metadata.etl(root_folder, server_id)
 
   @spec snapshot_to_format(snapshot :: [TTypes.enriched_row()]) :: binary()
   def snapshot_to_format(snapshot),

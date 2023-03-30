@@ -26,19 +26,19 @@ defmodule Collector.AggPlayers do
           increment: Collector.AggPlayers.Increment.t()
         }
 
-  defp agg_players_options(), do: {"agg_players", ".c6bert"}
+  def options(), do: {"agg_players", ".c6bert"}
 
-  defp agg_players_to_format(agg_players),
+  def to_format(agg_players),
     do: :erlang.term_to_binary(agg_players, [:compressed, :deterministic])
 
-  defp agg_players_from_format(encoded_agg_players),
+  def from_format(encoded_agg_players),
     do: :erlang.binary_to_term(encoded_agg_players)
 
   @spec open(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
           {:ok, [t()]} | {:error, any()}
   def open(root_folder, server_id, target_date) do
-    case Storage.open(root_folder, server_id, agg_players_options(), target_date) do
-      {:ok, {_, encoded}} -> {:ok, agg_players_from_format(encoded)}
+    case Storage.open(root_folder, server_id, options(), target_date) do
+      {:ok, {_, encoded}} -> {:ok, from_format(encoded)}
       error -> error
     end
   end
@@ -50,8 +50,8 @@ defmodule Collector.AggPlayers do
           target_date :: Date.t()
         ) :: :ok | {:error, any()}
   def store(root_folder, server_id, agg_players, target_date) do
-    encoded = agg_players_to_format(agg_players)
-    Storage.store(root_folder, server_id, agg_players_options(), encoded, target_date)
+    encoded = to_format(agg_players)
+    Storage.store(root_folder, server_id, options(), encoded, target_date)
   end
 
   @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
