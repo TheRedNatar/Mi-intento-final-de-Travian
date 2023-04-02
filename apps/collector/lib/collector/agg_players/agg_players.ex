@@ -142,7 +142,7 @@ defmodule Collector.AggPlayers do
     prev_increments =
       for x <- prev_agg_players,
           x.player_id in abandoned_players,
-          do: Map.put(x, :target_dt, target_dt)
+          do: x
 
     new_increments ++ prev_increments
   end

@@ -722,7 +722,7 @@ defmodule Collector.AggPlayersTest do
     [p1, p2] = Enum.sort_by(agg_players, & &1.player_id)
 
     assert(length(p1.increment) == 1)
-    assert(Date.compare(DateTime.to_date(p1.target_dt), target_date) == :eq)
+    assert(Date.compare(DateTime.to_date(p1.target_dt), target_date) == :lt)
     assert(length(p2.increment) == 2)
   end
 
