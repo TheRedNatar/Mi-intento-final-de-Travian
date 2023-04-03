@@ -1,21 +1,13 @@
 defmodule UtilsTest do
   use ExUnit.Case
 
-  @milliseconds_in_day 24 * 60 * 60 * 1000
+  test "time_until_hour computes the time until we reach the hour in miliseconds, it can be on the next day" do
+    now = Time.utc_now()
+    one_hour = Time.add(now, 3600)
+    minus_one_hour = Time.add(now, -3600)
 
-  test "if the collection time is later, return the difference time in milliseconds" do
-    collection_time = Time.utc_now() |> Time.add(3)
-    wait_time = Collector.Utils.time_until_collection(collection_time)
-    assert(wait_time > 0 and wait_time <= 3000)
-  end
-
-  test "if the collection time is earlier, return the next day collection time in milliseconds" do
-    collection_time = Time.utc_now() |> Time.add(-3)
-    wait_time = Collector.Utils.time_until_collection(collection_time)
-
-    assert(
-      wait_time > 0 and wait_time > @milliseconds_in_day and
-        wait_time <= @milliseconds_in_day + 3000
-    )
+    assert_in_delta(Collector.Utils.time_until_hour(one_hour), 3_600_000, 10)
+    assert_in_delta(Collector.Utils.time_until_hour(minus_one_hour), (24 - 1) * 3_600_000, 10)
+    assert_in_delta(Collector.Utils.time_until_hour(Time.utc_now() |> Time.add(1)), 1000, 10)
   end
 end
