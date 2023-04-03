@@ -111,10 +111,8 @@ defmodule Collector.DAG do
 
   @spec full_flow_reload!(root_folder :: String.t()) :: :ok
   def full_flow_reload!(root_folder) do
-    max_demand = Application.fetch_env!(:collector, :max_demand)
-
     Storage.list_servers(root_folder)
-    |> Flow.from_enumerable(max_demand: max_demand)
+    |> Flow.from_enumerable(max_demand: 1)
     |> Flow.map(fn server_id -> reload(root_folder, server_id) end)
     |> Enum.to_list()
 
