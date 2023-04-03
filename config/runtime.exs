@@ -16,6 +16,7 @@ config :medusa,
 
 config :collector,
   root_folder: System.get_env("MITRAVIAN_ROOTFOLDER", "/tmp/travian_folder"),
+  max_demand: System.get_env("MITRAVIAN__FLOW_MAXDEMAND", "1") |> String.to_integer(),
   collection_hour: Time.new!(3, 0, 0)
 
 config :medusa_metrics,
