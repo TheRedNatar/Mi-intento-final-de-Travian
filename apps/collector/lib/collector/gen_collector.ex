@@ -26,11 +26,9 @@ defmodule Collector.GenCollector do
   end
 
   @impl true
-
   def handle_continue(:init, state) do
     collection_hour = Application.fetch_env!(:collector, :collection_hour)
-    wait_time = Collector.Utils.time_until_collection(collection_hour)
-    tref = :erlang.send_after(wait_time, self(), :collect)
+    tref = spawn_next_timer(collection_hour)
     state = Map.put(state, :tref, tref)
     {:noreply, state}
   end
@@ -40,8 +38,7 @@ defmodule Collector.GenCollector do
       when map_size(active_p) == 0 do
     Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, :collection_finished}) end)
     collection_hour = Application.fetch_env!(:collector, :collection_hour)
-    wait_time = Collector.Utils.time_until_collection(collection_hour)
-    tref = :erlang.send_after(wait_time, self(), :collect)
+    tref = spawn_next_timer(collection_hour)
     state = Map.put(state, :tref, tref)
     Logger.info(%{msg: "Collection finished"})
     {:noreply, state}
@@ -111,14 +108,9 @@ defmodule Collector.GenCollector do
 
         ap = for {:ok, {pid, ref, server_id}} <- childs, into: %{}, do: {pid, {ref, server_id}}
 
-        collection_hour = Application.fetch_env!(:collector, :collection_hour)
-        wait_time = Collector.Utils.time_until_collection(collection_hour)
-        tref = :erlang.send_after(wait_time, self(), :collect)
-
         new_state =
           state
           |> Map.put(:active_p, ap)
-          |> Map.put(:tref, tref)
           |> Map.put(:target_date, target_date)
 
         {:noreply, new_state, {:continue, :is_finished}}
@@ -153,4 +145,9 @@ defmodule Collector.GenCollector do
   end
 
   def handle_info(_msg, state), do: {:noreply, state}
+
+  defp spawn_next_timer(t) do
+    wait_time = Collector.Utils.time_until_hour(t)
+    :erlang.send_after(wait_time, Collector.GenCollector, :collect)
+  end
 end

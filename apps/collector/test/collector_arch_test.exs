@@ -160,6 +160,21 @@ defmodule CollectorArchTest do
     assert_receive({:collector_event, :collection_finished}, 5_000)
   end
 
+  @tag :tmp_dir
+  test "A collection starts when the timer ends", %{
+    tmp_dir: root_folder
+  } do
+    Application.stop(:collector)
+    Application.put_env(:collector, :root_folder, root_folder)
+    Application.put_env(:collector, :collection_hour, Time.add(Time.utc_now(), 3))
+    Application.start(:collector)
+
+    assert(is_reference(Collector.subscribe()))
+    assert_receive({:collector_event, :collection_started}, 6_000)
+    Application.stop(:collector)
+    Application.start(:collector)
+  end
+
   # Supervisor.Worker tests
   @tag :tmp_dir
   test "Collector.Supervisor.Worker.start_child launch a GenWorker which runs a DAG", %{
