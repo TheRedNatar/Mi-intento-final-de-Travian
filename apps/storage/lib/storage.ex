@@ -6,7 +6,7 @@ defmodule Storage do
   @type open_options ::
           Date.t() | {Date.t(), Date.t()} | {Date.t(), Date.t(), :consecutive} | :unique
 
-  @type dest_identifier :: :global | TTypes.server_id()
+  @type dest_identifier :: :global | TTypes.server_id() | {:archive, TTypes.server_id()}
   @type date_options :: :unique | Date.t()
 
   @type flow_name :: binary()
@@ -23,6 +23,19 @@ defmodule Storage do
     server_path = gen_server_path(root_folder, identifier)
     {_flow_path, filename} = gen_flow_filename(server_path, date, flow_name, flow_extension)
     File.exists?(filename)
+  end
+
+  @spec exist_dir?(
+          root_folder :: String.t(),
+          identifier :: dest_identifier()
+        ) :: boolean()
+  def exist_dir?(root_folder, identifier) do
+    server_path = gen_server_path(root_folder, identifier)
+
+    case File.exists?(server_path) do
+      false -> false
+      true -> File.dir?(server_path)
+    end
   end
 
   @spec store(
@@ -122,9 +135,12 @@ defmodule Storage do
           root_folder :: binary(),
           identifier :: dest_identifier()
         ) :: binary()
-  defp gen_server_path(root_folder, :global), do: "#{root_folder}/global"
+  def gen_server_path(root_folder, :global), do: "#{root_folder}/global"
 
-  defp gen_server_path(root_folder, server_id),
+  def gen_server_path(root_folder, {:archive, server_id}),
+    do: "#{root_folder}/archive/#{TTypes.server_id_to_path(server_id)}"
+
+  def gen_server_path(root_folder, server_id),
     do: "#{gen_servers_path(root_folder)}/#{TTypes.server_id_to_path(server_id)}"
 
   defp gen_servers_path(root_folder), do: "#{root_folder}/servers"
