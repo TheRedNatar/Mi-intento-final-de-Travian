@@ -14,9 +14,18 @@ defmodule Collector.Application do
       :type => :worker
     }
 
+    gen_archive = %{
+      :id => "gen_archive",
+      :start => {Collector.GenArchive, :start_link, []},
+      :restart => :permanent,
+      :shutdown => 5_000,
+      :type => :worker
+    }
+
     children = [
       Collector.Supervisor.Worker,
-      gen_collector
+      gen_collector,
+      gen_archive
     ]
 
     opts = [strategy: :rest_for_one, name: Collector.Supervisor, max_restarts: 8, max_seconds: 30]

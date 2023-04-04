@@ -4,6 +4,8 @@ defmodule CollectorArchTest do
   @moduletag :capture_log
 
   setup_all do
+    :ok = Application.ensure_started(:collector)
+    on_exit(fn -> Application.stop(:collector) == :ok end)
     %{server_id: "https://ts5.x1.europe.travian.com"}
   end
 
@@ -21,8 +23,6 @@ defmodule CollectorArchTest do
     assert(is_reference(Collector.subscribe()))
     assert(:ok = Collector.collect())
     assert_receive({:collector_event, :collection_started}, 5_000)
-    Application.stop(:collector)
-    Application.start(:collector)
   end
 
   test "If you are subscribed and the collection ends, you will received and end_event", %{
@@ -171,8 +171,6 @@ defmodule CollectorArchTest do
 
     assert(is_reference(Collector.subscribe()))
     assert_receive({:collector_event, :collection_started}, 6_000)
-    Application.stop(:collector)
-    Application.start(:collector)
   end
 
   # Supervisor.Worker tests
@@ -262,5 +260,36 @@ defmodule CollectorArchTest do
     )
 
     assert(!Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
+  end
+
+  # GenArchive interacction
+
+  @tag :tmp_dir
+  test "GenArchive is triggered once the collection is finished", %{
+    tmp_dir: root_folder
+  } do
+    server_id = "https://ts8.x10.europe.travian.com"
+    content = "alskdjfalksdj"
+    target_date = Date.utc_today()
+
+    Collector.RawSnapshot.store(root_folder, server_id, content, Date.add(target_date, -8))
+    Collector.RawSnapshot.store(root_folder, server_id, content, Date.add(target_date, -7))
+
+    assert(Storage.list_servers(root_folder) == [server_id])
+
+    state = %Collector.GenCollector{
+      target_date: target_date,
+      subscriptions: [],
+      active_p: %{}
+    }
+
+    Application.put_env(:collector, :root_folder, root_folder)
+    Collector.GenCollector.handle_continue(:is_finished, state)
+
+    # maybe capture log
+    # sleep 5 secs but evaluate the condition in smaller steps
+    Process.sleep(2_000)
+    assert(Storage.list_servers(root_folder) == [])
+    assert(Storage.list_servers(root_folder, :archive) == ["#{server_id}__0"])
   end
 end
