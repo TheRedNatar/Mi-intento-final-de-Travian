@@ -276,6 +276,23 @@ defmodule StorageTest do
   end
 
   @tag :tmp_dir
+  test "exist_dir? is true if the file exists and it is a folder else false", %{
+    tmp_dir: tmp_dir,
+    server_id: server_id
+  } do
+    root_folder = tmp_dir
+    identifier = server_id
+
+    File.mkdir_p!("#{root_folder}/servers")
+    assert(false == Storage.exist_dir?(root_folder, identifier))
+    Storage.gen_server_path(root_folder, identifier) |> File.touch!()
+    assert(false == Storage.exist_dir?(root_folder, identifier))
+    Storage.gen_server_path(root_folder, identifier) |> File.rm!()
+    Storage.gen_server_path(root_folder, identifier) |> File.mkdir!()
+    assert(Storage.exist_dir?(root_folder, identifier))
+  end
+
+  @tag :tmp_dir
   test "list_servers list all the servers under root_folder", %{
     tmp_dir: root_folder
   } do

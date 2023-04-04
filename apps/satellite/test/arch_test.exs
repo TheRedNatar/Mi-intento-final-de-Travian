@@ -2,6 +2,7 @@ defmodule SatelliteArchTest do
   use ExUnit.Case
 
   setup do
+    :ok = Application.ensure_started(:collector)
     {:ok, cleaner} = Satellite.MedusaTable.GenCleaner.start_link()
     # on_exit(fn -> GenServer.stop(cleaner) end)
     %{cleaner: cleaner}

@@ -34,13 +34,18 @@ defmodule Collector.GenCollector do
   end
 
   @impl true
-  def handle_continue(:is_finished, state = %__MODULE__{active_p: active_p})
+  def handle_continue(
+        :is_finished,
+        state = %__MODULE__{active_p: active_p, target_date: target_date}
+      )
       when map_size(active_p) == 0 do
     Enum.each(state.subscriptions, fn x -> send(x, {:collector_event, :collection_finished}) end)
     collection_hour = Application.fetch_env!(:collector, :collection_hour)
     tref = spawn_next_timer(collection_hour)
     state = Map.put(state, :tref, tref)
     Logger.info(%{msg: "Collection finished"})
+    root_folder = Application.fetch_env!(:collector, :root_folder)
+    Collector.GenArchive.start_archiving(root_folder, target_date)
     {:noreply, state}
   end
 
