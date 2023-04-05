@@ -5,6 +5,7 @@ defmodule CollectorArchTest do
 
   setup_all do
     :ok = Application.ensure_started(:collector)
+    :ok = Satellite.install([Node.self()])
     on_exit(fn -> Application.stop(:collector) == :ok end)
     %{server_id: "https://ts5.x1.europe.travian.com"}
   end
