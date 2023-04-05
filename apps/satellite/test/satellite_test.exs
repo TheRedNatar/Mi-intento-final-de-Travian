@@ -2,7 +2,7 @@ defmodule SatelliteTest do
   use ExUnit.Case
   doctest Satellite
 
-  setup do
+  setup_all do
     target_date = Date.utc_today()
     creation_dt = DateTime.utc_now()
     server_id = "https://czsk.x1.czsk.travian.com"

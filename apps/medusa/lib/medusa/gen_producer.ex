@@ -107,15 +107,11 @@ defmodule Medusa.GenProducer do
     end
   end
 
-  def handle_info({:collector_event, {:snapshot_collected, server_id}}, state) when state.status == :active do
+  def handle_info({:collector_event, {:ok, server_id}}, state) when state.status == :active do
     Logger.debug(%{msg: "Medusa.GenProducer snapshot event received", server_id: server_id})
     new_pending_events = [server_id | state.pending_events]
     new_state = Map.put(state, :pending_events, new_pending_events)
     {:noreply, [server_id], new_state}
-  end
-  def handle_info({:collector_event, {other_event, server_id}}, state) do
-    Logger.debug(%{msg: "Medusa.GenProducer other event received", server_id: server_id, event: other_event})
-    {:noreply, [], state}
   end
   ######## COLLECTOR EVENTS END
   def handle_info(_msg, state), do: {:noreply, [], state}
