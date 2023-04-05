@@ -61,6 +61,7 @@ config :phoenix, :json_library, Jason
 #   hostname: "localhost"
 
 import_config "#{config_env()}.exs"
+import_config "runtime.exs"
 # Sample configuration:
 #
 #     config :logger, :console,

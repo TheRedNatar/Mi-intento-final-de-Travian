@@ -16,6 +16,15 @@ config :medusa,
 
 config :collector,
   root_folder: System.get_env("MITRAVIAN_ROOTFOLDER", "/tmp/travian_folder"),
+  attemps: System.get_env("MITRAVIAN__COLLECTOR_ATTEMPS", "3") |> String.to_integer(),
+  min:
+    System.get_env("MITRAVIAN__COLLECTOR_MIN", "1")
+    |> String.to_integer()
+    |> then(fn x -> x * 1000 end),
+  max:
+    System.get_env("MITRAVIAN__COLLECTOR_MAX", "120")
+    |> String.to_integer()
+    |> then(fn x -> x * 1000 end),
   collection_hour: Time.new!(3, 0, 0)
 
 config :medusa_metrics,

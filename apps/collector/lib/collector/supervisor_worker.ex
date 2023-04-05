@@ -20,16 +20,17 @@ defmodule Collector.Supervisor.Worker do
         ) ::
           {:ok, {pid(), reference(), TTypes.server_id()}} | {:error, any()}
   def start_child(root_folder, server_id, target_date) do
-    attemps = Application.get_env(:collector, :attemps, 3)
-    min = Application.get_env(:collector, :min, 1_000)
-    max = Application.get_env(:collector, :max, 120_000)
+    attemps = Application.fetch_env!(:collector, :attemps)
+    min = Application.fetch_env!(:collector, :min)
+    max = Application.fetch_env!(:collector, :max)
 
     child_spec = %{
       id: "Collector.GenWorker",
       start:
         {Collector.GenWorker, :start_link,
          [root_folder, server_id, target_date, attemps, min, max]},
-      restart: :transient
+      restart: :transient,
+      shutdown: :brutal_kill
     }
 
     case DynamicSupervisor.start_child(__MODULE__, child_spec) do
