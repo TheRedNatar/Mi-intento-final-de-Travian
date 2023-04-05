@@ -15,7 +15,8 @@ defmodule Satellite.Application do
       :type => :worker
     }
 
-    children = [gen_cleaner]
+    # children = [gen_cleaner]
+    children = []
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

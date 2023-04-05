@@ -18,7 +18,7 @@ defmodule Satellite.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :mnesia, :collector],
+      extra_applications: [:logger, :mnesia],
       mod: {Satellite.Application, []}
     ]
   end
@@ -26,8 +26,8 @@ defmodule Satellite.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:t_types, in_umbrella: true},
-      {:collector, in_umbrella: true}
+      {:t_types, in_umbrella: true}
+      # {:collector, in_umbrella: true}
     ]
   end
 end
