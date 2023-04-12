@@ -1,7 +1,6 @@
 defmodule Collector.Snapshot do
   @behaviour Collector.Feed
 
-
   @enforce_keys [
     :map_id,
     :x,
@@ -65,7 +64,6 @@ defmodule Collector.Snapshot do
           victory_points: TTypes.victory_points()
         }
 
-
   @impl true
   def options(), do: {"snapshot", ".c6bert"}
 
@@ -121,7 +119,8 @@ defmodule Collector.Snapshot do
       {:a, {:ok, raw_snapshot}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.RawSnapshot)},
       {:b, {rows, error_rows}} <- {:b, process_rows(raw_snapshot, server_id)},
-      {:c, :ok} <- {:c, Collector.Feed.store(root_folder, server_id, target_date, rows, __MODULE__)},
+      {:c, :ok} <-
+        {:c, Collector.Feed.store(root_folder, server_id, target_date, rows, __MODULE__)},
       {:d, :ok} <- {:d, store_errors_if_any(root_folder, server_id, error_rows, target_date)}
     ) do
       :ok

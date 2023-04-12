@@ -8,7 +8,9 @@ defmodule Collector.RawSnapshotTest do
 
     assert(:ok == Collector.RawSnapshot.run(root_folder, server_id, target_date))
 
-    {:ok, raw_snapshot} = Collector.Feed.open(root_folder, server_id, target_date, Collector.RawSnapshot)
+    {:ok, raw_snapshot} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.RawSnapshot)
+
     assert(is_bitstring(raw_snapshot))
   end
 

@@ -4,7 +4,6 @@ defmodule Collector.RawSnapshot do
   @impl true
   def options(), do: {"raw_snapshot", ".c6bert"}
 
-
   @impl true
   def to_format(raw_snapshot),
     do: :erlang.term_to_binary(raw_snapshot, [:compressed, :deterministic])
@@ -19,7 +18,8 @@ defmodule Collector.RawSnapshot do
   def run(root_folder, server_id, target_date) do
     with(
       {:a, {:ok, raw_snapshot}} <- {:a, :travianmap.get_map(server_id)},
-      {:b, :ok} <- {:b, Collector.Feed.store(root_folder, server_id, target_date, raw_snapshot, __MODULE__)}
+      {:b, :ok} <-
+        {:b, Collector.Feed.store(root_folder, server_id, target_date, raw_snapshot, __MODULE__)}
     ) do
       :ok
     else

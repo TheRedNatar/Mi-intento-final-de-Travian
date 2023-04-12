@@ -50,10 +50,13 @@ defmodule Collector.AggPlayers do
       {:b, {:ok, prev_snapshot}} <-
         {:b,
          open_option(prev_date, fn ->
-	   Collector.Feed.open(root_folder, server_id, prev_date, Collector.Snapshot)
+           Collector.Feed.open(root_folder, server_id, prev_date, Collector.Snapshot)
          end)},
       {:c, {:ok, prev_agg_players}} <-
-        {:c, open_option(prev_date, fn -> Collector.Feed.open(root_folder, server_id, prev_date, __MODULE__) end)}
+        {:c,
+         open_option(prev_date, fn ->
+           Collector.Feed.open(root_folder, server_id, prev_date, __MODULE__)
+         end)}
     ) do
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
@@ -65,6 +68,7 @@ defmodule Collector.AggPlayers do
         _ ->
           agg_players =
             process(target_dt, server_id, new_snapshot, prev_snapshot, prev_agg_players)
+
           Collector.Feed.store(root_folder, server_id, target_date, agg_players, __MODULE__)
       end
     else

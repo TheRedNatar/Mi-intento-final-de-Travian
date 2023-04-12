@@ -273,8 +273,21 @@ defmodule CollectorArchTest do
     content = "alskdjfalksdj"
     target_date = Date.utc_today()
 
-    Collector.Feed.store(root_folder, server_id, Date.add(target_date, -8), content, Collector.RawSnapshot)
-    Collector.Feed.store(root_folder, server_id, Date.add(target_date, -7), content, Collector.RawSnapshot)
+    Collector.Feed.store(
+      root_folder,
+      server_id,
+      Date.add(target_date, -8),
+      content,
+      Collector.RawSnapshot
+    )
+
+    Collector.Feed.store(
+      root_folder,
+      server_id,
+      Date.add(target_date, -7),
+      content,
+      Collector.RawSnapshot
+    )
 
     assert(Storage.list_servers(root_folder) == [server_id])
 
@@ -304,11 +317,31 @@ defmodule CollectorArchTest do
     content = "alskdjfalksdj"
     target_date = Date.utc_today()
 
-    Collector.Feed.store(root_folder, server_id_1, Date.add(target_date, -1), content, Collector.RawSnapshot)
+    Collector.Feed.store(
+      root_folder,
+      server_id_1,
+      Date.add(target_date, -1),
+      content,
+      Collector.RawSnapshot
+    )
+
     Collector.Feed.store(root_folder, server_id_1, target_date, content, Collector.RawSnapshot)
 
-    Collector.Feed.store(root_folder, server_id_2, Date.add(target_date, -8), content, Collector.RawSnapshot)
-    Collector.Feed.store(root_folder, server_id_2, Date.add(target_date, -7), content, Collector.RawSnapshot)
+    Collector.Feed.store(
+      root_folder,
+      server_id_2,
+      Date.add(target_date, -8),
+      content,
+      Collector.RawSnapshot
+    )
+
+    Collector.Feed.store(
+      root_folder,
+      server_id_2,
+      Date.add(target_date, -7),
+      content,
+      Collector.RawSnapshot
+    )
 
     assert(:ok == Collector.GenArchive.start_archiving(root_folder, target_date))
 

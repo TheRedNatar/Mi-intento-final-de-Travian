@@ -72,15 +72,17 @@ defmodule Collector.AggServer do
     with(
       {:a, {:ok, new_snapshot}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)},
-
       prev_date = get_prev_date(root_folder, server_id, target_date),
       {:b, {:ok, prev_snapshot}} <-
         {:b,
          open_option(prev_date, fn ->
-	   Collector.Feed.open(root_folder, server_id, prev_date, Collector.Snapshot)
+           Collector.Feed.open(root_folder, server_id, prev_date, Collector.Snapshot)
          end)},
       {:c, {:ok, prev_agg_server}} <-
-        {:c, open_option(prev_date, fn -> Collector.Feed.open(root_folder, server_id, prev_date, __MODULE__) end)}
+        {:c,
+         open_option(prev_date, fn ->
+           Collector.Feed.open(root_folder, server_id, prev_date, __MODULE__)
+         end)}
     ) do
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
