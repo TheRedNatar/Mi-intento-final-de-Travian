@@ -107,9 +107,10 @@ defmodule Collector.AggServerTest do
       }
     ]
 
-    assert(:ok == Collector.Snapshot.store(root_folder, server_id, new_snapshot, prev_date))
+    assert(:ok == Collector.Feed.store(root_folder, server_id, prev_date, new_snapshot, Collector.Snapshot))
+      
 
-    assert(:ok == Collector.Snapshot.store(root_folder, server_id, new_snapshot, target_date))
+    assert(:ok == Collector.Feed.store(root_folder, server_id, target_date, new_snapshot, Collector.Snapshot))
 
     {atom_error, {string_agg_open, _}} =
       Collector.AggServer.run(root_folder, server_id, target_date)
@@ -208,11 +209,12 @@ defmodule Collector.AggServerTest do
     ]
 
     assert(
-      :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, target_date)
+      :ok == Collector.Feed.store(root_folder, server_id, target_date, new_player_snapshot, Collector.Snapshot)
     )
 
     assert(:ok == Collector.AggServer.run(root_folder, server_id, target_date))
-    {:ok, agg_server} = Collector.AggServer.open(root_folder, server_id, target_date)
+    {:ok, agg_server} = Collector.Feed.open(root_folder, server_id, target_date, Collector.AggServer)
+          
 
     target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
@@ -339,18 +341,18 @@ defmodule Collector.AggServerTest do
     ]
 
     assert(
-      :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, target_date)
+      :ok == Collector.Feed.store(root_folder, server_id, target_date, new_player_snapshot, Collector.Snapshot)
     )
 
     assert(:ok == Collector.AggServer.run(root_folder, server_id, target_date))
 
     assert(
-      :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, next_date)
+      :ok == Collector.Feed.store(root_folder, server_id, next_date, new_player_snapshot, Collector.Snapshot)
     )
 
     assert(:ok == Collector.AggServer.run(root_folder, server_id, next_date))
 
-    {:ok, agg_server_next} = Collector.AggServer.open(root_folder, server_id, next_date)
+    {:ok, agg_server_next} = Collector.Feed.open(root_folder, server_id, next_date, Collector.AggServer)
     assert(length(agg_server_next.increment) == 2)
     [next_inc, prev_inc] = agg_server_next.increment
 

@@ -14,7 +14,7 @@ defmodule Collector.DAG do
           max :: pos_integer
         ) :: :ok | {:error, any()}
   def run(root_folder, server_id, target_date, attemps, min, max) do
-    Logger.info(%{
+    Logger.debug(%{
       msg: "Starting full Collector.DAG for #{server_id} at #{target_date}",
       server_id: server_id,
       target_date: target_date,
@@ -48,7 +48,7 @@ defmodule Collector.DAG do
           target_date :: Date.t()
         ) :: :ok | {:error, any()}
   def run_without_fetch(root_folder, server_id, target_date) do
-    Logger.info(%{
+    Logger.debug(%{
       msg: "Starting internal Collector.DAG for #{server_id} at #{target_date}",
       server_id: server_id,
       target_date: target_date,

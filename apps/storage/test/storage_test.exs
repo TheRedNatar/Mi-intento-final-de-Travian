@@ -305,11 +305,11 @@ defmodule StorageTest do
     target_date = Date.utc_today()
 
     assert([] == Storage.list_servers(root_folder))
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_2, content, target_date))
+    assert(:ok == Collector.Feed.store(root_folder, server_id_2, target_date, content, Collector.RawSnapshot))
     assert(["https://ts5.x1.international.travian.com"] == Storage.list_servers(root_folder))
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_1, content, target_date))
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_3, content, target_date))
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id_4, content, target_date))
+    assert(:ok == Collector.Feed.store(root_folder, server_id_1, target_date, content, Collector.RawSnapshot))
+    assert(:ok == Collector.Feed.store(root_folder, server_id_3, target_date, content, Collector.RawSnapshot))
+    assert(:ok == Collector.Feed.store(root_folder, server_id_4, target_date, content, Collector.RawSnapshot))
 
     assert(
       [
