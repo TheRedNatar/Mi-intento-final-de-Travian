@@ -22,7 +22,7 @@ defmodule Collector.DAG do
       current_dt: DateTime.utc_now()
     })
 
-    f = fn -> Collector.RawSnapshot.run(root_folder, server_id, target_date) end
+    f = fn -> Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.RawSnapshot) end
 
     case retry(f, min, max, attemps) do
       {:error, reason} ->
@@ -57,7 +57,7 @@ defmodule Collector.DAG do
     })
 
     with(
-      {:a, :ok} <- {:a, Collector.Snapshot.run(root_folder, server_id, target_date)},
+      {:a, :ok} <- {:a, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.Snapshot)},
       Logger.debug(%{
         msg: "Snapshot finished for #{server_id} at #{target_date}",
         server_id: server_id,
@@ -65,7 +65,7 @@ defmodule Collector.DAG do
         target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
         current_dt: DateTime.utc_now()
       }),
-      {:b, :ok} <- {:b, Collector.AggPlayers.run(root_folder, server_id, target_date)},
+      {:b, :ok} <- {:b, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.AggPlayers)},
       Logger.debug(%{
         msg: "AggPlayers finished for #{server_id} at #{target_date}",
         server_id: server_id,
@@ -73,7 +73,7 @@ defmodule Collector.DAG do
         target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
         current_dt: DateTime.utc_now()
       }),
-      {:c, :ok} <- {:c, Collector.AggServer.run(root_folder, server_id, target_date)},
+      {:c, :ok} <- {:c, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.AggServer)},
       Logger.debug(%{
         msg: "AggServer finished for #{server_id} at #{target_date}",
         server_id: server_id,
@@ -122,7 +122,7 @@ defmodule Collector.DAG do
     Storage.list_servers(root_folder)
     |> Flow.from_enumerable(max_demand: max_demand)
     |> Flow.map(fn server_id -> reload(root_folder, server_id) end)
-    |> Enum.to_list()
+    |> Enum.to_list() # just for triggering Flow
 
     :ok
   end
