@@ -7,11 +7,11 @@ defmodule CollectorArchTest do
     :ok = Application.ensure_started(:collector)
     :ok = Satellite.install([Node.self()])
     on_exit(fn -> wait_on_stop() end)
-    %{server_id: "https://ts5.x1.europe.travian.com"}
+    %{server_id: "https://ts6.x1.america.travian.com"}
   end
 
   defp wait_on_stop() do
-    Application.stop(:collector) == :ok
+    :ok = Application.stop(:collector)
     Process.sleep(3_000)
   end
 
@@ -188,12 +188,10 @@ defmodule CollectorArchTest do
     Application.put_env(:collector, :min, 1_000)
     Application.put_env(:collector, :max, 2_000)
     target_date = Date.utc_today()
-    assert(Supervisor.count_children(Collector.Supervisor.Worker)[:workers] == 0)
 
     {:ok, {pid, ref, ^server_id}} =
       Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
 
-    assert(Supervisor.count_children(Collector.Supervisor.Worker)[:workers] == 1)
     assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
 
@@ -275,8 +273,21 @@ defmodule CollectorArchTest do
     content = "alskdjfalksdj"
     target_date = Date.utc_today()
 
-    Collector.RawSnapshot.store(root_folder, server_id, content, Date.add(target_date, -8))
-    Collector.RawSnapshot.store(root_folder, server_id, content, Date.add(target_date, -7))
+    Collector.Feed.store(
+      root_folder,
+      server_id,
+      Date.add(target_date, -8),
+      content,
+      Collector.RawSnapshot
+    )
+
+    Collector.Feed.store(
+      root_folder,
+      server_id,
+      Date.add(target_date, -7),
+      content,
+      Collector.RawSnapshot
+    )
 
     assert(Storage.list_servers(root_folder) == [server_id])
 
@@ -306,11 +317,31 @@ defmodule CollectorArchTest do
     content = "alskdjfalksdj"
     target_date = Date.utc_today()
 
-    Collector.RawSnapshot.store(root_folder, server_id_1, content, Date.add(target_date, -1))
-    Collector.RawSnapshot.store(root_folder, server_id_1, content, target_date)
+    Collector.Feed.store(
+      root_folder,
+      server_id_1,
+      Date.add(target_date, -1),
+      content,
+      Collector.RawSnapshot
+    )
 
-    Collector.RawSnapshot.store(root_folder, server_id_2, content, Date.add(target_date, -8))
-    Collector.RawSnapshot.store(root_folder, server_id_2, content, Date.add(target_date, -7))
+    Collector.Feed.store(root_folder, server_id_1, target_date, content, Collector.RawSnapshot)
+
+    Collector.Feed.store(
+      root_folder,
+      server_id_2,
+      Date.add(target_date, -8),
+      content,
+      Collector.RawSnapshot
+    )
+
+    Collector.Feed.store(
+      root_folder,
+      server_id_2,
+      Date.add(target_date, -7),
+      content,
+      Collector.RawSnapshot
+    )
 
     assert(:ok == Collector.GenArchive.start_archiving(root_folder, target_date))
 

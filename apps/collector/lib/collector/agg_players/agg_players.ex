@@ -1,4 +1,6 @@
 defmodule Collector.AggPlayers do
+  @behaviour Collector.Feed
+
   @enforce_keys [
     :target_dt,
     :server_id,
@@ -26,61 +28,48 @@ defmodule Collector.AggPlayers do
           increment: Collector.AggPlayers.Increment.t()
         }
 
+  @impl true
   def options(), do: {"agg_players", ".c6bert"}
 
+  @impl true
   def to_format(agg_players),
     do: :erlang.term_to_binary(agg_players, [:compressed, :deterministic])
 
+  @impl true
   def from_format(encoded_agg_players),
     do: :erlang.binary_to_term(encoded_agg_players)
 
-  @spec open(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          {:ok, [t()]} | {:error, any()}
-  def open(root_folder, server_id, target_date) do
-    case Storage.open(root_folder, server_id, options(), target_date) do
-      {:ok, {_, encoded}} -> {:ok, from_format(encoded)}
-      error -> error
-    end
-  end
-
-  @spec store(
-          root_folder :: String.t(),
-          server_id :: TTypes.server_id(),
-          agg_players :: [t()],
-          target_date :: Date.t()
-        ) :: :ok | {:error, any()}
-  def store(root_folder, server_id, agg_players, target_date) do
-    encoded = to_format(agg_players)
-    Storage.store(root_folder, server_id, options(), encoded, target_date)
-  end
-
+  @impl true
   @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
           :ok | {:error, any()}
   def run(root_folder, server_id, target_date) do
     with(
       {:a, {:ok, new_snapshot}} <-
-        {:a, Collector.Snapshot.open(root_folder, server_id, target_date)},
+        {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)},
       prev_date = get_prev_date(root_folder, server_id, target_date),
       {:b, {:ok, prev_snapshot}} <-
         {:b,
          open_option(prev_date, fn ->
-           Collector.Snapshot.open(root_folder, server_id, prev_date)
+           Collector.Feed.open(root_folder, server_id, prev_date, Collector.Snapshot)
          end)},
       {:c, {:ok, prev_agg_players}} <-
-        {:c, open_option(prev_date, fn -> open(root_folder, server_id, prev_date) end)}
+        {:c,
+         open_option(prev_date, fn ->
+           Collector.Feed.open(root_folder, server_id, prev_date, __MODULE__)
+         end)}
     ) do
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
       case prev_date do
         nil ->
           agg_players = process(target_dt, server_id, new_snapshot)
-          store(root_folder, server_id, agg_players, target_date)
+          Collector.Feed.store(root_folder, server_id, target_date, agg_players, __MODULE__)
 
         _ ->
           agg_players =
             process(target_dt, server_id, new_snapshot, prev_snapshot, prev_agg_players)
 
-          store(root_folder, server_id, agg_players, target_date)
+          Collector.Feed.store(root_folder, server_id, target_date, agg_players, __MODULE__)
       end
     else
       {:a, {:error, reason}} -> {:error, {"Unable to open target_date snapshot", reason}}

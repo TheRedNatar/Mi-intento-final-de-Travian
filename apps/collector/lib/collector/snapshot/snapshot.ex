@@ -1,4 +1,6 @@
 defmodule Collector.Snapshot do
+  @behaviour Collector.Feed
+
   @enforce_keys [
     :map_id,
     :x,
@@ -62,6 +64,15 @@ defmodule Collector.Snapshot do
           victory_points: TTypes.victory_points()
         }
 
+  @impl true
+  def options(), do: {"snapshot", ".c6bert"}
+
+  @impl true
+  def to_format(snapshot), do: :erlang.term_to_binary(snapshot, [:compressed, :deterministic])
+
+  @impl true
+  def from_format(encoded), do: :erlang.binary_to_term(encoded)
+
   def snapshot_options(), do: {"snapshot", ".c6bert"}
   def snapshot_errors_options(), do: {"snapshot_errors", ".c6bert"}
 
@@ -75,26 +86,6 @@ defmodule Collector.Snapshot do
 
   defp snapshot_errors_from_format(encoded_snapshot_errors),
     do: :erlang.binary_to_term(encoded_snapshot_errors)
-
-  @spec open(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          {:ok, [t()]} | {:error, any()}
-  def open(root_folder, server_id, target_date) do
-    case Storage.open(root_folder, server_id, snapshot_options(), target_date) do
-      {:ok, {_, encoded}} -> {:ok, snapshot_from_format(encoded)}
-      error -> error
-    end
-  end
-
-  @spec store(
-          root_folder :: String.t(),
-          server_id :: TTypes.server_id(),
-          snapshot :: [t()],
-          target_date :: Date.t()
-        ) :: :ok | {:error, any()}
-  def store(root_folder, server_id, snapshot, target_date) do
-    encoded = snapshot_to_format(snapshot)
-    Storage.store(root_folder, server_id, snapshot_options(), encoded, target_date)
-  end
 
   @spec open_errors(
           root_folder :: String.t(),
@@ -120,14 +111,16 @@ defmodule Collector.Snapshot do
     Storage.store(root_folder, server_id, snapshot_errors_options(), encoded, target_date)
   end
 
+  @impl true
   @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
           :ok | {:error, any()}
   def run(root_folder, server_id, target_date) do
     with(
       {:a, {:ok, raw_snapshot}} <-
-        {:a, Collector.RawSnapshot.open(root_folder, server_id, target_date)},
+        {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.RawSnapshot)},
       {:b, {rows, error_rows}} <- {:b, process_rows(raw_snapshot, server_id)},
-      {:c, :ok} <- {:c, store(root_folder, server_id, rows, target_date)},
+      {:c, :ok} <-
+        {:c, Collector.Feed.store(root_folder, server_id, target_date, rows, __MODULE__)},
       {:d, :ok} <- {:d, store_errors_if_any(root_folder, server_id, error_rows, target_date)}
     ) do
       :ok

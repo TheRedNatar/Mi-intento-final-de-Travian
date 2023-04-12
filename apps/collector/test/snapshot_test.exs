@@ -184,9 +184,19 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
     target_date = Date.utc_today()
     server_id = "server_x"
 
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id, raw_snapshot, target_date))
+    assert(
+      :ok ==
+        Collector.Feed.store(
+          root_folder,
+          server_id,
+          target_date,
+          raw_snapshot,
+          Collector.RawSnapshot
+        )
+    )
+
     assert(:ok == Collector.Snapshot.run(root_folder, server_id, target_date))
-    {:ok, snapshot} = Collector.Snapshot.open(root_folder, server_id, target_date)
+    {:ok, snapshot} = Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)
 
     for x <- snapshot, do: assert(is_struct(x, Collector.Snapshot))
   end
@@ -201,9 +211,19 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
     target_date = Date.utc_today()
     server_id = "server_x"
 
-    assert(:ok == Collector.RawSnapshot.store(root_folder, server_id, raw_snapshot, target_date))
+    assert(
+      :ok ==
+        Collector.Feed.store(
+          root_folder,
+          server_id,
+          target_date,
+          raw_snapshot,
+          Collector.RawSnapshot
+        )
+    )
+
     assert(:ok == Collector.Snapshot.run(root_folder, server_id, target_date))
-    {:ok, snapshot} = Collector.Snapshot.open(root_folder, server_id, target_date)
+    {:ok, snapshot} = Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)
     {:ok, snapshot_errors} = Collector.Snapshot.open_errors(root_folder, server_id, target_date)
 
     assert(length(snapshot) == 1)

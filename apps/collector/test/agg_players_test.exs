@@ -282,11 +282,27 @@ defmodule Collector.AggPlayersTest do
     ]
 
     assert(
-      :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, prev_date)
+      # :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, prev_date)
+      :ok ==
+        Collector.Feed.store(
+          root_folder,
+          server_id,
+          prev_date,
+          new_player_snapshot,
+          Collector.Snapshot
+        )
     )
 
     assert(
-      :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, target_date)
+      # :ok == Collector.Snapshot.store(root_folder, server_id, new_player_snapshot, target_date)
+      :ok ==
+        Collector.Feed.store(
+          root_folder,
+          server_id,
+          target_date,
+          new_player_snapshot,
+          Collector.Snapshot
+        )
     )
 
     {atom_error, {string_agg_open, _}} =
@@ -399,7 +415,10 @@ defmodule Collector.AggPlayersTest do
     )
 
     assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
-    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    {:ok, agg_players} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)
+
     for agg_player <- agg_players, do: assert(is_struct(agg_player, Collector.AggPlayers))
   end
 
@@ -585,7 +604,9 @@ defmodule Collector.AggPlayersTest do
     )
 
     assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
-    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    {:ok, agg_players} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)
 
     [p1, p2, p3] = Enum.sort_by(agg_players, & &1.player_id)
 
@@ -717,7 +738,9 @@ defmodule Collector.AggPlayersTest do
     )
 
     assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
-    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    {:ok, agg_players} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)
 
     [p1, p2] = Enum.sort_by(agg_players, & &1.player_id)
 
@@ -909,7 +932,9 @@ defmodule Collector.AggPlayersTest do
     )
 
     assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
-    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    {:ok, agg_players} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)
 
     [_p1, _p2, p3] = Enum.sort_by(agg_players, & &1.player_id)
 
@@ -1126,7 +1151,9 @@ defmodule Collector.AggPlayersTest do
     )
 
     assert(:ok == Collector.AggPlayers.run(root_folder, server_id, target_date))
-    {:ok, agg_players} = Collector.AggPlayers.open(root_folder, server_id, target_date)
+
+    {:ok, agg_players} =
+      Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)
 
     [p1, p2, p3] = Enum.sort_by(agg_players, & &1.player_id)
 
