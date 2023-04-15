@@ -1,9 +1,6 @@
 defmodule Collector.AggServerTest do
   use ExUnit.Case
 
-  test "" do
-  end
-
   @tag :tmp_dir
   test "AggServer.run() returns unable to open the file if there is no snapshot of target_date",
        %{tmp_dir: root_folder} do
