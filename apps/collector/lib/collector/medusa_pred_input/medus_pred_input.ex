@@ -246,7 +246,7 @@ defmodule Collector.MedusaPredInput do
           t_1_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_1_has_increase?: non_neg_integer(),
-          t_1_time_difference_in_days: non_neg_integer(),
+          t_1_time_difference_in_days: number(),
           t_1_total_population: non_neg_integer(),
           t_1_population_increase: non_neg_integer(),
           t_1_population_increase_by_founded: non_neg_integer(),
@@ -267,7 +267,7 @@ defmodule Collector.MedusaPredInput do
           t_2_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_2_has_increase?: non_neg_integer(),
-          t_2_time_difference_in_days: non_neg_integer(),
+          t_2_time_difference_in_days: number(),
           t_2_total_population: non_neg_integer(),
           t_2_population_increase: non_neg_integer(),
           t_2_population_increase_by_founded: non_neg_integer(),
@@ -288,7 +288,7 @@ defmodule Collector.MedusaPredInput do
           t_3_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_3_has_increase?: non_neg_integer(),
-          t_3_time_difference_in_days: non_neg_integer(),
+          t_3_time_difference_in_days: number(),
           t_3_total_population: non_neg_integer(),
           t_3_population_increase: non_neg_integer(),
           t_3_population_increase_by_founded: non_neg_integer(),
@@ -309,7 +309,7 @@ defmodule Collector.MedusaPredInput do
           t_4_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_4_has_increase?: non_neg_integer(),
-          t_4_time_difference_in_days: non_neg_integer(),
+          t_4_time_difference_in_days: number(),
           t_4_total_population: non_neg_integer(),
           t_4_population_increase: non_neg_integer(),
           t_4_population_increase_by_founded: non_neg_integer(),
@@ -330,7 +330,7 @@ defmodule Collector.MedusaPredInput do
           t_5_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_5_has_increase?: non_neg_integer(),
-          t_5_time_difference_in_days: non_neg_integer(),
+          t_5_time_difference_in_days: number(),
           t_5_total_population: non_neg_integer(),
           t_5_population_increase: non_neg_integer(),
           t_5_population_increase_by_founded: non_neg_integer(),
@@ -351,7 +351,7 @@ defmodule Collector.MedusaPredInput do
           t_6_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_6_has_increase?: non_neg_integer(),
-          t_6_time_difference_in_days: non_neg_integer(),
+          t_6_time_difference_in_days: number(),
           t_6_total_population: non_neg_integer(),
           t_6_population_increase: non_neg_integer(),
           t_6_population_increase_by_founded: non_neg_integer(),
@@ -372,7 +372,7 @@ defmodule Collector.MedusaPredInput do
           t_7_has_data?: non_neg_integer(),
           # Represents a boolean value as 0 or 1
           t_7_has_increase?: non_neg_integer(),
-          t_7_time_difference_in_days: non_neg_integer(),
+          t_7_time_difference_in_days: number(),
           t_7_total_population: non_neg_integer(),
           t_7_population_increase: non_neg_integer(),
           t_7_population_increase_by_founded: non_neg_integer(),
@@ -456,11 +456,11 @@ defmodule Collector.MedusaPredInput do
       player_id: snapshot.player_id,
       has_alliance?: if(snapshot.alliance_server_id == 0, do: 0, else: 1),
       # AggServer
-      server_days_from_start: Date.diff(agg_server.estimated_starting_date, today),
+      server_days_from_start: Date.diff(today, agg_server.estimated_starting_date),
       has_speed?: if(agg_server.speed, do: 1, else: 0),
       speed: if(agg_server.speed, do: agg_server.speed, else: 0),
       # AggPlayers
-      player_days_from_start: Date.diff(agg_player.estimated_starting_date, today),
+      player_days_from_start: Date.diff(today, agg_player.estimated_starting_date),
       estimated_tribe: agg_player.estimated_tribe,
       ## Today's data
       t_has_increase?: if(increase?, do: 1, else: 0),
@@ -488,24 +488,25 @@ defmodule Collector.MedusaPredInput do
       t_lost_village_destroyed: if(increase?, do: last.lost_village_destroyed, else: 0)
     }
 
-    update_t_n_samples(t, rest)
+    update_t_n_samples(t, target_dt, rest)
   end
 
-  def update_t_n_samples(t, []), do: t
+  def update_t_n_samples(t, _target_dt, []), do: t
 
-  def update_t_n_samples(t, [n_sample | rest]) do
-    update_t_n_samples(t, 1, n_sample, rest)
+  def update_t_n_samples(t, target_dt, [n_sample | rest]) do
+    update_t_n_samples(t, target_dt, 1, n_sample, rest)
   end
 
-  def update_t_n_samples(t, 8, _n_sample, _rest) do
+  def update_t_n_samples(t, _target_dt, 8, _n_sample, _rest) do
     t
   end
 
-  def update_t_n_samples(t, n, n_sample, []) do
+  def update_t_n_samples(t, target_dt, n, n_sample, []) do
     updated_fields = %{
       ta("t_#{n}_has_data?") => 1,
       ta("t_#{n}_has_increase?") => 0,
-      ta("t_#{n}_time_difference_in_days") => 0,
+      ta("t_#{n}_time_difference_in_days") =>
+        DateTime.diff(target_dt, n_sample.target_dt) / (3600 * 24),
       ta("t_#{n}_total_population") => n_sample.total_population,
       ta("t_#{n}_total_villages") => n_sample.total_villages
     }
@@ -513,11 +514,12 @@ defmodule Collector.MedusaPredInput do
     struct!(t, updated_fields)
   end
 
-  def update_t_n_samples(t, n, n_sample, [n2_sample | rest]) do
+  def update_t_n_samples(t, target_dt, n, n_sample, [n2_sample | rest]) do
     updated_fields = %{
       ta("t_#{n}_has_data?") => 1,
       ta("t_#{n}_has_increase?") => 1,
-      ta("t_#{n}_time_difference_in_days") => 0 calcular,
+      ta("t_#{n}_time_difference_in_days") =>
+        DateTime.diff(target_dt, n_sample.target_dt) / (3600 * 24),
       ta("t_#{n}_total_population") => n_sample.total_population,
       ta("t_#{n}_population_increase") => n_sample.population_increase,
       ta("t_#{n}_population_increase_by_founded") => n_sample.population_increase_by_founded,
@@ -538,7 +540,7 @@ defmodule Collector.MedusaPredInput do
     }
 
     new_t = struct!(t, updated_fields)
-    update_t_n_samples(new_t, n + 1, n2_sample, rest)
+    update_t_n_samples(new_t, target_dt, n + 1, n2_sample, rest)
   end
 
   # alias
