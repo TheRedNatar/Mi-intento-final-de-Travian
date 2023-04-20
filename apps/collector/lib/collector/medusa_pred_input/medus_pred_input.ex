@@ -446,9 +446,10 @@ defmodule Collector.MedusaPredInput do
         ) :: t()
   def process(server_id, target_dt, snapshot, agg_player, agg_server)
       when snapshot.player_id == agg_player.player_id do
-    today = Date.utc_today()
     [last | rest] = Enum.sort_by(agg_player.increment, & &1.target_dt, {:desc, Date})
     increase? = length(rest) != 0
+
+    target_date = DateTime.to_date(target_dt)
 
     t = %__MODULE__{
       target_dt: target_dt,
@@ -456,11 +457,11 @@ defmodule Collector.MedusaPredInput do
       player_id: snapshot.player_id,
       has_alliance?: if(snapshot.alliance_server_id == 0, do: 0, else: 1),
       # AggServer
-      server_days_from_start: Date.diff(today, agg_server.estimated_starting_date),
+      server_days_from_start: Date.diff(target_date, agg_server.estimated_starting_date),
       has_speed?: if(agg_server.speed, do: 1, else: 0),
       speed: if(agg_server.speed, do: agg_server.speed, else: 0),
       # AggPlayers
-      player_days_from_start: Date.diff(today, agg_player.estimated_starting_date),
+      player_days_from_start: Date.diff(target_date, agg_player.estimated_starting_date),
       estimated_tribe: agg_player.estimated_tribe,
       ## Today's data
       t_has_increase?: if(increase?, do: 1, else: 0),
