@@ -28,7 +28,7 @@ defmodule Collector.MedusaTrain do
   #   end
   # end
 
-  @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: nil | boolean()
+  @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: boolean()
   def is_inactive?(inc) do
     inc.population_increase + inc.population_increase_by_founded +
       inc.population_increase_by_conquered == 0
@@ -71,7 +71,7 @@ defmodule Collector.MedusaTrain do
 
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
-      samples = for {input, agg_p} <- bundle, do: process(target_dt, agg_p, input)
+      samples = for {input, agg_p} <- bundle, agg_p.target_dt == target_dt, do: process(target_dt, agg_p, input)
 
       medusa_train = %__MODULE__{
         target_dt: target_dt,
@@ -96,8 +96,7 @@ defmodule Collector.MedusaTrain do
     %Collector.MedusaTrain.Sample{
       sample: input,
       labeling_dt: target_dt,
-      is_inactive?:
-        is_inactive?(Enum.find(agg_player.increment, fn inc -> inc.target_dt == target_dt end))
+      is_inactive?: is_inactive?(Enum.find(agg_player.increment, &(&1.target_dt == target_dt)))
     }
   end
 end

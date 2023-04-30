@@ -25,7 +25,7 @@ defmodule Collector.AggPlayers do
           player_id: TTypes.player_id(),
           estimated_starting_date: Date.t(),
           estimated_tribe: TTypes.tribe_integer(),
-          increment: Collector.AggPlayers.Increment.t()
+          increment: [Collector.AggPlayers.Increment.t()]
         }
 
   @impl true
