@@ -44,14 +44,14 @@ defmodule Collector.DAG do
     end
   end
 
-
-
   @spec run_without_fetch(
           root_folder :: String.t(),
           server_id :: TTypes.server_id() | {:archive, TTypes.server_id()},
           target_date :: Date.t()
         ) :: :ok | {:error, any()}
-  def run_without_fetch(root_folder, {:archive, server_id}, target_date), do: run_without_fetch(root_folder, server_id, target_date)
+  def run_without_fetch(root_folder, {:archive, server_id}, target_date),
+    do: run_without_fetch(root_folder, server_id, target_date)
+
   def run_without_fetch(root_folder, server_id, target_date) do
     Logger.debug(%{
       msg: "Starting internal Collector.DAG for #{server_id} at #{target_date}",
@@ -99,10 +99,8 @@ defmodule Collector.DAG do
         target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
         current_dt: DateTime.utc_now()
       }),
-
       {:e, :ok} <-
-        {:e,
-         Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.MedusaTrain)},
+        {:e, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.MedusaTrain)},
       Logger.debug(%{
         msg: "MedusaTrain finished for #{server_id} at #{target_date}",
         server_id: server_id,
@@ -154,7 +152,6 @@ defmodule Collector.DAG do
     for date <- available_dates, do: Collector.Feed.run_feed(root_folder, server_id, date, feed)
     :ok
   end
-
 
   @spec full_flow_reload!(root_folder :: String.t(), max_demand :: pos_integer()) :: :ok
   def full_flow_reload!(root_folder, max_demand \\ 1) do

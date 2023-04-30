@@ -71,7 +71,10 @@ defmodule Collector.MedusaTrain do
 
       target_dt = DateTime.new!(target_date, ~T[00:00:00.000])
 
-      samples = for {input, agg_p} <- bundle, agg_p.target_dt == target_dt, do: process(target_dt, agg_p, input)
+      samples =
+        for {input, agg_p} <- bundle,
+            agg_p.target_dt == target_dt,
+            do: process(target_dt, agg_p, input)
 
       medusa_train = %__MODULE__{
         target_dt: target_dt,
