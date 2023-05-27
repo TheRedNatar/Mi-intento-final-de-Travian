@@ -19,15 +19,6 @@ defmodule Collector.MedusaTrain do
           samples: [Collector.MedusaTrain.Sample.t()]
         }
 
-  # @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: nil | boolean()
-  # def is_inactive?(inc) do
-  #   case {inc.population_increase, inc.population_increase_by_founded,
-  #         inc.population_increase_by_conquered} do
-  #     {nil, nil, nil} -> nil
-  #     {vill_inc, founded, conquered} -> (vill_inc + founded + conquered) == 0
-  #   end
-  # end
-
   @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: boolean()
   def is_inactive?(inc) do
     inc.population_increase + inc.population_increase_by_founded +
@@ -46,7 +37,7 @@ defmodule Collector.MedusaTrain do
     do: :erlang.binary_to_term(encoded_medusa_train)
 
   @impl true
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, agg_players}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)},

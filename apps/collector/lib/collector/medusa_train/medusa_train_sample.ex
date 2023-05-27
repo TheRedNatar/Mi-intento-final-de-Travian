@@ -5,6 +5,7 @@ defmodule Collector.MedusaTrain.Sample do
     :is_inactive?
   ]
 
+  @derive Jason.Encoder
   defstruct [
     :sample,
     :labeling_dt,

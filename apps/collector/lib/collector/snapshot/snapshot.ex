@@ -112,9 +112,7 @@ defmodule Collector.Snapshot do
   end
 
   @impl true
-  @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          :ok | {:error, any()}
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, raw_snapshot}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.RawSnapshot)},

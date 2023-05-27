@@ -22,10 +22,27 @@ defmodule Collector.Application do
       :type => :worker
     }
 
+    medusa_model_args = [
+      Application.fetch_env!(:collector, :model_dir),
+      Application.fetch_env!(:collector, :py_version),
+      Application.fetch_env!(:collector, :py_env),
+      Application.fetch_env!(:collector, :server),
+      Application.fetch_env!(:collector, :model)
+    ]
+
+    gen_medusa_port = %{
+      :id => "gen_medusa_port",
+      :start => {Collector.MedusaPredOutput.GenPort, :start_link, medusa_model_args},
+      :restart => :permanent,
+      :shutdown => 5_000,
+      :type => :worker
+    }
+
     children = [
       Collector.Supervisor.Worker,
       gen_collector,
-      gen_archive
+      gen_archive,
+      gen_medusa_port
     ]
 
     opts = [strategy: :rest_for_one, name: Collector.Supervisor, max_restarts: 8, max_seconds: 30]
