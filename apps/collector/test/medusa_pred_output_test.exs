@@ -196,12 +196,14 @@ defmodule Collector.MedusaPredOutputTest do
         Collector.MedusaPredInput
       )
 
-
     :ok = Application.ensure_started(:collector)
-    assert(:ok ==
-      Collector.MedusaPredOutput.run(root_folder, server_id, target_date, %{
-        "medusa_gen_port" => Collector.MedusaPredOutput.GenPort
-      })
+
+    assert(
+      :ok ==
+        Collector.MedusaPredOutput.run(root_folder, server_id, target_date, %{
+          "medusa_gen_port" => Collector.MedusaPredOutput.GenPort
+        })
+    )
 
     {:ok, medusa_pred_output} =
       Collector.Feed.open(root_folder, server_id, target_date, Collector.MedusaPredOutput)

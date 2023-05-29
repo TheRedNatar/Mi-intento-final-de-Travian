@@ -123,6 +123,21 @@ defmodule Collector.DAG do
         target_date: target_date,
         target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
         current_dt: DateTime.utc_now()
+      }),
+      {:g, :ok} <-
+        {:g,
+         Collector.Feed.run_feed(
+           root_folder,
+           server_id,
+           target_date,
+           Collector.MedusaScore
+         )},
+      Logger.debug(%{
+        msg: "MedusaScore finished for #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
       })
     ) do
       Logger.info(%{
