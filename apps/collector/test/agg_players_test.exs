@@ -401,14 +401,14 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
+    encoded_snapshot = Collector.Snapshot.to_format(new_player_snapshot)
 
     assert(
       :ok ==
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           encoded_snapshot,
           target_date
         )
@@ -576,15 +576,15 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
-    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+    new_encoded_snapshot = Collector.Snapshot.to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.Snapshot.to_format(prev_player_snapshot)
 
     assert(
       :ok ==
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           prev_encoded_snapshot,
           yesterday
         )
@@ -597,7 +597,7 @@ defmodule Collector.AggPlayersTest do
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           new_encoded_snapshot,
           target_date
         )
@@ -710,15 +710,15 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
-    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+    new_encoded_snapshot = Collector.Snapshot.to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.Snapshot.to_format(prev_player_snapshot)
 
     assert(
       :ok ==
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           prev_encoded_snapshot,
           yesterday
         )
@@ -731,7 +731,7 @@ defmodule Collector.AggPlayersTest do
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           new_encoded_snapshot,
           target_date
         )
@@ -904,15 +904,15 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
-    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+    new_encoded_snapshot = Collector.Snapshot.to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.Snapshot.to_format(prev_player_snapshot)
 
     assert(
       :ok ==
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           prev_encoded_snapshot,
           yesterday
         )
@@ -925,7 +925,7 @@ defmodule Collector.AggPlayersTest do
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           new_encoded_snapshot,
           target_date
         )
@@ -1123,15 +1123,15 @@ defmodule Collector.AggPlayersTest do
       }
     ]
 
-    new_encoded_snapshot = Collector.snapshot_to_format(new_player_snapshot)
-    prev_encoded_snapshot = Collector.snapshot_to_format(prev_player_snapshot)
+    new_encoded_snapshot = Collector.Snapshot.to_format(new_player_snapshot)
+    prev_encoded_snapshot = Collector.Snapshot.to_format(prev_player_snapshot)
 
     assert(
       :ok ==
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           prev_encoded_snapshot,
           yesterday2
         )
@@ -1144,7 +1144,7 @@ defmodule Collector.AggPlayersTest do
         Storage.store(
           root_folder,
           server_id,
-          Collector.snapshot_options(),
+          Collector.Snapshot.options(),
           new_encoded_snapshot,
           target_date
         )

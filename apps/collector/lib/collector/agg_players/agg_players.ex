@@ -40,9 +40,7 @@ defmodule Collector.AggPlayers do
     do: :erlang.binary_to_term(encoded_agg_players)
 
   @impl true
-  @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          :ok | {:error, any()}
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, new_snapshot}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)},
@@ -85,7 +83,7 @@ defmodule Collector.AggPlayers do
   end
 
   defp get_prev_date(root_folder, server_id, target_date) do
-    case Storage.list_dates(root_folder, server_id, Collector.snapshot_options()) do
+    case Storage.list_dates(root_folder, server_id, Collector.Snapshot.options()) do
       [] ->
         nil
 

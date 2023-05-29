@@ -70,5 +70,3 @@ import_config "runtime.exs"
 #       metadata: [:user_id]
 #
 
-config :medusa,
-  python_version: System.get_env("MITRAVIAN__MEDUSA_PY_VERSION", "3.7")

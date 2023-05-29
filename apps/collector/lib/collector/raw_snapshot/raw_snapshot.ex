@@ -13,9 +13,7 @@ defmodule Collector.RawSnapshot do
     do: :erlang.binary_to_term(encoded_raw_snapshot)
 
   @impl true
-  @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          :ok | {:error, any()}
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, raw_snapshot}} <- {:a, :travianmap.get_map(server_id)},
       {:b, :ok} <-

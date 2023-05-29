@@ -33,6 +33,7 @@ defmodule Collector.MedusaPredInput do
     :t_lost_village_destroyed
   ]
 
+  @derive Jason.Encoder
   defstruct [
     :target_dt,
     :server_id,
@@ -402,9 +403,7 @@ defmodule Collector.MedusaPredInput do
     do: :erlang.binary_to_term(encoded_medusa_pred_input)
 
   @impl true
-  @spec run(root_folder :: String.t(), server_id :: TTypes.server_id(), target_date :: Date.t()) ::
-          :ok | {:error, any()}
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, snapshot}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.Snapshot)},

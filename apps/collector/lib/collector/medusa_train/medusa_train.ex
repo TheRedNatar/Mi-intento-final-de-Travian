@@ -7,6 +7,7 @@ defmodule Collector.MedusaTrain do
     :samples
   ]
 
+  @derive Jason.Encoder
   defstruct [
     :target_dt,
     :server_id,
@@ -18,15 +19,6 @@ defmodule Collector.MedusaTrain do
           server_id: TTypes.server_id(),
           samples: [Collector.MedusaTrain.Sample.t()]
         }
-
-  # @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: nil | boolean()
-  # def is_inactive?(inc) do
-  #   case {inc.population_increase, inc.population_increase_by_founded,
-  #         inc.population_increase_by_conquered} do
-  #     {nil, nil, nil} -> nil
-  #     {vill_inc, founded, conquered} -> (vill_inc + founded + conquered) == 0
-  #   end
-  # end
 
   @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: boolean()
   def is_inactive?(inc) do
@@ -46,7 +38,7 @@ defmodule Collector.MedusaTrain do
     do: :erlang.binary_to_term(encoded_medusa_train)
 
   @impl true
-  def run(root_folder, server_id, target_date) do
+  def run(root_folder, server_id, target_date, _ \\ %{}) do
     with(
       {:a, {:ok, agg_players}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, Collector.AggPlayers)},
@@ -85,7 +77,8 @@ defmodule Collector.MedusaTrain do
       Collector.Feed.store(root_folder, server_id, target_date, medusa_train, __MODULE__)
     else
       {:a, {:error, reason}} -> {:error, {"Unable to open agg_players", reason}}
-      {:b, {:error, reason}} -> :ok
+      # Unable to open prev file, but we shouldnt fail here
+      {:b, {:error, _reason}} -> :ok
     end
   end
 

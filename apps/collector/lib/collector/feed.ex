@@ -48,20 +48,22 @@ defmodule Collector.Feed do
   @callback run(
               root_folder :: String.t(),
               server_id :: TTypes.server_id(),
-              target_date :: Date.t()
+              target_date :: Date.t(),
+              options :: %{String.t() => any()}
             ) :: any()
 
   @spec run_feed(
           root_folder :: String.t(),
           server_id :: TTypes.server_id(),
           target_date :: Date.t(),
-          feed_module :: module
+          feed_module :: module,
+          options :: %{String.t() => any()}
         ) :: :ok | {:error, any()}
-  def run_feed(root_folder, server_id, target_date, feed) do
+  def run_feed(root_folder, server_id, target_date, feed, options \\ %{}) do
     {feed_name, _} = feed.options()
     started_dt = DateTime.utc_now()
 
-    with(:ok <- feed.run(root_folder, server_id, target_date)) do
+    with(:ok <- feed.run(root_folder, server_id, target_date, options)) do
       end_dt = DateTime.utc_now()
       duration_in_seconds = DateTime.diff(end_dt, started_dt, :millisecond) / 1000
 
