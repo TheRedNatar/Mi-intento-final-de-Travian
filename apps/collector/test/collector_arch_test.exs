@@ -228,8 +228,14 @@ defmodule CollectorArchTest do
     assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
-    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date))
-    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date))
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date)
+    )
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date)
+    )
   end
 
   @tag :tmp_dir
