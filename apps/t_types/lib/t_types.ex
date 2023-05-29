@@ -104,7 +104,8 @@ defmodule TTypes do
   @type server_info :: %{String.t() => any()}
 
   @typedoc "It's the tribe of the player/village. It can change if the village is conquered by another player with diffrent tribe. You can check the map with `tribe_integer()` in `encode_tribe` or `decode_tribe` implementations."
-  @type tribe_atom :: :romans | :teutons | :gauls | :nature | :natars | :huns | :egyptians | :spartans
+  @type tribe_atom ::
+          :romans | :teutons | :gauls | :nature | :natars | :huns | :egyptians | :spartans
 
   @typedoc "It's the encoding of the tribe value. You can check the map with `tribe_atom()` in `encode_tribe` or `decode_tribe` implementations."
   @type tribe_integer :: pos_integer()

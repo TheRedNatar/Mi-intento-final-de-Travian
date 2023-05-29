@@ -7,6 +7,7 @@ defmodule Collector.MedusaTrain do
     :samples
   ]
 
+  @derive Jason.Encoder
   defstruct [
     :target_dt,
     :server_id,
@@ -76,7 +77,8 @@ defmodule Collector.MedusaTrain do
       Collector.Feed.store(root_folder, server_id, target_date, medusa_train, __MODULE__)
     else
       {:a, {:error, reason}} -> {:error, {"Unable to open agg_players", reason}}
-      {:b, {:error, reason}} -> :ok
+      # Unable to open prev file, but we shouldnt fail here
+      {:b, {:error, _reason}} -> :ok
     end
   end
 

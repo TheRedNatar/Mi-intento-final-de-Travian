@@ -12,7 +12,7 @@ defmodule CollectorArchTest do
 
   defp wait_on_stop() do
     :ok = Application.stop(:collector)
-    Process.sleep(3_000)
+    Process.sleep(1_000)
   end
 
   # Event tests
@@ -225,12 +225,11 @@ defmodule CollectorArchTest do
     ref = Process.monitor(pid)
     assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
-
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.Snapshot.snapshot_options(), target_date)
-    )
-
+    assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
+    assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date))
   end
 
   @tag :tmp_dir
