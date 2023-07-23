@@ -20,7 +20,12 @@ defmodule Collector.MedusaTrain do
           samples: [Collector.MedusaTrain.Sample.t()]
         }
 
-  @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: boolean()
+  @spec is_inactive?(inc :: Collector.AggPlayers.Increment.t()) :: boolean() | :undefined
+  def is_inactive?(inc)
+      when inc.population_increase == nil or inc.population_increase_by_founded == nil or
+             inc.population_increase_by_conquered,
+      do: :undefined
+
   def is_inactive?(inc) do
     inc.population_increase + inc.population_increase_by_founded +
       inc.population_increase_by_conquered == 0
