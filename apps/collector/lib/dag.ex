@@ -40,7 +40,22 @@ defmodule Collector.DAG do
         {:error, reason}
 
       :ok ->
-        run_without_fetch(root_folder, server_id, target_date)
+        case run_without_fetch(root_folder, server_id, target_date) do
+          {:error, reason} ->
+            Logger.error(%{
+              msg: "Unable to run internal DAG for #{server_id} at #{target_date}",
+              server_id: server_id,
+              target_date: target_date,
+              target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+              current_dt: DateTime.utc_now(),
+              reason: reason
+            })
+
+            {:error, reason}
+
+          :ok ->
+            push_to_mnesia(root_folder, server_id, target_date)
+        end
     end
   end
 
@@ -130,6 +145,21 @@ defmodule Collector.DAG do
            root_folder,
            server_id,
            target_date,
+           Collector.SMedusaPred
+         )},
+      Logger.debug(%{
+        msg: "SMedusaPred finished for #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
+      }),
+      {:h, :ok} <-
+        {:h,
+         Collector.Feed.run_feed(
+           root_folder,
+           server_id,
+           target_date,
            Collector.MedusaScore
          )},
       Logger.debug(%{
@@ -153,6 +183,60 @@ defmodule Collector.DAG do
       {step, error} ->
         Logger.error(%{
           msg: "Unable to run internal Collector.DAG for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          step: step,
+          reason: error
+        })
+
+        error
+    end
+  end
+
+  @spec push_to_mnesia(
+          root_folder :: String.t(),
+          server_id :: TTypes.server_id() | {:archive, TTypes.server_id()},
+          target_date :: Date.t()
+        ) :: :ok | {:error, any()}
+  def push_to_mnesia(root_folder, server_id, target_date) do
+    Logger.debug(%{
+      msg: "Starting pushing to Mnesia for #{server_id} at #{target_date}",
+      server_id: server_id,
+      target_date: target_date,
+      target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+      current_dt: DateTime.utc_now()
+    })
+
+    with(
+      {:a, :ok} <-
+        {:a,
+         Collector.Feed.insert_in_table(
+           root_folder,
+           server_id,
+           target_date,
+           Collector.SMedusaPred
+         )},
+      Logger.debug(%{
+        msg: "SMedusaPred inserted in Mnesia #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
+      })
+    ) do
+      Logger.info(%{
+        msg: "Push to Mnesia done for #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
+      })
+    else
+      {step, error} ->
+        Logger.error(%{
+          msg: "Unable to push to Mnesia for #{server_id} at #{target_date}",
           server_id: server_id,
           target_date: target_date,
           target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
