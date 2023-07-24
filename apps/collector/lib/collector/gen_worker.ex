@@ -24,7 +24,6 @@ defmodule Collector.GenWorker do
     case Collector.DAG.run(root_folder, server_id, target_date, attemps, min, max) do
       :ok ->
         GenServer.cast(Collector.GenCollector, {:ok, server_id, self()})
-        Satellite.ServersTable.upsert_server!(server_id)
         {:stop, :normal, state}
 
       {:error, reason} ->
