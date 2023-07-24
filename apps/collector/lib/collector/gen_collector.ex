@@ -88,6 +88,7 @@ defmodule Collector.GenCollector do
     target_date = Date.utc_today()
 
     with(
+      :ok <- Collector.SServer.clean(target_date, %{}),
       :ok <- Collector.SMedusaPred.clean(target_date, %{}),
       Logger.debug(%{msg: "Mnesia tables cleaned"}),
       {:ok, urls} <- :travianmap.get_urls()

@@ -2,7 +2,7 @@ defmodule Front.MedusaController do
   use Front, :controller
 
   def index(conn, _params) do
-    servers = Satellite.ServersTable.get_servers!(Date.utc_today())
+    servers = get_servers!()
     render(conn, "index.html", servers: servers)
   end
 
@@ -19,5 +19,11 @@ defmodule Front.MedusaController do
     answer = :mnesia.activity(:transaction, func)
 
     for {_table_name, _player_id, _server_id, _target_date_row, row} <- answer, do: row
+  end
+
+  def get_servers!() do
+    {table_name, _} = Collector.SServer.options()
+    func = fn -> :mnesia.all_keys(String.to_atom(table_name)) end
+    :mnesia.activity(:transaction, func)
   end
 end

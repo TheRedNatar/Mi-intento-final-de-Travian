@@ -49,6 +49,7 @@ defmodule Front.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:collector, in_umbrella: true},
       {:satellite, in_umbrella: true}
     ]
   end
