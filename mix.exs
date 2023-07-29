@@ -56,7 +56,6 @@ defmodule MyTravian.MixProject do
         sasl: :permanent,
         elixir: :permanent,
         collector: :permanent,
-        medusa: :permanent,
         satellite: :permanent
       ],
       include_executables_for: [:unix],
