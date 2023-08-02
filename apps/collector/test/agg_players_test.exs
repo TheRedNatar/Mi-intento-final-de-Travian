@@ -21,6 +21,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -41,6 +42,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -61,6 +63,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -81,6 +84,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -104,6 +108,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -124,6 +129,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -144,6 +150,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -164,6 +171,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -217,6 +225,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -237,6 +246,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -257,6 +267,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -277,6 +288,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -337,6 +349,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -357,6 +370,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -377,6 +391,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -397,6 +412,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -449,6 +465,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -469,6 +486,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -489,6 +507,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -509,6 +528,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -532,6 +552,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -552,6 +573,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -572,6 +594,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -643,6 +666,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -663,6 +687,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -686,6 +711,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -706,6 +732,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -777,6 +804,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -797,6 +825,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -817,6 +846,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -837,6 +867,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -860,6 +891,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -880,6 +912,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -900,6 +933,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -996,6 +1030,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1016,6 +1051,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1036,6 +1072,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1056,6 +1093,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1079,6 +1117,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1099,6 +1138,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1119,6 +1159,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1189,6 +1230,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1209,6 +1251,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1229,6 +1272,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1249,6 +1293,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1272,6 +1317,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1292,6 +1338,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1312,6 +1359,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1374,6 +1422,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1394,6 +1443,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1414,6 +1464,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1459,6 +1510,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1479,6 +1531,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1499,6 +1552,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1522,6 +1576,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1542,6 +1597,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1562,6 +1618,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1602,6 +1659,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1622,6 +1680,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1642,6 +1701,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1665,6 +1725,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1685,6 +1746,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1725,6 +1787,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1748,6 +1811,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1768,6 +1832,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1788,6 +1853,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1828,6 +1894,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1848,6 +1915,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1871,6 +1939,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1891,6 +1960,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1911,6 +1981,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -1951,6 +2022,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1971,6 +2043,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -1991,6 +2064,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2014,6 +2088,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2034,6 +2109,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2074,6 +2150,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2094,6 +2171,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2114,6 +2192,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2137,6 +2216,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2157,6 +2237,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2177,6 +2258,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2217,6 +2299,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2237,6 +2320,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2257,6 +2341,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2280,6 +2365,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2300,6 +2386,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2340,6 +2427,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2360,6 +2448,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2380,6 +2469,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2403,6 +2493,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2423,6 +2514,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2463,6 +2555,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2483,6 +2576,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2503,6 +2597,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2526,6 +2621,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2546,6 +2642,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2566,6 +2663,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2606,6 +2704,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2626,6 +2725,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2646,6 +2746,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2669,6 +2770,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2689,6 +2791,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2709,6 +2812,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2749,6 +2853,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2769,6 +2874,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2789,6 +2895,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2812,6 +2919,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2832,6 +2940,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2852,6 +2961,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2892,6 +3002,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2912,6 +3023,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -2935,6 +3047,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2955,6 +3068,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -2975,6 +3089,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3015,6 +3130,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3035,6 +3151,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3055,6 +3172,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3078,6 +3196,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3098,6 +3217,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3118,6 +3238,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3158,6 +3279,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3178,6 +3300,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3198,6 +3321,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3221,6 +3345,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3241,6 +3366,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3261,6 +3387,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3301,6 +3428,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3321,6 +3449,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3341,6 +3470,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3364,6 +3494,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3384,6 +3515,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3404,6 +3536,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
@@ -3443,6 +3576,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3463,6 +3597,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       },
       %Collector.Snapshot{
@@ -3483,6 +3618,7 @@ defmodule Collector.AggPlayersTest do
         region: nil,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         victory_points: nil
       }
     ]
