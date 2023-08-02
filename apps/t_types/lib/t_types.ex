@@ -63,6 +63,9 @@ defmodule TTypes do
   @typedoc "If the server is type `Conquer`, this attribute defines if the village is a [city](https://blog.travian.com/2014/04/cities-the-evolution-of-villages)."
   @type is_city() :: boolean() | nil
 
+  @typedoc "If the server is type `Conquer`, this attribute defines if the village has a harbor [city](https://blog.travian.com/2014/04/cities-the-evolution-of-villages)."
+  @type has_harbor() :: boolean() | nil
+
   @typedoc "Row information in the snapshot."
   @type snapshot_row :: {
           map_id(),

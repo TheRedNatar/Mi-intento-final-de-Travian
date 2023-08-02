@@ -5,11 +5,11 @@ defmodule Collector.SnapshotTest do
     server_id = "server_x"
 
     raw_snapshot =
-      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',41,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (57,-144,200,6,39161,'05',374,'LosDosHermanos',210,'Hags',225,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (58,-143,200,6,32245,'02',374,'LosDosHermanos',210,'Hags',721,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (82,-119,200,6,39221,'01 Fonseca',2265,'Fonseca',250,'W.S0',90,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL);"
+      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',41,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (57,-144,200,6,39161,'05',374,'LosDosHermanos',210,'Hags',225,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (58,-143,200,6,32245,'02',374,'LosDosHermanos',210,'Hags',721,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (82,-119,200,6,39221,'01 Fonseca',2265,'Fonseca',250,'W.S0',90,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     {output_rows, error_rows} = Collector.Snapshot.process_rows(raw_snapshot, server_id)
 
@@ -20,6 +20,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 251,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 27,
         player_id: "server_x--P--13",
         player_name: "Masbro",
@@ -40,6 +41,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 210,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 57,
         player_id: "server_x--P--374",
         player_name: "LosDosHermanos",
@@ -60,6 +62,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 210,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 58,
         player_id: "server_x--P--374",
         player_name: "LosDosHermanos",
@@ -80,6 +83,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 250,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 82,
         player_id: "server_x--P--2265",
         player_name: "Fonseca",
@@ -100,6 +104,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 235,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 115,
         player_id: "server_x--P--9808",
         player_name: "Aeirdun",
@@ -121,12 +126,71 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
     for x <- expected_rows, do: assert(x in output_rows)
   end
 
+  test "Snapshot.process_rows() is able to catch Tides of Conquest fields" do
+    server_id = "server_x"
+
+    raw_snapshot =
+      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',41,'Pandora',FALSE,FALSE,TRUE,0);
+INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,'Madrid',FALSE,TRUE,TRUE,15);"
+
+    {output_rows, error_rows} = Collector.Snapshot.process_rows(raw_snapshot, server_id)
+
+    expected_rows = [
+      %Collector.Snapshot{
+        alliance_id: "server_x--A--251",
+        alliance_name: "ÖFKE",
+        alliance_server_id: 251,
+        is_capital: false,
+        is_city: false,
+        has_harbor: true,
+        map_id: 27,
+        player_id: "server_x--P--13",
+        player_name: "Masbro",
+        player_server_id: 13,
+        population: 41,
+        region: "Pandora",
+        tribe: 3,
+        victory_points: 0,
+        village_id: "server_x--V--39983",
+        village_name: "New village",
+        village_server_id: 39983,
+        x: -174,
+        y: 200
+      },
+      %Collector.Snapshot{
+        alliance_id: "server_x--A--235",
+        alliance_name: "AP",
+        alliance_server_id: 235,
+        is_capital: false,
+        is_city: true,
+        has_harbor: true,
+        map_id: 115,
+        player_id: "server_x--P--9808",
+        player_name: "Aeirdun",
+        player_server_id: 9808,
+        population: 104,
+        region: "Madrid",
+        tribe: 1,
+        victory_points: 15,
+        village_id: "server_x--V--39368",
+        village_name: "02",
+        village_server_id: 39368,
+        x: -86,
+        y: 200
+      }
+    ]
+
+    assert(error_rows == [])
+    assert(length(output_rows) == length(expected_rows))
+    for x <- expected_rows, do: assert(x in output_rows)
+  end
+
   test "Snapshot.process_rows() catch error rows" do
     server_id = "server_x"
 
     raw_snapshot =
       "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE');
-INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL);"
+INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     {output_rows, error_rows} = Collector.Snapshot.process_rows(raw_snapshot, server_id)
 
@@ -137,6 +201,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
         alliance_server_id: 235,
         is_capital: false,
         is_city: nil,
+        has_harbor: nil,
         map_id: 115,
         player_id: "server_x--P--9808",
         player_name: "Aeirdun",
@@ -175,11 +240,11 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
   test "Snapshot.run() creates a snapshot table of target_date using the raw_snapshot of target_date",
        %{tmp_dir: root_folder} do
     raw_snapshot =
-      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',41,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (57,-144,200,6,39161,'05',374,'LosDosHermanos',210,'Hags',225,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (58,-143,200,6,32245,'02',374,'LosDosHermanos',210,'Hags',721,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (82,-119,200,6,39221,'01 Fonseca',2265,'Fonseca',250,'W.S0',90,NULL,FALSE,NULL,NULL);
-INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL);"
+      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',41,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (57,-144,200,6,39161,'05',374,'LosDosHermanos',210,'Hags',225,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (58,-143,200,6,32245,'02',374,'LosDosHermanos',210,'Hags',721,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (82,-119,200,6,39221,'01 Fonseca',2265,'Fonseca',250,'W.S0',90,NULL,FALSE,NULL,NULL,NULL);
+INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     target_date = Date.utc_today()
     server_id = "server_x"
@@ -206,7 +271,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
        %{tmp_dir: root_folder} do
     raw_snapshot =
       "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE');
-INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL);"
+INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     target_date = Date.utc_today()
     server_id = "server_x"
