@@ -5,7 +5,7 @@ defmodule CollectorArchTest do
 
   setup_all do
     :ok = Application.ensure_started(:collector)
-    :ok = Collector.set_up_mnesia([Node.self()], Node.self())
+    :ok = Collector.Scripts.set_up_mnesia([Node.self()], Node.self())
     on_exit(fn -> wait_on_stop() end)
     %{server_id: "https://ts6.x1.america.travian.com"}
   end
