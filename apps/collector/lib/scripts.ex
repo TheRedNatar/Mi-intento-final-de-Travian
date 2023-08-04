@@ -65,7 +65,7 @@ defmodule Collector.Scripts do
       Collector.Feed.open(root_folder, server_id, target_date, Collector.MedusaTrain)
 
     json = Jason.encode!(medusa_train)
-    File.write!("#{dst_folder}/#{server_id}_#{Date.to_iso8601(target_date, :basic)}.json", json)
+    File.write!("#{dst_folder}/#{TTypes.server_id_to_path(server_id)}_#{Date.to_iso8601(target_date, :basic)}.json", json)
   end
 
   def reload_all_servers(root_folder) do
