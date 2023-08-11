@@ -48,7 +48,8 @@ defmodule Collector.Scripts do
   def copy_all_medusa_train_to_a_folder(root_folder, dst_folder) do
     File.mkdir_p!(dst_folder)
 
-    servers = Storage.list_servers(root_folder) ++ Storage.list_servers(root_folder, :archive)
+    #servers = Storage.list_servers(root_folder) ++ Storage.list_servers(root_folder, :archive)
+    servers = Storage.list_servers(root_folder)
 
     servers
     |> Enum.flat_map(fn s -> zip_date(root_folder, s, dst_folder, Collector.MedusaTrain) end)
@@ -68,11 +69,11 @@ defmodule Collector.Scripts do
     File.write!("#{dst_folder}/#{TTypes.server_id_to_path(server_id)}_#{Date.to_iso8601(target_date, :basic)}.json", json)
   end
 
-  def reload_all_servers(root_folder) do
-    reload_active_servers(root_folder)
-    reload_archived_servers(root_folder)
-  end
+  # def reload_all_servers(root_folder) do
+  #   reload_active_servers(root_folder)
+  #   reload_archived_servers(root_folder)
+  # end
 
-  def reload_active_servers(root_folder), do: :ok
-  def reload_archived_servers(root_folder), do: :ok
+  # def reload_active_servers(root_folder), do: :ok
+  # def reload_archived_servers(root_folder), do: :ok
 end
