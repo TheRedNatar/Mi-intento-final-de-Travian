@@ -26,8 +26,8 @@ defmodule Front.MedusaView do
   end
 
   def yesterday_to_string(:undefined), do: "undefined"
-  def yesterday_to_string(true), do: "yes"
-  def yesterday_to_string(false), do: "no"
+  def yesterday_to_string(true), do: "no"
+  def yesterday_to_string(false), do: "yes"
 
   def today_to_string(true), do: "no"
   def today_to_string(false), do: "yes"
