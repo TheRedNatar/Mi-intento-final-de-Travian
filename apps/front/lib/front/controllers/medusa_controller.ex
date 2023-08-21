@@ -13,8 +13,7 @@ defmodule Front.MedusaController do
   end
 
   def get_predictions(server_id) do
-    {table_name, _} = Collector.SMedusaPred.options()
-    pattern = {String.to_atom(table_name), :_, server_id, :_, :_}
+    pattern = {:s_medusa_pred, :_, server_id, :_, :_}
     func = fn -> :mnesia.match_object(pattern) end
     answer = :mnesia.activity(:transaction, func)
 
@@ -22,8 +21,7 @@ defmodule Front.MedusaController do
   end
 
   def get_servers!() do
-    {table_name, _} = Collector.SServer.options()
-    func = fn -> :mnesia.all_keys(String.to_atom(table_name)) end
+    func = fn -> :mnesia.all_keys(:s_server) end
     :mnesia.activity(:transaction, func)
   end
 end
