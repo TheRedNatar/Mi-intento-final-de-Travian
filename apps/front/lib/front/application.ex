@@ -7,6 +7,9 @@ defmodule Front.Application do
 
   @impl true
   def start(_type, _args) do
+
+    :ok = Application.ensure_started(:mnesia, :permanent)
+
     children = [
       # Start the Telemetry supervisor
       {Phoenix.PubSub, name: Front.PubSub},
