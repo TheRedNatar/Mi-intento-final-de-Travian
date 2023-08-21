@@ -22,8 +22,11 @@ defmodule Front.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
+      applications: [
+	:mnesia
+      ],
       mod: {Front.Application, []},
-      extra_applications: [:logger, :runtime_tools, :mnesia]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 
