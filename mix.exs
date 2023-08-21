@@ -70,7 +70,6 @@ defmodule MyTravian.MixProject do
         stdlib: :permanent,
         sasl: :permanent,
         elixir: :permanent,
-	collector: :none,
         satellite: :permanent,
         front: :permanent
       ],
