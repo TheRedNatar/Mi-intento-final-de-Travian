@@ -15,24 +15,24 @@ defmodule Connector.GenConnector do
   def handle_cast(_, state), do: {:noreply, state}
 
   def handle_info(:check_connexion, state) do
-    front_node = Application.fetch_env!(:connector, :front_node)
+    node_to_ping = Application.fetch_env!(:connector, :node_to_ping)
 
     case Node.list() do
-      [^front_node] ->
+      [^node_to_ping] ->
         {:noreply, state}
 
       [] ->
-        case Node.connect(front_node) do
+        case Node.connect(node_to_ping) do
           true ->
-            Logger.notice(%{msg: "Connected to front node", node: front_node})
+            Logger.notice(%{msg: "Connected to node", node: node_to_ping})
             {:noreply, state}
 
           false ->
-            Logger.alert(%{msg: "Can't connect to front node", node: front_node})
+            Logger.alert(%{msg: "Can't connect to node", node: node_to_ping})
             {:noreply, state}
 
           :ignored ->
-            Logger.alert(%{msg: "Can't reach front node", node: front_node})
+            Logger.alert(%{msg: "Can't reach node", node: node_to_ping})
             {:noreply, state}
         end
     end

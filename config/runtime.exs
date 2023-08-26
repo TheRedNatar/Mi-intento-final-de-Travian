@@ -10,7 +10,7 @@ config :mnesia,
   dir: System.get_env("MITRAVIAN__MNESIA_DIR", "/tmp/mnesia") |> String.to_charlist()
 
 config :connector,
-  front_node: System.get_env("MITRAVIAN__FRONT_NODE", "legati@somenode") |> String.to_atom()
+  node_to_ping: System.get_env("MITRAVIAN__NODE_TO_PING", "legati@somenode") |> String.to_atom()
 
 
 config :collector,

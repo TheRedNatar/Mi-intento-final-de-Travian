@@ -55,6 +55,7 @@ defmodule MyTravian.MixProject do
         stdlib: :permanent,
         sasl: :permanent,
         elixir: :permanent,
+	mnesia: :permanent,
         collector: :permanent,
         satellite: :permanent
       ],
@@ -70,6 +71,8 @@ defmodule MyTravian.MixProject do
         stdlib: :permanent,
         sasl: :permanent,
         elixir: :permanent,
+	mnesia: :permanent,
+	connector: :permanent,
         satellite: :permanent,
         front: :permanent
       ],
