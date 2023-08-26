@@ -18,7 +18,7 @@ defmodule Collector.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :ssl, :inets],
+      extra_applications: [:logger, :ssl, :inets, :mnesia],
       mod: {Collector.Application, []}
     ]
   end
@@ -28,7 +28,7 @@ defmodule Collector.MixProject do
     [
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:benchee, "~> 1.0", only: :dev},
-      {:travianmap, "~> 0.4.1"},
+      {:travianmap, "~> 0.5.0"},
       {:flow, "~> 1.0"},
       {:t_types, in_umbrella: true},
       {:storage, in_umbrella: true}

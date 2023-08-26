@@ -19,6 +19,7 @@ defmodule Collector.Snapshot do
     :region,
     :is_capital,
     :is_city,
+    :has_harbor,
     :victory_points
   ]
 
@@ -40,6 +41,7 @@ defmodule Collector.Snapshot do
     :region,
     :is_capital,
     :is_city,
+    :has_harbor,
     :victory_points
   ]
 
@@ -61,6 +63,7 @@ defmodule Collector.Snapshot do
           region: TTypes.region(),
           is_capital: TTypes.is_capital(),
           is_city: TTypes.is_city(),
+          has_harbor: TTypes.has_harbor(),
           victory_points: TTypes.victory_points()
         }
 
@@ -147,7 +150,7 @@ defmodule Collector.Snapshot do
          server_id,
          {map_id, x_position, y_position, tribe, village_server_id, village_name,
           player_server_id, player_name, alliance_server_id, alliance_name, population, region,
-          is_capital, is_city, victory_points}
+          is_capital, is_city, has_harbor, victory_points}
        ) do
     %__MODULE__{
       map_id: map_id,
@@ -167,6 +170,7 @@ defmodule Collector.Snapshot do
       region: region,
       is_capital: is_capital,
       is_city: is_city,
+      has_harbor: has_harbor,
       victory_points: victory_points
     }
   end

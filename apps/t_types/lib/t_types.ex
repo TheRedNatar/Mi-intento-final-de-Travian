@@ -63,6 +63,9 @@ defmodule TTypes do
   @typedoc "If the server is type `Conquer`, this attribute defines if the village is a [city](https://blog.travian.com/2014/04/cities-the-evolution-of-villages)."
   @type is_city() :: boolean() | nil
 
+  @typedoc "If the server is type `Conquer`, this attribute defines if the village has a harbor [city](https://blog.travian.com/2014/04/cities-the-evolution-of-villages)."
+  @type has_harbor() :: boolean() | nil
+
   @typedoc "Row information in the snapshot."
   @type snapshot_row :: {
           map_id(),
@@ -166,4 +169,16 @@ defmodule TTypes do
 
   @spec distance401(x1 :: float(), y1 :: float(), x2 :: float(), y2 :: float()) :: float()
   def distance401(x1, y1, x2, y2), do: distance(401, 401, x1, y1, x2, y2)
+
+  @spec player_url(server_id :: server_id(), player_id :: player_id()) :: String.t()
+  def player_url(server_id, player_id) do
+    [_, _, player_identifier] = String.split(player_id, "--", parts: 3)
+    "#{server_id}/profile/#{player_identifier}"
+  end
+
+  @spec alliance_url(server_id :: server_id(), alliance_id :: alliance_id()) :: String.t()
+  def alliance_url(server_id, alliance_id) do
+    [_, _, alliance_identifier] = String.split(alliance_id, "--", parts: 3)
+    "#{server_id}/alliance/#{alliance_identifier}"
+  end
 end

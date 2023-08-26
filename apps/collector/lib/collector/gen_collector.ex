@@ -85,40 +85,45 @@ defmodule Collector.GenCollector do
   def handle_info(:collect, state) do
     Logger.info(%{msg: "Collection started"})
 
-    case :travianmap.get_urls() do
+    target_date = Date.utc_today()
+
+    with(
+      :ok <- Collector.SServer.clean(target_date, %{}),
+      :ok <- Collector.SMedusaPred.clean(target_date, %{}),
+      Logger.debug(%{msg: "Mnesia tables cleaned"}),
+      {:ok, urls} <- :travianmap.get_urls()
+    ) do
+      Enum.each(state.subscriptions, fn x ->
+        send(x, {:collector_event, :collection_started})
+      end)
+
+      root_folder = Application.fetch_env!(:collector, :root_folder)
+
+      {childs, errors} =
+        Enum.map(urls, fn server_id ->
+          Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
+        end)
+        |> Enum.split_with(fn {atom, _} -> atom == :ok end)
+
+      Enum.each(
+        errors,
+        &Logger.warning(%{msg: "Unable to start Collector.GenWorker", reason: elem(&1, 1)})
+      )
+
+      ap = for {:ok, {pid, ref, server_id}} <- childs, into: %{}, do: {pid, {ref, server_id}}
+
+      new_state =
+        state
+        |> Map.put(:active_p, ap)
+        |> Map.put(:target_date, target_date)
+
+      {:noreply, new_state, {:continue, :is_finished}}
+    else
       {:error, reason} ->
         Logger.error(%{msg: "Unable to start the colletion", reason: reason})
         tref = :erlang.send_after(3_000, self(), :collect)
         new_state = Map.put(state, :tref, tref)
         {:noreply, new_state}
-
-      {:ok, urls} ->
-        Enum.each(state.subscriptions, fn x ->
-          send(x, {:collector_event, :collection_started})
-        end)
-
-        root_folder = Application.fetch_env!(:collector, :root_folder)
-        target_date = Date.utc_today()
-
-        {childs, errors} =
-          Enum.map(urls, fn server_id ->
-            Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
-          end)
-          |> Enum.split_with(fn {atom, _} -> atom == :ok end)
-
-        Enum.each(
-          errors,
-          &Logger.warning(%{msg: "Unable to start Collector.GenWorker", reason: elem(&1, 1)})
-        )
-
-        ap = for {:ok, {pid, ref, server_id}} <- childs, into: %{}, do: {pid, {ref, server_id}}
-
-        new_state =
-          state
-          |> Map.put(:active_p, ap)
-          |> Map.put(:target_date, target_date)
-
-        {:noreply, new_state, {:continue, :is_finished}}
     end
   end
 

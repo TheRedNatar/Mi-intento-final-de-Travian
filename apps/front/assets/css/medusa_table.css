@@ -116,7 +116,6 @@ table.medusa tbody tr:hover td {
 
 table.medusa thead th:nth-child(1) {
   text-align: left;
-  width: 15%;
 }
 table.medusa tbody td:nth-child(1) {
   text-align: left;
@@ -125,7 +124,6 @@ table.medusa tbody td:nth-child(1) {
 
 table.medusa thead th:nth-child(2) {
   text-align: left;
-  width: 10%;
 }
 table.medusa tbody td:nth-child(2) {
   text-align: left;
@@ -134,7 +132,6 @@ table.medusa tbody td:nth-child(2) {
 
 table.medusa thead th:nth-child(3) {
   text-align: right;
-  width: 5%;
 }
 table.medusa tbody td:nth-child(3) {
   text-align: right;
@@ -143,7 +140,6 @@ table.medusa tbody td:nth-child(3) {
 
 table.medusa thead th:nth-child(4) {
   text-align: right;
-  width: 5%;
 }
 table.medusa tbody td:nth-child(4) {
   text-align: right;
@@ -152,7 +148,6 @@ table.medusa tbody td:nth-child(4) {
 
 table.medusa thead th:nth-child(5) {
   text-align: right;
-  width: 13%;
 }
 table.medusa tbody td:nth-child(5) {
   text-align: right;
@@ -160,19 +155,9 @@ table.medusa tbody td:nth-child(5) {
 
 
 table.medusa thead th:nth-child(6) {
-  text-align: right;
-  width: 5%;
+  text-align: left;
 }
 table.medusa tbody td:nth-child(6) {
-  text-align: right;
-}
-
-
-table.medusa thead th:nth-child(7) {
-  text-align: left;
-  width: 15%;
-}
-table.medusa tbody td:nth-child(7) {
   text-align: left;
   border-width: 0.1px 0px 0px 2px;
   border-style: solid dashed;
@@ -180,21 +165,21 @@ table.medusa tbody td:nth-child(7) {
 }
 
 
-table.medusa thead th:nth-child(8) {
+table.medusa thead th:nth-child(7) {
   text-align: left;
-  width: 12%;
+}
+table.medusa tbody td:nth-child(7) {
+  text-align: left;
+}
+
+
+table.medusa thead th:nth-child(8) {
+  text-align: right;
 }
 table.medusa tbody td:nth-child(8) {
-  text-align: left;
-}
-
-
-table.medusa thead th:nth-child(9) {
-  text-align: right;
-  width: 13%;
-}
-table.medusa tbody td:nth-child(9) {
   text-align: right;
   font-weight: bold;
 }
+
+
 

@@ -33,6 +33,29 @@ defmodule Collector.MedusaTrainTest do
     )
   end
 
+  test "A player is considered :undefined if there if it is the first increment" do
+    inc = %Collector.AggPlayers.Increment{
+      target_dt: ~U[2023-04-15 00:00:00.000Z],
+      total_population: 1047,
+      population_increase: nil,
+      population_increase_by_founded: nil,
+      population_increase_by_conquered: nil,
+      population_decrease: nil,
+      population_decrease_by_conquered: nil,
+      population_decrease_by_destroyed: nil,
+      total_villages: 3,
+      n_villages_with_population_increase: nil,
+      n_villages_with_population_decrease: nil,
+      n_villages_with_population_stuck: nil,
+      new_village_founded: nil,
+      new_village_conquered: nil,
+      lost_village_conquered: nil,
+      lost_village_destroyed: nil
+    }
+
+    assert(Collector.MedusaTrain.is_inactive?(inc) == :undefined)
+  end
+
   @tag :tmp_dir
   test "MedusaTrain.run returns unable to open file if there is no AggPlayers of target_date", %{
     tmp_dir: root_folder

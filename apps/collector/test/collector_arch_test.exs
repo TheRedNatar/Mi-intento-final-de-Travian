@@ -5,7 +5,7 @@ defmodule CollectorArchTest do
 
   setup_all do
     :ok = Application.ensure_started(:collector)
-    :ok = Satellite.install([Node.self()])
+    :ok = Collector.Scripts.set_up_mnesia([Node.self()], Node.self())
     on_exit(fn -> wait_on_stop() end)
     %{server_id: "https://ts6.x1.america.travian.com"}
   end
@@ -188,6 +188,7 @@ defmodule CollectorArchTest do
     Application.put_env(:collector, :min, 1_000)
     Application.put_env(:collector, :max, 2_000)
     target_date = Date.utc_today()
+    target_date_plus_1 = Date.add(target_date, 1)
 
     {:ok, {pid, ref, ^server_id}} =
       Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
@@ -200,6 +201,30 @@ defmodule CollectorArchTest do
     )
 
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
+    assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date)
+    )
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date)
+    )
+
+    assert(Storage.exist?(root_folder, server_id, Collector.SMedusaPred.options(), target_date))
+
+    {:ok, {pid, ref, ^server_id}} =
+      Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date_plus_1)
+
+    assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaTrain.options(), target_date_plus_1)
+    )
+
+    assert(
+      Storage.exist?(root_folder, server_id, Collector.MedusaScore.options(), target_date_plus_1)
+    )
   end
 
   # GenWorker tests
