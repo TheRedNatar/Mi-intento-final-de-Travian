@@ -25,7 +25,7 @@ config :esbuild,
   version: "0.14.29",
   default: [
     args:
-      ~w(js/app.js js/medusa_table.js js/medusa_players_table.js  --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js js/medusa_table.js js/medusa_players_table.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../apps/front/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
