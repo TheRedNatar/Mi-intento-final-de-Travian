@@ -9,7 +9,7 @@ defmodule Front.MedusaView do
     # TTypes.distance401(x, y, row.center_mass_x, row.center_mass_y)
     # |> Float.round(1)
     # |> Float.to_string()
-    "0.0"
+    0.0
   end
 
   def mass_center_to_str(row) do
