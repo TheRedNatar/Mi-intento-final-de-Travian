@@ -17,8 +17,7 @@
             <th>Village coordinates</th>
             <th>played yesterday?</th>
             <th>Will play today?</th>
-            <th>Inactive probability</th>
-            <th>Model confidence</th>
+            <th>Model confidence %</th>
         </tr>
     </thead>
     <tbody id="medusa_player_body">
@@ -30,12 +29,11 @@
 	      <td><%= row.alliance_url %></td>
 	      <td><%= row.total_population %></td>
 	      <td><%= row.total_villages %></td>
-	      <td><%= distance_to_COM(0, 0, row) %></td>
+	      <td><%= trunc(Float.round(distance_to_COM(0, 0, row))) %></td>
 	      <td><%= inspect([{1, 0}, {2, 3}]) %></td>
 	      <td><%= yesterday_to_string(row.inactive_in_current?) %></td>
 	      <td><%= today_to_string(row.inactive_in_future?) %></td>
-	      <td><%= Float.round(row.inactive_probability, 3) %></td>
-	      <td><%= Float.round(2 * abs(row.inactive_probability - 0.5), 3) %></td>
+	      <td><%= trunc(100 * 2 * abs(row.inactive_probability - 0.5)) %></td>
         </tr>
 	<% end %>
     </tbody>
@@ -55,8 +53,7 @@
       {select: 7, type: "string", hidden: true},
       {select: 8, type: "string"},
       {select: 9, type: "string"},
-      {select: 10, type: "number"},
-      {select: 11, type: "number"}
+      {select: 10, type: "number"}
   ]
 
   let options = {

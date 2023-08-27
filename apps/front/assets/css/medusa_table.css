@@ -97,6 +97,7 @@ table.medusa thead tr th {
   padding: 5px 20px;
   font-size: 1.1rem;
   vertical-align: bottom;
+  text-transform: uppercase;
   border-width: 0px 0px 2px 0px;
   border-style: solid;
 }
@@ -114,72 +115,6 @@ table.medusa tbody tr:hover td {
   background-color: #CCCCCC;
 }
 
-table.medusa thead th:nth-child(1) {
-  text-align: left;
-}
-table.medusa tbody td:nth-child(1) {
-  text-align: left;
-}
-
-
-table.medusa thead th:nth-child(2) {
-  text-align: left;
-}
-table.medusa tbody td:nth-child(2) {
-  text-align: left;
-}
-
-
-table.medusa thead th:nth-child(3) {
-  text-align: right;
-}
-table.medusa tbody td:nth-child(3) {
-  text-align: right;
-}
-
-
-table.medusa thead th:nth-child(4) {
-  text-align: right;
-}
-table.medusa tbody td:nth-child(4) {
-  text-align: right;
-}
-
-
-table.medusa thead th:nth-child(5) {
-  text-align: right;
-}
-table.medusa tbody td:nth-child(5) {
-  text-align: right;
-}
-
-
-table.medusa thead th:nth-child(6) {
-  text-align: left;
-}
-table.medusa tbody td:nth-child(6) {
-  text-align: left;
-  border-width: 0.1px 0px 0px 2px;
-  border-style: solid dashed;
-  border-color: rgba(178, 13, 48, 0.3) rgba(178, 13, 48);
-}
-
-
-table.medusa thead th:nth-child(7) {
-  text-align: left;
-}
-table.medusa tbody td:nth-child(7) {
-  text-align: left;
-}
-
-
-table.medusa thead th:nth-child(8) {
-  text-align: right;
-}
-table.medusa tbody td:nth-child(8) {
-  text-align: right;
-  font-weight: bold;
-}
 
 
 
