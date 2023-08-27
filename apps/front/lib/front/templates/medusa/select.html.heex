@@ -1,6 +1,6 @@
-
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+
 
 <div class="medusa-div">
 <button id="button-csv">Export CSV</button>
@@ -8,26 +8,34 @@
     <thead>
         <tr>
             <th>Player</th>
+            <th>Player url</th>
             <th>Alliance</th>
+            <th>Alliance url</th>
             <th>Population</th>
             <th>Villages</th>
             <th>Distance to closest village</th>
+            <th>Village coordinates</th>
             <th>played yesterday?</th>
             <th>Will play today?</th>
             <th>Inactive probability</th>
+            <th>Model confidence</th>
         </tr>
     </thead>
     <tbody id="medusa_player_body">
         <%= for row <- @rows do %>
         <tr>
 	      <td><%= link(row.player_name, to: URI.parse(row.player_url)) %></td>
+	      <td><%= row.player_url %></td>
 	      <td><%= link(row.alliance_name, to: URI.parse(row.alliance_url)) %></td>
+	      <td><%= row.alliance_url %></td>
 	      <td><%= row.total_population %></td>
 	      <td><%= row.total_villages %></td>
 	      <td><%= distance_to_COM(0, 0, row) %></td>
+	      <td><%= inspect([{1, 0}, {2, 3}]) %></td>
 	      <td><%= yesterday_to_string(row.inactive_in_current?) %></td>
 	      <td><%= today_to_string(row.inactive_in_future?) %></td>
-	      <td style={"color:rgba(178, 13, 48, #{transparent_probability(row.inactive_probability)})"}><%= Float.round(row.inactive_probability, 3) %></td>
+	      <td><%= Float.round(row.inactive_probability, 3) %></td>
+	      <td><%= Float.round(2 * abs(row.inactive_probability - 0.5), 3) %></td>
         </tr>
 	<% end %>
     </tbody>
@@ -36,17 +44,40 @@
 
 <script type="module">
 
+  let columnOptions = [
+      {select: 0, type: "html"},
+      {select: 1, type: "html", hidden: true},
+      {select: 2, type: "html"},
+      {select: 3, type: "html", hidden: true},
+      {select: 4, type: "number"},
+      {select: 5, type: "number"},
+      {select: 6, type: "number"},
+      {select: 7, type: "string", hidden: true},
+      {select: 8, type: "string"},
+      {select: 9, type: "string"},
+      {select: 10, type: "number"},
+      {select: 11, type: "number"}
+  ]
+
   let options = {
+      columns: columnOptions,
       perPageSelect: false,
       perPage: 30
   }
   const dataTable = new simpleDatatables.DataTable("#medusa_table", options)
 
-            document.querySelector("#button-csv").addEventListener("click", () => {
-                simpleDatatables.exportCSV(dataTable, {
-                    download: true,
-                    lineDelimiter: "\n"
-                })
-            })
+  const date = new Date()
+  const [month, day, year] = [
+      date.getMonth(),
+      date.getDate(),
+      date.getFullYear()]
+
+  document.querySelector("#button-csv").addEventListener("click", () => {
+      simpleDatatables.exportCSV(dataTable, {
+          filename: `player_predictions_${year}_${month}_${day}`,
+          download: true,
+          lineDelimiter: "\n"
+      })
+  })
 </script>
 
