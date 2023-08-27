@@ -12,7 +12,6 @@ config :mnesia,
 config :connector,
   node_to_ping: System.get_env("MITRAVIAN__NODE_TO_PING", "legati@somenode") |> String.to_atom()
 
-
 config :collector,
   root_folder: System.get_env("MITRAVIAN_ROOTFOLDER", "/tmp/travian_folder"),
   attemps: System.get_env("MITRAVIAN__COLLECTOR_ATTEMPS", "3") |> String.to_integer(),
