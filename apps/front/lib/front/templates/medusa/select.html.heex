@@ -2,9 +2,25 @@
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 
 
-<div class="medusa-div">
-<button id="button-csv">Export CSV</button>
-<table class="medusa" id="medusa_table">
+<div class="medusa-select-wrapper">
+  <div class="medusa-options-wrapper">
+    <button class="trn-button medusa-options-container" id="button-csv">Export to CSV</button>
+    <div class="medusa-options-container">
+      <div class="medusa-options-container-origin">
+	<li>
+	  <ul class="trn-ul">
+	    <li><input class="trn-input" type="number" max="200" min="-200" id="position-x" value={"#{@position_x}"}></li>
+	    <li><input class="trn-input" type="number" max="200" min="-200" id="position-y" value={"#{@position_y}"}></li>
+	  </ul>
+	</li>
+	  <button class="trn-button" id="button-origin">New origin point</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<table id="medusa_table" class="trn-table">
     <thead>
         <tr>
             <th>Player</th>
@@ -23,13 +39,13 @@
     <tbody id="medusa_player_body">
         <%= for row <- @rows do %>
         <tr>
-	      <td><%= link(row.player_name, to: URI.parse(row.player_url)) %></td>
+	      <td><%= link(row.player_name, to: URI.parse(row.player_url), class: "trn-a") %></td>
 	      <td><%= row.player_url %></td>
-	      <td><%= link(row.alliance_name, to: URI.parse(row.alliance_url)) %></td>
+	      <td><%= link(row.alliance_name, to: URI.parse(row.alliance_url), class: "trn-a") %></td>
 	      <td><%= row.alliance_url %></td>
 	      <td><%= row.total_population %></td>
 	      <td><%= row.total_villages %></td>
-	      <td><%= trunc(Float.round(distance_to_COM(0, 0, row))) %></td>
+	      <td><%= trunc(Float.round(distance_to_COM(@position_x, @position_y, row))) %></td>
 	      <td><%= inspect([{1, 0}, {2, 3}]) %></td>
 	      <td><%= yesterday_to_string(row.inactive_in_current?) %></td>
 	      <td><%= today_to_string(row.inactive_in_future?) %></td>
@@ -39,6 +55,25 @@
     </tbody>
 </table>
 </div>
+
+<script type="module">
+
+  const position_x_input = document.querySelector("#position-x")
+  const position_y_input = document.querySelector("#position-y")
+
+  document.querySelector("#button-origin").addEventListener("click", () => {
+      var params = new URLSearchParams(window.location.search); 
+      params.set("position_x", position_x_input.value)
+      params.set("position_y", position_y_input.value)
+      var newUrl = window.location.origin 
+          + window.location.pathname 
+          + '?' + params.toString();
+      window.location.assign(newUrl)
+      }
+  )
+
+
+</script>
 
 <script type="module">
 
@@ -59,6 +94,7 @@
   let options = {
       columns: columnOptions,
       perPageSelect: false,
+      searchable: false,
       perPage: 30
   }
   const dataTable = new simpleDatatables.DataTable("#medusa_table", options)

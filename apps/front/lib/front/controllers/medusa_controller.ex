@@ -6,10 +6,21 @@ defmodule Front.MedusaController do
     render(conn, "index.html", servers: servers)
   end
 
+  def select(
+        conn,
+        _params = %{"server_id" => server_id_path, "position_x" => x, "position_y" => y}
+      ) do
+    server_id = TTypes.server_id_from_path(server_id_path)
+    rows = get_predictions(server_id)
+    fixed_x = fix_position_parameter(x)
+    fixed_y = fix_position_parameter(y)
+    render(conn, "select.html", rows: rows, position_x: fixed_x, position_y: fixed_y)
+  end
+
   def select(conn, _params = %{"server_id" => server_id_path}) do
     server_id = TTypes.server_id_from_path(server_id_path)
     rows = get_predictions(server_id)
-    render(conn, "select.html", rows: rows)
+    render(conn, "select.html", rows: rows, position_x: "0", position_y: "0")
   end
 
   def get_predictions(server_id) do
@@ -22,6 +33,20 @@ defmodule Front.MedusaController do
 
   def get_servers!() do
     func = fn -> :mnesia.all_keys(:s_server) end
+
     :mnesia.activity(:transaction, func)
+    |> Enum.sort()
+  end
+
+  defp fix_position_parameter(x) do
+    try do
+      case String.to_integer(x) do
+        n when n > 200 -> "200"
+        n when n < -200 -> "200"
+        _ -> x
+      end
+    rescue
+      _ -> "0"
+    end
   end
 end
