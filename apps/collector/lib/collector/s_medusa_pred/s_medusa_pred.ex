@@ -17,6 +17,7 @@ defmodule Collector.SMedusaPred do
     :inactive_in_current?,
     :total_population,
     :total_villages,
+    :village_coordinates,
     :target_date,
     :creation_dt
   ]
@@ -35,6 +36,7 @@ defmodule Collector.SMedusaPred do
     :inactive_in_current?,
     :total_population,
     :total_villages,
+    :village_coordinates,
     :target_date,
     :creation_dt
   ]
@@ -53,6 +55,7 @@ defmodule Collector.SMedusaPred do
           inactive_in_current?: boolean() | :undefined,
           total_population: pos_integer(),
           total_villages: pos_integer(),
+          village_coordinates: [{integer(), integer()}, ...],
           target_date: Date.t(),
           creation_dt: DateTime.t()
         }
@@ -137,19 +140,28 @@ defmodule Collector.SMedusaPred do
         {:c, Collector.Feed.open(root_folder, server_id, target_date, Collector.MedusaPredOutput)}
     ) do
       player_ids = for row <- medusa_pred_output, do: row.player_id
-      uniq_snapshot = Enum.sort_by(snapshot, & &1.player_id) |> Enum.dedup_by(& &1.player_id)
+      snapshot_sorted = Enum.sort_by(snapshot, & &1.player_id)
+
+      village_coordinates =
+        Enum.chunk_by(snapshot_sorted, & &1.player_id)
+        |> Enum.map(fn s -> {hd(s).player_id, Enum.map(s, &{&1.x, &1.y})} end)
+
+      uniq_snapshot = Enum.dedup_by(snapshot_sorted, & &1.player_id)
 
       uniq_agg_players =
         Enum.filter(agg_players, &(&1.player_id in player_ids)) |> Enum.sort_by(& &1.player_id)
 
       uniq_medusa_pred_output = Enum.sort_by(medusa_pred_output, & &1.player_id)
 
-      bundle = Enum.zip([uniq_snapshot, uniq_agg_players, uniq_medusa_pred_output])
+      bundle =
+        Enum.zip([uniq_snapshot, uniq_agg_players, uniq_medusa_pred_output, village_coordinates])
+
       now = DateTime.utc_now()
 
       s_medusa_pred =
-        for {row, agg_player, medusa_output} <- bundle,
-            do: process(target_date, now, server_id, row, agg_player, medusa_output)
+        for {row, agg_player, medusa_output, village_coords} <- bundle,
+            do:
+              process(target_date, now, server_id, row, agg_player, medusa_output, village_coords)
 
       Collector.Feed.store(root_folder, server_id, target_date, s_medusa_pred, __MODULE__)
     else
@@ -170,10 +182,20 @@ defmodule Collector.SMedusaPred do
           server_id :: TTypes.server_id(),
           row :: Collector.Snapshot.t(),
           agg_player :: Collector.AggPlayers.t(),
-          medusa_output :: Collector.MedusaPredOutput.t()
+          medusa_output :: Collector.MedusaPredOutput.t(),
+          village_coords :: {TTypes.player_id(), [{integer(), integer()}, ...]}
         ) :: t()
-  def process(target_date, creation_dt, server_id, row, agg_player, medusa_output)
-      when row.player_id == agg_player.player_id and row.player_id == medusa_output.player_id do
+  def process(
+        target_date,
+        creation_dt,
+        server_id,
+        row,
+        agg_player,
+        medusa_output,
+        {cords_player_id, village_coordinates}
+      )
+      when row.player_id == agg_player.player_id and row.player_id == medusa_output.player_id and
+             row.player_id == cords_player_id do
     last_increment = hd(agg_player.increment)
 
     %__MODULE__{
@@ -190,6 +212,7 @@ defmodule Collector.SMedusaPred do
       inactive_in_current?: Collector.MedusaTrain.is_inactive?(last_increment),
       total_population: last_increment.total_population,
       total_villages: last_increment.total_villages,
+      village_coordinates: village_coordinates,
       target_date: target_date,
       creation_dt: creation_dt
     }
