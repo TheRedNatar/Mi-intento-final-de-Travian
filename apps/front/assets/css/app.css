@@ -122,28 +122,143 @@
 
 /*Mine*/
 
-body {
-    /*background-image: url(/images/white-paper-texture-background.jpg);*/
-    background-color: #F2F2F2;
+
+:root {
+    --main-color-red: #B20D30;
+    --main-color-grey: #F2F2F2;
+    --main-color-grey-dark: #CCCCCC;
+    --main-font-family: 'Open Sans',sans-serif;
 }
 
-/* input { */
-/*   font-family: 'Open Sans',sans-serif; */
-/* } */
 
-/* input:focus { */
-/*   outline: 3px solid transparent; */
-/* } */
+body {
+    background-color: var(--main-color-grey);
+}
+
+.medusa-index-wrapper {
+    display: flex;
+}
+
+.medusa-index-wrapper > ul {
+    margin: 0 auto;
+    padding: 0 20px;
+    border-left: solid var(--main-color-red);
+}
+
+.medusa-index-wrapper > ul > li {
+    margin: 10px 0;
+}
+
+.trn-ul {
+    list-style-type: none;
+}
+
+.trn-ul > li {
+    margin: 10px 0;
+}
+
+
+.trn-button {
+    text-transform: uppercase;
+    color: white;
+    background-color: var(--main-color-red);
+    border-radius: 4px;
+    max-height: 3rem;
+    min-height: 3rem;
+    border-radius: 5px;
+    border: 8px double var(--main-color-grey-dark);
+}
+
+.trn-input {
+  border: 2px solid var(--main-color-red);
+  border-radius: 2px;
+  font-family: var(--main-font-family);
+  background-color: transparent;
+  width: 5rem;
+}
+
+.trn-a {
+    position: relative;
+    color: var(--main-color-red);
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+
+.trn-a:hover {
+    color: #000;
+}
+
+.trn-a::before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.trn-a:hover::before {
+  transform: scaleX(1);
+}
+
+
+
+.trn-table {
+    border: 8px double var(--main-color-grey-dark);
+}
+
+.trn-table > tbody > tr > td {
+    border-bottom: 1px solid var(--main-color-grey-dark);
+}
+
+
+
+
+
+
+.datatable-table > thead > tr > th {
+  padding: 5px 20px;
+  font-size: 1.1rem;
+  color: var(--main-color-red);
+  vertical-align: bottom;
+  text-transform: uppercase;
+  border-width: 0px 0px 2px 0px;
+  border-style: solid;
+}
+
+.datatable-table > tbody > td {
+  padding: 5px 20px;
+  height: 2rem;
+  border-width: 1px 0px 0px 0px;
+  border-style: solid;
+  border-color: rgba(178, 13, 48, 0.3);
+}
+
+.datatable-table > tbody > tr:hover > td {
+  background-color: var(--main-color-grey-dark);
+}
+
+.trn-table thead tr th {
+  padding: 5px 20px;
+  font-size: 1.1rem;
+  color: var(--main-color-red);
+  vertical-align: bottom;
+  text-transform: uppercase;
+  border-width: 0px 0px 2px 0px;
+  border-style: solid;
+}
+
+
+
 
 label.custom-input{
   font-family: 'Open Sans',sans-serif;
   color: #B20D30;
-}
-
-input {
-  font-family: 'Open Sans',sans-serif;
-  border: 2px solid #B20D30;
-  background-color: rgb(255,255,255,0.3);
 }
 
 

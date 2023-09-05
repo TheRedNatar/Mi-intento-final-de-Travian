@@ -1,120 +1,28 @@
-div.medusa_index_wrapper {
-  display: grid;
-  grid-template-columns: 50% 50%;
-}
-
-table.medusa_index {
-  table-layout: fixed;
-  border-collapse: collapse;
-  font-family: 'Open Sans',sans-serif;
-  width: 40%;
-}
-
-table.medusa_index tbody td {
-  padding: 20px;
-}
-
-table.medusa_index a {
-  text-decoration: none;
-  background-color: #B20D30;
-  color: #ffffff;
-  text-transform: uppercase;
-}
-table.medusa_index a:hover {
-  background-color: #555;
-}
-
-table.medusa_index a:active {
-  background-color: black;
-}
-
-
-.medusa-div {
+.medusa-select-wrapper {
   width: 90%;
-  background-color: #fefefe;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
-  padding: 0px 20px 0px 20px;
-  margin-top: 5vh;
 }
-.medusa-options {
+
+.medusa-options-wrapper {
     display: flex;
-    margin: 0px 0px 5vh 0px;
-    padding-top: 5vh;
+    justify-content: space-evenly;
+    align-items: baseline;
+    align-items: center;
 }
-.medusa-options > * {
-        flex: 1 1 0;
-      }
-.medusa-options li {
-    list-style-type: none;
+
+.medusa-options-container {
+    border: 8px double var(--main-color-grey-dark);
+}
+
+.medusa-options-container-origin {
     display: flex;
-    justify-content: flex-end;
-}
-.medusa-options li p{
-  padding: 0px 4px 0px 4px;
-}
-
-
-
-
-
-
-table.medusa a {
-  text-decoration: none;
-  color: #B20D30;
-  text-transform: uppercase;
-}
-table.medusa a:hover {
-  text-decoration: underline;
-}
-
-table.medusa a:visited {
-  color: #390510;
-  text-decoration: underline;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
 }
 
 
-table.medusa {
-  width: 100%;
-  table-layout: auto;
-  border-collapse: collapse;
-  font-family: 'Open Sans',sans-serif;
+.medusa-options-container-origin > * {
+    margin: 0 15px 0;
 }
-
-table.medusa thead {
-  font-weight: bold;
-  color: #B20D30;
-}
-
-/* table.medusa thead { */
-/*   background-color: #B20D30; */
-/*   font-weight: bold; */
-/*   color: #ffffff; */
-/* } */
-
-table.medusa thead tr th {
-  padding: 5px 20px;
-  font-size: 1.1rem;
-  vertical-align: bottom;
-  text-transform: uppercase;
-  border-width: 0px 0px 2px 0px;
-  border-style: solid;
-}
-
-table.medusa tbody td {
-  padding: 5px 20px;
-  height: 2rem;
-  border-width: 1px 0px 0px 0px;
-  border-style: solid;
-  border-color: rgba(178, 13, 48, 0.3);
-}
-
-
-table.medusa tbody tr:hover td {
-  background-color: #CCCCCC;
-}
-
-
-
-
