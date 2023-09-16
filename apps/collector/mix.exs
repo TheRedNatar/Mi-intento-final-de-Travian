@@ -28,7 +28,7 @@ defmodule Collector.MixProject do
     [
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:benchee, "~> 1.0", only: :dev},
-      {:travianmap, "~> 0.5.0"},
+      {:travianmap, "~> 0.6.1"},
       {:flow, "~> 1.0"},
       {:t_types, in_umbrella: true},
       {:storage, in_umbrella: true}
