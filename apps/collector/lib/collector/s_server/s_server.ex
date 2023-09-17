@@ -34,7 +34,7 @@ defmodule Collector.SServer do
         insert_record(agg_server)
         :ok
       end,
-      {:b, :ok} <- {:b, :mnesia.activity(:transaction, func)}
+      {:b, :ok} <- {:b, :mnesia.activity(:sync_transaction, func)}
     ) do
       :ok
     else
