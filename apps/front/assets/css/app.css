@@ -162,11 +162,18 @@ body {
     text-transform: uppercase;
     color: white;
     background-color: var(--main-color-red);
-    border-radius: 4px;
     max-height: 3rem;
     min-height: 3rem;
     border-radius: 5px;
     border: 8px double var(--main-color-grey-dark);
+    transition: all 0.3s ease;
+}
+
+.trn-button:hover {
+    background-color: #000;
+    border-radius: 8px;
+    border-color: #000;
+    transition: all 0.3s ease;
 }
 
 .trn-input {
