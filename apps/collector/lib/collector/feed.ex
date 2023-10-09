@@ -131,10 +131,17 @@ defmodule Collector.Feed do
   end
 
   @spec create_table(nodes :: [node()], feed :: module()) :: {:atomic, any()} | {:aborted, any()}
-  def create_table(nodes, feed) do
+  def create_table(nodes, feed = Collector.SServer) do
     {name, config} = feed.table_config()
 
     config_with_nodes = [{:disc_copies, nodes} | config]
+    :mnesia.create_table(name, config_with_nodes)
+  end
+
+  def create_table(nodes, feed) do
+    {name, config} = feed.table_config()
+
+    config_with_nodes = [{:disc_only_copies, nodes} | config]
     :mnesia.create_table(name, config_with_nodes)
   end
 

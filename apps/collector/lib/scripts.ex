@@ -48,7 +48,7 @@ defmodule Collector.Scripts do
   def copy_all_medusa_train_to_a_folder(root_folder, dst_folder) do
     File.mkdir_p!(dst_folder)
 
-    #servers = Storage.list_servers(root_folder) ++ Storage.list_servers(root_folder, :archive)
+    # servers = Storage.list_servers(root_folder) ++ Storage.list_servers(root_folder, :archive)
     servers = Storage.list_servers(root_folder)
 
     servers
@@ -66,7 +66,11 @@ defmodule Collector.Scripts do
       Collector.Feed.open(root_folder, server_id, target_date, Collector.MedusaTrain)
 
     json = Jason.encode!(medusa_train)
-    File.write!("#{dst_folder}/#{TTypes.server_id_to_path(server_id)}_#{Date.to_iso8601(target_date, :basic)}.json", json)
+
+    File.write!(
+      "#{dst_folder}/#{TTypes.server_id_to_path(server_id)}_#{Date.to_iso8601(target_date, :basic)}.json",
+      json
+    )
   end
 
   # def reload_all_servers(root_folder) do
