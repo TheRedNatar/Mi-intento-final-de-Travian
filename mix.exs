@@ -56,8 +56,7 @@ defmodule MyTravian.MixProject do
         sasl: :permanent,
         elixir: :permanent,
         mnesia: :permanent,
-        collector: :permanent,
-        satellite: :permanent
+        collector: :permanent
       ],
       include_executables_for: [:unix],
       steps: [:assemble, :tar]
@@ -73,7 +72,6 @@ defmodule MyTravian.MixProject do
         elixir: :permanent,
         mnesia: :permanent,
         connector: :permanent,
-        satellite: :permanent,
         front: :permanent
       ],
       include_executables_for: [:unix],
@@ -88,9 +86,8 @@ defmodule MyTravian.MixProject do
         stdlib: :permanent,
         sasl: :permanent,
         elixir: :permanent,
+        mnesia: :permanent,
         collector: :permanent,
-        medusa: :permanent,
-        satellite: :permanent,
         front: :permanent
       ],
       include_executables_for: [:unix],
