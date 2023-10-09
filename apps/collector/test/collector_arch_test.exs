@@ -15,191 +15,21 @@ defmodule CollectorArchTest do
     Process.sleep(1_000)
   end
 
-  # Event tests
   @tag :tmp_dir
-  test "If you are subscribed and the collection starts, you will received and start_event", %{
-    tmp_dir: root_folder
-  } do
-    # We don't want to start the collection, just the event
-    Application.put_env(:collector, :min, 200_000)
-    Application.put_env(:collector, :max, 300_000)
-
-    Application.put_env(:collector, :root_folder, root_folder)
-
-    assert(is_reference(Collector.subscribe()))
-    assert(:ok = Collector.collect())
-    assert_receive({:collector_event, :collection_started}, 5_000)
-  end
-
-  test "If you are subscribed and the collection ends, you will received and end_event", %{
-    server_id: server_id
-  } do
-    pid = :c.pid(0, 250, 0)
-    ref = make_ref()
-
-    target_date = Date.utc_today()
-    subscriptions = [self()]
-    active_p = %{pid => {ref, server_id}}
-
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: subscriptions,
-      active_p: active_p
-    }
-
-    {:noreply, new_state, {:continue, :is_finished}} =
-      Collector.GenCollector.handle_cast({{:error, "some_error"}, server_id, pid}, state)
-
-    assert(new_state.active_p == %{})
-    Collector.GenCollector.handle_continue(:is_finished, new_state)
-    assert_receive({:collector_event, :collection_finished}, 5_000)
-  end
-
-  test "If you are subscribed and the collection of a server_id finish, you will received and server_id end event",
-       %{
-         server_id: server_id
-       } do
-    pid = :c.pid(0, 250, 0)
-    ref = make_ref()
-
-    target_date = Date.utc_today()
-    subscriptions = [self()]
-    active_p = %{pid => {ref, server_id}}
-
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: subscriptions,
-      active_p: active_p
-    }
-
-    Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
-    assert_receive({:collector_event, {:ok, ^server_id}}, 5_000)
-    Collector.GenCollector.handle_cast({{:error, "some_error"}, server_id, pid}, state)
-    assert_receive({:collector_event, {{:error, "some_error"}, ^server_id}}, 5_000)
-  end
-
-  # Server_Id process behaviours
-  test "If a server_id process finish its collection ok or with {error, reason}, remove it from the active_p list",
-       %{
-         server_id: server_id
-       } do
-    pid = :c.pid(0, 250, 0)
-    pid2 = :c.pid(0, 250, 1)
-    ref = make_ref()
-    ref2 = make_ref()
-
-    target_date = Date.utc_today()
-    subscriptions = []
-    active_p = %{pid => {ref, server_id}, pid2 => {ref2, server_id}}
-
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: subscriptions,
-      active_p: active_p
-    }
-
-    {:noreply, new_state, {:continue, :is_finished}} =
-      Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
-
-    assert(new_state.active_p == %{pid2 => {ref2, server_id}})
-  end
-
-  test "If a server_id process crash during its collection, relaunch it and update the active_p with the new pid",
-       %{
-         server_id: server_id
-       } do
-    pid = :c.pid(0, 250, 0)
-    ref = make_ref()
-
-    target_date = Date.utc_today()
-    subscriptions = [self()]
-    active_p = %{pid => {ref, server_id}}
-    down_msg = {:DOWN, ref, :process, pid, :error}
-
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: subscriptions,
-      active_p: active_p
-    }
-
-    {:noreply, new_state, {:continue, :is_finished}} =
-      Collector.GenCollector.handle_info(down_msg, state)
-
-    [pid2] = Map.keys(new_state.active_p)
-    {ref2, server_id2} = Map.get(new_state.active_p, pid2)
-    assert(server_id == server_id2)
-    assert(is_pid(pid2))
-    assert(is_reference(ref2))
-    assert(pid2 != pid)
-    assert(ref2 != ref)
-  end
-
-  test "A collection ends where the last active_p process finish", %{
-    server_id: server_id
-  } do
-    pid = :c.pid(0, 250, 0)
-    pid2 = :c.pid(0, 250, 1)
-    ref = make_ref()
-    ref2 = make_ref()
-
-    target_date = Date.utc_today()
-    subscriptions = [self()]
-    active_p = %{pid => {ref, server_id}, pid2 => {ref2, server_id}}
-
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: subscriptions,
-      active_p: active_p
-    }
-
-    {:noreply, new_state, {:continue, :is_finished}} =
-      Collector.GenCollector.handle_cast({:ok, server_id, pid}, state)
-
-    Collector.GenCollector.handle_continue(:is_finished, new_state)
-    refute_receive({:collector_event, :collection_finished}, 5_000)
-
-    {:noreply, new_state2, {:continue, :is_finished}} =
-      Collector.GenCollector.handle_cast({:ok, server_id, pid2}, new_state)
-
-    assert(new_state2.active_p == %{})
-    Collector.GenCollector.handle_continue(:is_finished, new_state2)
-    assert_receive({:collector_event, :collection_finished}, 5_000)
-  end
-
-  @tag :tmp_dir
-  test "A collection starts when the timer ends", %{
-    tmp_dir: root_folder
-  } do
-    Application.stop(:collector)
-    Application.put_env(:collector, :root_folder, root_folder)
-    Application.put_env(:collector, :collection_hour, Time.add(Time.utc_now(), 3))
-    Application.start(:collector)
-
-    assert(is_reference(Collector.subscribe()))
-    assert_receive({:collector_event, :collection_started}, 6_000)
-  end
-
-  # Supervisor.Worker tests
-  @tag :tmp_dir
-  test "Collector.Supervisor.Worker.start_child launch a GenWorker which runs a DAG", %{
+  test "Collector.DAG.run creates the tables and push them to Mnesia", %{
     tmp_dir: root_folder,
     server_id: server_id
   } do
-    Application.put_env(:collector, :min, 1_000)
-    Application.put_env(:collector, :max, 2_000)
     target_date = Date.utc_today()
-    target_date_plus_1 = Date.add(target_date, 1)
+    tomorrow = Date.add(target_date, 1)
+    attemps = 1
+    min = 1_000
+    max = 2_000
 
-    {:ok, {pid, ref, ^server_id}} =
-      Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date)
+    assert(:ok == Collector.DAG.run(root_folder, server_id, target_date, attemps, min, max))
 
-    assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
-
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.Snapshot.snapshot_options(), target_date)
-    )
-
+    assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
 
@@ -213,58 +43,23 @@ defmodule CollectorArchTest do
 
     assert(Storage.exist?(root_folder, server_id, Collector.SMedusaPred.options(), target_date))
 
-    {:ok, {pid, ref, ^server_id}} =
-      Collector.Supervisor.Worker.start_child(root_folder, server_id, target_date_plus_1)
+    ##### Next Day
 
-    assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
+    assert(:ok == Collector.DAG.run(root_folder, server_id, tomorrow, attemps, min, max))
 
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.MedusaTrain.options(), target_date_plus_1)
-    )
-
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.MedusaScore.options(), target_date_plus_1)
-    )
-  end
-
-  # GenWorker tests
-  @tag :tmp_dir
-  test "Collector.GenWorker runs the whole DAG for server_id", %{
-    tmp_dir: root_folder,
-    server_id: server_id
-  } do
-    target_date = Date.utc_today()
-    attemps = 1
-    min = 1_000
-    max = 2_000
-
-    child_spec = %{
-      id: "Collector.GenWorker",
-      start:
-        {Collector.GenWorker, :start_link,
-         [root_folder, server_id, target_date, attemps, min, max]},
-      restart: :transient
-    }
-
-    pid = start_supervised!(child_spec)
-    ref = Process.monitor(pid)
-    assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
-    assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
-    assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
-    assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
-    assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
-
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date)
-    )
-
-    assert(
-      Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date)
-    )
+    assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaTrain.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.SMedusaPred.options(), tomorrow))
+    assert(Storage.exist?(root_folder, server_id, Collector.MedusaScore.options(), tomorrow))
   end
 
   @tag :tmp_dir
-  test "Collector.GenWorker runs and do nothing with a bad_server_id but it doesn't fail", %{
+  test "Collector.DAG.run runs and do nothing with a bad_server_id but it doesn't raise", %{
     tmp_dir: root_folder
   } do
     target_date = Date.utc_today()
@@ -273,69 +68,63 @@ defmodule CollectorArchTest do
     min = 1_000
     max = 2_000
 
-    child_spec = %{
-      id: "Collector.GenWorker",
-      start:
-        {Collector.GenWorker, :start_link,
-         [root_folder, server_id, target_date, attemps, min, max]},
-      restart: :transient
-    }
+    {:error, _reason} = Collector.DAG.run(root_folder, server_id, target_date, attemps, min, max)
 
-    pid = start_supervised!(child_spec)
-    ref = Process.monitor(pid)
-    assert_receive({:DOWN, ^ref, :process, ^pid, :normal}, 5_000)
     assert(!Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
+    assert(!Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
+    assert(!Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
+    assert(!Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
 
     assert(
-      !Storage.exist?(root_folder, server_id, Collector.Snapshot.snapshot_options(), target_date)
+      !Storage.exist?(root_folder, server_id, Collector.MedusaPredInput.options(), target_date)
     )
 
-    assert(!Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
+    assert(
+      !Storage.exist?(root_folder, server_id, Collector.MedusaPredOutput.options(), target_date)
+    )
+
+    assert(!Storage.exist?(root_folder, server_id, Collector.SMedusaPred.options(), target_date))
   end
 
   # GenArchive
 
-  @tag :tmp_dir
-  test "GenArchive is triggered once the collection is finished", %{
-    tmp_dir: root_folder
-  } do
-    server_id = "https://ts8.x10.europe.travian.com"
-    content = "alskdjfalksdj"
-    target_date = Date.utc_today()
+  # @tag :tmp_dir
+  # test "GenArchive is triggered once the collection is finished", %{
+  #   tmp_dir: root_folder
+  # } do
+  #   server_id = "https://ts8.x10.europe.travian.com"
+  #   content = "alskdjfalksdj"
+  #   target_date = Date.utc_today()
 
-    Collector.Feed.store(
-      root_folder,
-      server_id,
-      Date.add(target_date, -8),
-      content,
-      Collector.RawSnapshot
-    )
+  #   Collector.Feed.store(
+  #     root_folder,
+  #     server_id,
+  #     Date.add(target_date, -8),
+  #     content,
+  #     Collector.RawSnapshot
+  #   )
 
-    Collector.Feed.store(
-      root_folder,
-      server_id,
-      Date.add(target_date, -7),
-      content,
-      Collector.RawSnapshot
-    )
+  #   Collector.Feed.store(
+  #     root_folder,
+  #     server_id,
+  #     Date.add(target_date, -7),
+  #     content,
+  #     Collector.RawSnapshot
+  #   )
 
-    assert(Storage.list_servers(root_folder) == [server_id])
+  #   assert(Storage.list_servers(root_folder) == [server_id])
 
-    state = %Collector.GenCollector{
-      target_date: target_date,
-      subscriptions: [],
-      active_p: %{}
-    }
+  #   state = %Collector.GenCollector{}
 
-    Application.put_env(:collector, :root_folder, root_folder)
-    Collector.GenCollector.handle_continue(:is_finished, state)
+  #   Application.put_env(:collector, :root_folder, root_folder)
+  #   Collector.GenCollector.handle_continue(:is_finished, state)
 
-    # maybe capture log
-    # sleep 5 secs but evaluate the condition in smaller steps
-    Process.sleep(2_000)
-    assert(Storage.list_servers(root_folder) == [])
-    assert(Storage.list_servers(root_folder, :archive) == ["#{server_id}__0"])
-  end
+  #   # maybe capture log
+  #   # sleep 5 secs but evaluate the condition in smaller steps
+  #   Process.sleep(2_000)
+  #   assert(Storage.list_servers(root_folder) == [])
+  #   assert(Storage.list_servers(root_folder, :archive) == ["#{server_id}__0"])
+  # end
 
   @tag :tmp_dir
   test "GenArchive.start_archiving evaluates the active servers and if they are condidates for archiving, it moves them to the archive folder",

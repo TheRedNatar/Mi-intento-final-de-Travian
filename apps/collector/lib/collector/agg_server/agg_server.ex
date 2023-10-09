@@ -125,8 +125,8 @@ defmodule Collector.AggServer do
   @spec process(
           target_dt :: DateTime.t(),
           server_id :: TTypes.server_id(),
-          today_snapshot :: [TTypes.enriched_row()],
-          yesterday_snapshot :: [TTypes.enriched_row()],
+          today_snapshot :: [Collector.Snapshot.t()],
+          yesterday_snapshot :: [Collector.Snapshot.t()],
           yesterday_agg_server :: t()
         ) :: t()
   def process(target_dt, _server_id, new_snapshot, prev_snapshot, prev_agg_server) do

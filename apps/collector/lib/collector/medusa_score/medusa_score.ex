@@ -95,9 +95,13 @@ defmodule Collector.MedusaScore do
     }
   end
 
-  @spec assign_score(actual_activity :: boolean(), estimated_activity :: boolean()) :: score()
+  @spec assign_score(actual_activity :: boolean() | :undefined, estimated_activity :: boolean()) ::
+          score()
   def assign_score(true, true), do: :true_positive
   def assign_score(false, false), do: :true_negative
   def assign_score(true, false), do: :false_negative
   def assign_score(false, true), do: :false_positive
+
+  def assign_score(:undefined, _),
+    do: raise(ArgumentError, message: ":undefined player with 2 days of activity")
 end

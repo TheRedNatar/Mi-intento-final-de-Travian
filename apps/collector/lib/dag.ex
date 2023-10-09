@@ -26,7 +26,7 @@ defmodule Collector.DAG do
       Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.RawSnapshot)
     end
 
-    case retry(f, min, max, attemps) do
+    case Retryable.retryable([on: :error, tries: attemps], f) do
       {:error, reason} ->
         Logger.error(%{
           msg: "Unable to fetch map_sql for #{server_id} at #{target_date}",
@@ -264,6 +264,29 @@ defmodule Collector.DAG do
     end
   end
 
+  @spec launch_collection(
+          root_folder :: String.t(),
+          servers_list :: [TTypes.server_id()],
+          target_date :: Date.t(),
+          launch_options :: map()
+        ) :: [:ok | {:error, any()}]
+  def launch_collection(root_folder, servers_list, target_date, launch_options) do
+    f = fn server_id ->
+      run(
+        root_folder,
+        server_id,
+        target_date,
+        launch_options[:attemps],
+        launch_options[:min],
+        launch_options[:max]
+      )
+    end
+
+    Flow.from_enumerable(servers_list, max_demand: 1, stages: launch_options[:stages])
+    |> Flow.map(f)
+    |> Enum.to_list()
+  end
+
   @spec reload(root_folder :: String.t(), server_id :: TTypes.server_id()) :: :ok
   def reload(root_folder, server_id) do
     available_dates =
@@ -331,12 +354,14 @@ defmodule Collector.DAG do
   end
 
   defp retry(f, min, max, attemps, tries, _error) when tries < attemps do
-    sleep = compute_sleep(min, max)
-    :timer.sleep(sleep)
-
     case f.() do
-      :ok -> :ok
-      {:error, reason} -> retry(f, min, max, attemps, tries + 1, reason)
+      :ok ->
+        :ok
+
+      {:error, reason} ->
+        # sleep = compute_sleep(min, max)
+        # :timer.sleep(sleep)
+        retry(f, min, max, attemps, tries + 1, reason)
     end
   end
 

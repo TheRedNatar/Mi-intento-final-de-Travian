@@ -23,6 +23,9 @@ config :collector,
     System.get_env("MITRAVIAN__COLLECTOR_MAX", "120")
     |> String.to_integer()
     |> then(fn x -> x * 1000 end),
+  stages:
+    System.get_env("MITRAVIAN__COLLECTOR_STAGES", "2")
+    |> String.to_integer(),
   collection_hour: Time.new!(3, 0, 0),
   # Collector Medusa Model Options
   model_dir:

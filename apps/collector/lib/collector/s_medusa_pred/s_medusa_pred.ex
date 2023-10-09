@@ -91,7 +91,7 @@ defmodule Collector.SMedusaPred do
           do: :mnesia.write({@table_name, x.player_id, x.server_id, x.target_date, x})
     end
 
-    :mnesia.activity(:transaction, func)
+    :mnesia.activity(:sync_transaction, func)
   end
 
   @impl true

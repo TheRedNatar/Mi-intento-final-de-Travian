@@ -101,8 +101,8 @@ defmodule Collector.AggPlayers do
   @spec process(
           target_dt :: DateTime.t(),
           server_id :: TTypes.server_id(),
-          today_snapshot :: [TTypes.enriched_row()],
-          yesterday_snapshot :: [TTypes.enriched_row()],
+          today_snapshot :: [Collector.Snapshot.t()],
+          yesterday_snapshot :: [Collector.Snapshot.t()],
           yesterday_agg_players :: [t()]
         ) :: [t()]
   def process(target_dt, server_id, new_snapshot, prev_snapshot, prev_agg_players) do

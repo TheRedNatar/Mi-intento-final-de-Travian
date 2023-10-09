@@ -28,6 +28,7 @@ defmodule Collector.MixProject do
     [
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:benchee, "~> 1.0", only: :dev},
+      {:retryable_ex, "~> 2.0"},
       {:travianmap, "~> 0.6.1"},
       {:flow, "~> 1.0"},
       {:t_types, in_umbrella: true},

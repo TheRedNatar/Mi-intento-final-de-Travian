@@ -39,7 +39,6 @@ defmodule Collector.Application do
     }
 
     children = [
-      Collector.Supervisor.Worker,
       gen_collector,
       gen_archive,
       gen_medusa_port
