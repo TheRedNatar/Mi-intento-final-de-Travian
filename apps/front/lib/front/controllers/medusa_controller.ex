@@ -3,7 +3,8 @@ defmodule Front.MedusaController do
 
   def index(conn, _params) do
     servers = get_servers!()
-    render(conn, "index.html", servers: servers)
+    last_update = get_target_date!(hd(servers))
+    render(conn, "index.html", servers: servers, last_update: last_update)
   end
 
   def select(
@@ -36,6 +37,13 @@ defmodule Front.MedusaController do
 
     :mnesia.activity(:transaction, func)
     |> Enum.sort()
+  end
+
+  def get_target_date!(server_id) do
+    pattern = {:s_server, server_id, :_, :_}
+    func = fn -> :mnesia.match_object(pattern) end
+    [{_, _, date, _}] = :mnesia.activity(:transaction, func)
+    date
   end
 
   defp fix_position_parameter(x) do
