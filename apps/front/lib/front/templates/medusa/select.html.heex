@@ -97,7 +97,18 @@
       searchable: false,
       perPage: 30
   }
+
+
+
+
+
+
   const dataTable = new simpleDatatables.DataTable("#medusa_table", options)
+
+  let columns = dataTable.columns
+
+  const x = "<%= @position_x %>"
+  const y = "<%= @position_y %>"
 
   const date = new Date()
   const [month, day, year] = [
@@ -106,11 +117,16 @@
       date.getFullYear()]
 
   document.querySelector("#button-csv").addEventListener("click", () => {
+
+      columns.show([1, 3, 7]);
+
       simpleDatatables.exportCSV(dataTable, {
-          filename: `player_predictions_${year}_${month}_${day}`,
+          filename: `player_predictions_date_${year}_${month}_${day}_origin_${x}_${y}`,
           download: true,
           lineDelimiter: "\n"
       })
+
+      columns.hide([1, 3, 7]);
   })
 </script>
 
