@@ -1,5 +1,3 @@
-import os
-import sys
 import subprocess
 
 
@@ -18,12 +16,9 @@ def new_version(old_version, commit_message):
 
 if __name__ == "__main__":
     old_version = ""
+    commit_message = subprocess.check_output(["git", "show", "-s", "--format=%s"]).decode("ascii")
 
-    subprocess.check_call([sys.executable, '-m', 'pip', 'install', '--user', 'gitpython'])
-
-    import git
-    repo = git.Repo(os.getcwd())
-    commit_message = repo.head.reference.commit.message
+    print(commit_message)
 
     with open("version.txt", "r") as r:
         old_version = r.read()
