@@ -11,11 +11,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            .github
-            version.txt
-          sparse-checkout-cone-mode: false
 
       - name: Read and update the version file
         run: python3 .github/update_version.py
@@ -24,6 +19,6 @@ jobs:
         run: |
           git config --global user.name "your username"
           git config --global user.email "your email"
-          git add -A
+          git add version.txt
           git commit -m "update version"
           git push
