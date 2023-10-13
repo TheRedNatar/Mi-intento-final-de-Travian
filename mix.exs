@@ -90,6 +90,7 @@ defmodule MyTravian.MixProject do
     ]
   end
 
+
   defp version() do
     File.read!("version.txt")
     |> String.trim()
