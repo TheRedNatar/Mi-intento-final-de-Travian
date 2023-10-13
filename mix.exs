@@ -5,10 +5,11 @@ defmodule MyTravian.MixProject do
     [
       name: "MyTravian project",
       apps_path: "apps",
-      version: "0.2.0",
+      version: version(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      dialyzer: [plt_add_apps: [:mnesia]],
       releases: releases()
     ]
   end
@@ -93,5 +94,10 @@ defmodule MyTravian.MixProject do
       include_executables_for: [:unix],
       steps: [:assemble, :tar]
     ]
+  end
+
+  defp version() do
+    File.read!("version.txt")
+    |> String.trim()
   end
 end
