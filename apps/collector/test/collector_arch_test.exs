@@ -15,7 +15,7 @@ defmodule CollectorArchTest do
     Process.sleep(1_000)
   end
 
-  @tag :tmp_dir
+  @tag tmp_dir: true, needs_model: true
   test "Collector.DAG.run creates the tables and push them to Mnesia", %{
     tmp_dir: root_folder,
     server_id: server_id
