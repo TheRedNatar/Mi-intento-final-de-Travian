@@ -24,7 +24,7 @@ defmodule Collector.MedusaPredOutputTest do
     end)
   end
 
-  @tag :tmp_dir
+  @tag tmp_dir: true, needs_model: true
   test "run creates a prediction output feed", %{tmp_dir: root_folder} do
     server_id = "https://gos.x2.arabics.travian.com"
     target_dt = ~U[2023-05-28 00:00:00.000Z]
