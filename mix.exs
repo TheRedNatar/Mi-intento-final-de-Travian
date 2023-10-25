@@ -5,7 +5,7 @@ defmodule MyTravian.MixProject do
     [
       name: "MyTravian project",
       apps_path: "apps",
-      version: "0.2.1",
+      version: version(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -88,5 +88,15 @@ defmodule MyTravian.MixProject do
       include_executables_for: [:unix],
       steps: [:assemble, :tar]
     ]
+  end
+
+  defp version() do
+    {version, 0} = System.cmd("git", ~w[describe --dirty --tags --always --first-parent])
+
+    version
+    |> String.split("-")
+    |> List.first()
+    |> String.replace_prefix("v", "")
+    |> String.trim()
   end
 end
