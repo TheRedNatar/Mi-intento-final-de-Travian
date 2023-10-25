@@ -5,7 +5,7 @@ defmodule MyTravian.MixProject do
     [
       name: "MyTravian project",
       apps_path: "apps",
-      version: "0.2.0",
+      version: "0.2.1",
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
