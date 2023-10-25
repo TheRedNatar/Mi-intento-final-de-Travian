@@ -11,6 +11,7 @@ defmodule Collector.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
+      dialyzer: [plt_add_apps: [:mnesia]],
       deps: deps()
     ]
   end
