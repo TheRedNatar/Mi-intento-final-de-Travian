@@ -4,6 +4,7 @@ on:
     branches:
       - master
 jobs:
+  permissions: write-all
   build:
     runs-on: ubuntu-latest
     steps:
