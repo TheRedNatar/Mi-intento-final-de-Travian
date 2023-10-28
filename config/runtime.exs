@@ -27,6 +27,11 @@ config :collector,
     System.get_env("MITRAVIAN__COLLECTOR_STAGES", "2")
     |> String.to_integer(),
   collection_hour: Time.new!(3, 0, 0),
+
+  # Mnesia related
+  retention_period_api_map_sql:
+    System.get_env("MITRAVIAN__MNESIA_RETENTION_PERIOD_API_MAP_SQL", "7") |> String.to_integer(),
+
   # Collector Medusa Model Options
   model_dir:
     System.get_env("MITRAVIAN__MEDUSA_MODELDIR", "/home/jorge/Proyectos/TheRedNatar/MedusaPY"),

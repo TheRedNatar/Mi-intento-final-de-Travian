@@ -168,6 +168,21 @@ defmodule Collector.DAG do
         target_date: target_date,
         target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
         current_dt: DateTime.utc_now()
+      }),
+      {:i, :ok} <-
+        {:i,
+         Collector.Feed.run_feed(
+           root_folder,
+           server_id,
+           target_date,
+           Collector.ApiMapSql
+         )},
+      Logger.debug(%{
+        msg: "ApiMapSql finished for #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
       })
     ) do
       Logger.info(%{
@@ -227,6 +242,21 @@ defmodule Collector.DAG do
       }),
       {:b, :ok} <-
         {:b,
+         Collector.Feed.insert_in_table(
+           root_folder,
+           server_id,
+           target_date,
+           Collector.ApiMapSql
+         )},
+      Logger.debug(%{
+        msg: "ApiMapSql inserted in Mnesia #{server_id} at #{target_date}",
+        server_id: server_id,
+        target_date: target_date,
+        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+        current_dt: DateTime.utc_now()
+      }),
+      {:c, :ok} <-
+        {:c,
          Collector.Feed.insert_in_table(
            root_folder,
            server_id,

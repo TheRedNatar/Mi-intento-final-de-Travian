@@ -48,9 +48,16 @@ defmodule Collector.GenCollector do
       stages: Application.fetch_env!(:collector, :stages)
     }
 
+    retention_period_api_map_sql =
+      Application.fetch_env!(:collector, :retention_period_api_map_sql)
+
     with(
       :ok <- Collector.SServer.clean(target_date, %{}),
       :ok <- Collector.SMedusaPred.clean(target_date, %{}),
+      :ok <-
+        Collector.ApiMapSql.clean(target_date, %{
+          "retention_period" => retention_period_api_map_sql
+        }),
       Logger.debug(%{msg: "Mnesia tables cleaned"}),
       {:ok, urls} <- :travianmap.get_urls()
     ) do
