@@ -8,6 +8,7 @@ defmodule Collector.Scripts do
       :rpc.multicall(nodes, :application, :start, [:mnesia]),
       {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.SServer),
       {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.SMedusaPred),
+      {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.ApiMapSql),
       :ok <- :mnesia.set_master_nodes([master_node])
     ) do
       :ok
@@ -19,6 +20,7 @@ defmodule Collector.Scripts do
   def clear_tables() do
     :mnesia.clear_table(:s_server)
     :mnesia.clear_table(:s_medusa_pred)
+    :mnesia.clear_table(:api_map_sql)
   end
 
   def copy_all_snapshot_raw_to_a_folder(root_folder, dst_folder) do
