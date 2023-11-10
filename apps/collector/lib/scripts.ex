@@ -6,21 +6,50 @@ defmodule Collector.Scripts do
       :ok <- :mnesia.delete_schema(nodes),
       :ok <- :mnesia.create_schema(nodes),
       :rpc.multicall(nodes, :application, :start, [:mnesia]),
-      {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.SServer),
-      {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.SMedusaPred),
-      {:atomic, _res} <- Collector.Feed.create_table(nodes, Collector.ApiMapSql),
+      creation_results =
+        Enum.map(Collector.Feed.list_table_modules(), &Collector.Feed.create_table(nodes, &1)),
+      true <- Enum.all?(creation_results, fn {mnesia_result, _} -> mnesia_result == :atomic end),
       :ok <- :mnesia.set_master_nodes([master_node])
     ) do
       :ok
     else
+      false -> {:error, "unable to create tables"}
       reason -> {:error, reason}
     end
   end
 
   def clear_tables() do
-    :mnesia.clear_table(:s_server)
-    :mnesia.clear_table(:s_medusa_pred)
-    :mnesia.clear_table(:api_map_sql)
+    Collector.Feed.list_table_modules()
+    |> Enum.map(fn x -> String.to_existing_atom(elem(x.options(), 0)) end)
+    |> Enum.each(fn table_name -> :mnesia.clear_table(table_name) end)
+  end
+
+  def push_to_mnesia(root_folder, target_date) do
+    stages = Application.fetch_env!(:collector, :stages)
+
+    clear_tables()
+
+    table_has_day = fn server_id, table_module ->
+      target_date in Storage.list_dates(root_folder, server_id, table_module.options())
+    end
+
+    available_modules =
+      Collector.Feed.list_table_modules() |> Enum.filter(&(&1 != Collector.SServer))
+
+    server_has_all_tables = fn server_id ->
+      Enum.map(available_modules, &table_has_day.(server_id, &1))
+      |> Enum.all?()
+    end
+
+    f = fn server_id -> Collector.DAG.push_to_mnesia(root_folder, server_id, target_date) end
+
+    Storage.list_servers(root_folder)
+    |> Enum.filter(&server_has_all_tables.(&1))
+    |> Flow.from_enumerable(max_demand: 1, stages: stages)
+    |> Flow.map(f)
+    |> Enum.to_list()
+
+    :ok
   end
 
   def copy_all_snapshot_raw_to_a_folder(root_folder, dst_folder) do
