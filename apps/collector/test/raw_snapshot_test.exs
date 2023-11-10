@@ -4,7 +4,7 @@ defmodule Collector.RawSnapshotTest do
   @tag :tmp_dir
   test "RawSnapshot.run() fetch a map.sql file from a Travian server", %{tmp_dir: root_folder} do
     target_date = Date.utc_today()
-    server_id = "https://ts6.x1.america.travian.com"
+    server_id = "https://ts4.x1.america.travian.com"
 
     assert(:ok == Collector.RawSnapshot.run(root_folder, server_id, target_date))
 

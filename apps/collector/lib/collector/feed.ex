@@ -105,6 +105,17 @@ defmodule Collector.Feed do
     end
   end
 
+  @doc """
+  List the table modules that push to Mnesia.
+  """
+  def list_table_modules() do
+    [
+      Collector.SMedusaPred,
+      Collector.ApiMapSql,
+      Collector.SServer
+    ]
+  end
+
   @spec open(
           root_folder :: String.t(),
           server_id :: TTypes.server_id(),

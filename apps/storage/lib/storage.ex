@@ -181,9 +181,14 @@ defmodule Storage do
     dir_path = gen_server_path(root_folder, identifier)
     flow_path = "#{dir_path}/#{flow_name}"
 
-    case File.exists?(dir_path) do
-      false -> []
-      true -> File.ls!(flow_path) |> Enum.map(&filename_to_date/1)
+    with(
+      true <- File.exists?(dir_path),
+      true <- File.dir?(dir_path),
+      {:ok, dates} <- File.ls(flow_path)
+    ) do
+      Enum.map(dates, &filename_to_date/1)
+    else
+      _ -> []
     end
   end
 
