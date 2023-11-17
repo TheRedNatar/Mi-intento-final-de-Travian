@@ -32,6 +32,7 @@ defmodule Collector.MixProject do
       {:retryable_ex, "~> 2.0"},
       {:travianmap, "~> 0.6.1"},
       {:flow, "~> 1.0"},
+      {:temp, "~> 0.4.7"},
       {:t_types, in_umbrella: true},
       {:storage, in_umbrella: true}
     ]

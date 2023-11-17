@@ -13,4 +13,21 @@ defmodule Collector.Utils do
       :lt -> @milliseconds_in_day + Time.diff(t, now, :millisecond)
     end
   end
+
+  @spec bin_to_zip_bin(content :: binary()) :: {:ok, binary()} | {:error, any()}
+  def bin_to_zip_bin(content) do
+    with(
+      {:ok, tmp_dir} <- Temp.mkdir(),
+      {:ok, {_filename, zip_bin}} <-
+        :zip.zip('output.zip', [{'input.txt', content}], [
+          :memory,
+          {:cwd, String.to_charlist(tmp_dir)}
+        ]),
+      {:ok, _} <- File.rm_rf(tmp_dir)
+    ) do
+      {:ok, zip_bin}
+    else
+      error -> error
+    end
+  end
 end
