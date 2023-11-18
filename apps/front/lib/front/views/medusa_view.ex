@@ -1,10 +1,8 @@
 defmodule Front.MedusaView do
   use Front, :view
 
-  @round 1
-
-  @spec distance_to_COM(x :: float(), y :: float(), row :: Satellite.MedusaTable.t()) ::
-          String.t()
+  # @spec distance_to_COM(x :: float(), y :: float(), row :: Collector.SMedusaPred.t()) ::
+  #         String.t()
   def distance_to_COM(x, y, row) do
     int_x = String.to_integer(x)
     int_y = String.to_integer(y)
@@ -13,19 +11,6 @@ defmodule Front.MedusaView do
       distance401(int_x, int_y, row_x, row_y)
     end)
     |> Enum.min()
-  end
-
-  def mass_center_to_str(row) do
-    # x = Float.round(row.center_mass_x, @round)
-    # y = Float.round(row.center_mass_y, @round)
-    x = 0
-    y = 0
-    "(#{x}|#{y})"
-  end
-
-  @spec max_attr(rows :: [Satellite.MedusaTable.t()], attr :: atom()) :: String.t()
-  def max_attr(rows, attr) do
-    Enum.max(rows, &(Map.fetch!(&1, attr) >= Map.fetch!(&2, attr))) |> Map.fetch!(attr)
   end
 
   def yesterday_to_string(:undefined), do: "undefined"

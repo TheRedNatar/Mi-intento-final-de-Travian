@@ -1,41 +1,47 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace of mind from prototype to production</p>
+<section>
+  <h1 class="main-title">The Red Natar</h1>
+  <p>An analytics platform for Travian</p>
 </section>
 
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.6/CHANGELOG.md">v1.6 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://web.libera.chat/#elixir">#elixir on Libera Chat (IRC)</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-      <li>
-        <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a>
-      </li>
-      <li>
-        <a href="https://discord.gg/elixir">Elixir on Discord</a>
-      </li>
-    </ul>
-  </article>
+<section>
+  <p>My purpose is to provide a space where players can explore, analyze and take advantage of the current status of Travian via different data which is crafted using machine learning models.</p>
+</section>
+
+<section>
+  <h2>Tools</h2>
+  <div class="tools-container">
+    <article class="tool">
+      <a href="/medusa" class="tool__link"}>
+	<header><h3>Medusa</h3></header>
+	<img src={Routes.static_path(@conn, "/images/mailchimp.jpg")}>
+	<div class="tool__content">
+	  <p>
+	    Find future inactive players using ML with Medusa
+	  </p>
+	</div>
+      </a>
+    </article>
+    <article class="tool tool--not-released">
+      <header><h3>API</h3></header>
+      <img src={Routes.static_path(@conn, "/images/mailchimp.jpg")}>
+      <div class="tool__content">
+	<p>
+	  The Unoficial Oficial API for Travian
+	</p>
+      </div>
+    </article>
+    <article class="tool tool--not-released">
+      <header><h3>Travian Statistics</h3></header>
+      <img src={Routes.static_path(@conn, "/images/mailchimp.jpg")}>
+      <div class="tool__content">
+	<p>
+	  An overview of the current state of all the servers accros Travian
+	</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2>About Me</h2>
 </section>

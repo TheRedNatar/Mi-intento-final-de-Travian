@@ -19,6 +19,9 @@ defmodule Front.ConnCase do
 
   using do
     quote do
+
+      use Front, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
