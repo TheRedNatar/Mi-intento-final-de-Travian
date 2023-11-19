@@ -5,7 +5,7 @@ defmodule Front.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {Front.LayoutView, :root}
+    plug :put_root_layout, html: {Front.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -16,31 +16,46 @@ defmodule Front.Router do
 
   scope "/", Front do
     pipe_through :browser
-    get "/", MedusaController, :index
+
+    get "/", PageController, :home
     get "/medusa", MedusaController, :index
     get "/medusa/:server_id", MedusaController, :select
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Front do
-  #   pipe_through :api
-  # end
+  scope "/api", Front do
+    pipe_through :api
+    get "/servers", Api.ServerController, :index
+    get "/mapsql/:server_id", Api.MapSQLController, :show
+    get "/mapsql/:server_id/:date", Api.MapSQLController, :show
+    get "/zip/mapsql/:server_id", Api.Zip.MapSQLController, :show
+    get "/zip/mapsql/:server_id/:date", Api.Zip.MapSQLController, :show
+  end
 
-  # Enables LiveDashboard only for development
-  #
-  # If you want to use the LiveDashboard in production, you should put
-  # it behind authentication and allow only admins to access itkkkjkmmk
-  # If your application does not have an admins-only section yet,
-  # you can use Plug.BasicAuth to set up some basic authentication
-  # as long as you are also bbbbbbb,,,,,,,...mmmmnnnbbjkkkjkj/ial
-  # uuuu
-  if Mix.env() in [:dev, :test] do
+  # Enable LiveDashboard and Swoosh mailbox preview in development
+  if Application.compile_env(:front, :dev_routes) do
+    # If you want to use the LiveDashboard in production, you should put
+    # it behind authentication and allow only admins to access it.
+    # If your application does not have an admins-only section yet,
+    # you can use Plug.BasicAuth to set up some basic authentication
+    # as long as you are also using SSL (which you should anyway).
     import Phoenix.LiveDashboard.Router
 
-    scope "/" do
+    scope "/dev" do
       pipe_through :browser
 
       live_dashboard "/dashboard", metrics: Front.Telemetry
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
+
+  def swagger_info do
+    %{
+      info: %{
+        version: "1.0",
+        title: "The unofficial official Travian API"
+      }
+    }
+  end
+
 end

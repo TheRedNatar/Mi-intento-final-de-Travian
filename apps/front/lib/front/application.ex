@@ -7,16 +7,13 @@ defmodule Front.Application do
 
   @impl true
   def start(_type, _args) do
-    :ok = Application.ensure_started(:mnesia, :permanent)
-
     children = [
-      # Start the Telemetry supervisor
-      {Phoenix.PubSub, name: Front.PubSub},
       Front.Telemetry,
-      # Start the Endpoint (http/https)
-      Front.Endpoint
       # Start a worker by calling: Front.Worker.start_link(arg)
-      # {Front.Worker, arg}
+      # {Front.Worker, arg},
+      # Start to serve requests, typically the last entry
+      Front.Endpoint,
+      {Phoenix.PubSub, name: Front.PubSub}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

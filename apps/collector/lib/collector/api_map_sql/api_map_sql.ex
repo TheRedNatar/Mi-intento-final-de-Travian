@@ -65,7 +65,18 @@ defmodule Collector.ApiMapSql do
       {:a, {:ok, api_map_sql}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, __MODULE__)},
       {:b, {:ok, json}} <- {:b, to_json(api_map_sql.rows)},
-      {:c, {:ok, zip_json}} <- {:c, Collector.Utils.bin_to_zip_bin(json)},
+      {:ok, json_to_zip} <-
+        Jason.encode(%{
+          zip: true,
+          target_date: target_date,
+          data: json
+        }),
+      {:c, {:ok, zip_json}} <-
+        {:c,
+         Collector.Utils.bin_to_zip_bin(
+           json_to_zip,
+           Collector.Feed.gen_snapshot_name(server_id, target_date, __MODULE__) <> ".json"
+         )},
       func = fn ->
         :mnesia.write(
           {@table_name, Date.to_gregorian_days(api_map_sql.target_date), api_map_sql.server_id,
@@ -85,13 +96,14 @@ defmodule Collector.ApiMapSql do
       {:c, {:error, reason}} ->
         {:error, {"Unable to zip api_map_sql json", reason}}
 
-      {:c, {:error, posix, _bin}} ->
+      {:c, {:error, posix, bin}} ->
         Logger.warning(%{
           msg: "Unable to remove zip json api_map_sql for #{server_id} at #{target_date}",
           server_id: server_id,
           target_date: target_date,
           target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-          current_dt: DateTime.utc_now()
+          current_dt: DateTime.utc_now(),
+          reason: {:error, {posix, bin}}
         })
 
         :ok

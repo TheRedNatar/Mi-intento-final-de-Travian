@@ -7,7 +7,8 @@ defmodule Front.Endpoint do
   @session_options [
     store: :cookie,
     key: "_front_key",
-    signing_salt: "L0m09PI4"
+    signing_salt: "gJFwtUL/",
+    same_site: "Lax"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

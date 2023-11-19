@@ -14,12 +14,13 @@ defmodule Collector.Utils do
     end
   end
 
-  @spec bin_to_zip_bin(content :: binary()) :: {:ok, binary()} | {:error, any()}
-  def bin_to_zip_bin(content) do
+  @spec bin_to_zip_bin(content :: binary(), zip_name :: binary) ::
+          {:ok, binary()} | {:error, any()}
+  def bin_to_zip_bin(content, zip_name) do
     with(
       {:ok, tmp_dir} <- Temp.mkdir(),
       {:ok, {_filename, zip_bin}} <-
-        :zip.zip('output.zip', [{'input.txt', content}], [
+        :zip.zip(~c"output.zip", [{String.to_charlist(zip_name), content}], [
           :memory,
           {:cwd, String.to_charlist(tmp_dir)}
         ]),
