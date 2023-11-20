@@ -23,17 +23,6 @@ config :front, Front.Endpoint,
   pubsub_server: Front.PubSub,
   live_view: [signing_salt: "VFU0nyvm"]
 
-# Configure Swagger
-config :front, :phoenix_swagger,
-  swagger_files: %{
-    "priv/static/swagger.json" => [
-      router: Front.Router,     # phoenix routes will be converted to swagger paths
-      endpoint: Front.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
-    ]
-  }
-
-config :phoenix_swagger, json_library: Jason
-
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",

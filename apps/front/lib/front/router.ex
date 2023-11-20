@@ -48,14 +48,4 @@ defmodule Front.Router do
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
   end
-
-  def swagger_info do
-    %{
-      info: %{
-        version: "1.0",
-        title: "The unofficial official Travian API"
-      }
-    }
-  end
-
 end

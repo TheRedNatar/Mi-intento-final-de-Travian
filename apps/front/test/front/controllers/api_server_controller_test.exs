@@ -7,6 +7,6 @@ defmodule Front.ServerControllerTest do
 
     assert(Map.has_key?(response, "data"))
 
-    #assert json_response(conn, 200) =~ "Peace of mind from prototype to production"
+    # assert json_response(conn, 200) =~ "Peace of mind from prototype to production"
   end
 end
