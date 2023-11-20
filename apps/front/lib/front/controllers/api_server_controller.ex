@@ -1,6 +1,6 @@
 defmodule Front.Api.ServerController do
   use Front, :controller
-  
+
   def index(conn, _params) do
     servers = get_servers_keys!()
     render(conn, :index, servers: servers)
