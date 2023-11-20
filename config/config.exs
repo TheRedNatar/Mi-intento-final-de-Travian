@@ -10,62 +10,43 @@
 import Config
 
 config :front,
-  ecto_repos: [Front.Repo],
   generators: [context_app: false]
 
 # Configures the endpoint
 config :front, Front.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: Front.ErrorView, accepts: ~w(html json), layout: false],
+  adapter: Phoenix.Endpoint.Cowboy2Adapter,
+  render_errors: [
+    formats: [html: Front.ErrorHTML, json: Front.ErrorJSON],
+    layout: false
+  ],
   pubsub_server: Front.PubSub,
-  live_view: [signing_salt: "ENYS5xbS"]
+  live_view: [signing_salt: "VFU0nyvm"]
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.14.29",
+  version: "0.17.11",
   default: [
     args:
-      ~w(js/app.js js/medusa_table.js js/medusa_players_table.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js js/medusa_players_table.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../apps/front/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
-# config :front,
-#   ecto_repos: [Front.Repo],
-#   generators: [context_app: false]
-
-# # Configures the endpoint
-# config :front, Front.Endpoint,
-#   url: [host: "localhost"],
-#   render_errors: [view: Front.ErrorView, accepts: ~w(html json), layout: false],
-#   pubsub_server: Front.PubSub,
-#   live_view: [signing_salt: "c6bMNyBc"]
-
-# # Configure esbuild (the version is required)
-# config :esbuild,
-#   version: "0.14.29",
-#   default: [
-#     args:
-#       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
-#     cd: Path.expand("../apps/front/assets", __DIR__),
-#     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
-#   ]
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "3.3.2",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../apps/front/assets", __DIR__)
+  ]
 
 # Use Jason for JSON parsing in Phoenix
-config :phoenix, :json_library, Jason
-
-# config :t_db, TDB.Repo,
-#   database: "travian",
-#   username: "postgres",
-#   password: "postgres",
-#   hostname: "localhost"
+# config :phoenix, :json_library, Jason
 
 import_config "#{config_env()}.exs"
 import_config "runtime.exs"
-# Sample configuration:
-#
-#     config :logger, :console,
-#       level: :info,
-#       format: "$date $time [$level] $metadata$message\n",
-#       metadata: [:user_id]
-#

@@ -1,6 +1,8 @@
 defmodule Collector.ApiMapSql do
   @behaviour Collector.Feed
 
+  require Logger
+
   @enforce_keys [
     :server_id,
     :target_date,
@@ -62,20 +64,51 @@ defmodule Collector.ApiMapSql do
     with(
       {:a, {:ok, api_map_sql}} <-
         {:a, Collector.Feed.open(root_folder, server_id, target_date, __MODULE__)},
+      {:b, {:ok, json}} <- {:b, to_json(api_map_sql.rows)},
+      {:ok, json_to_zip} <-
+        Jason.encode(%{
+          zip: true,
+          target_date: target_date,
+          data: json
+        }),
+      {:c, {:ok, zip_json}} <-
+        {:c,
+         Collector.Utils.bin_to_zip_bin(
+           json_to_zip,
+           Collector.Feed.gen_snapshot_name(server_id, target_date, __MODULE__) <> ".json"
+         )},
       func = fn ->
         :mnesia.write(
           {@table_name, Date.to_gregorian_days(api_map_sql.target_date), api_map_sql.server_id,
-           to_json(api_map_sql.rows)}
+           {json, zip_json}}
         )
       end,
-      {:b, :ok} <- {:b, :mnesia.activity(:sync_transaction, func)}
+      {:d, :ok} <- {:d, :mnesia.activity(:sync_transaction, func)}
     ) do
       :ok
     else
       {:a, {:error, reason}} ->
         {:error, {"Unable to open target_date api_map_sql", reason}}
 
-      {:b, {:aborted, reason}} ->
+      {:b, {:error, reason}} ->
+        {:error, {"Unable to converto to json api_map_sql", reason}}
+
+      {:c, {:error, reason}} ->
+        {:error, {"Unable to zip api_map_sql json", reason}}
+
+      {:c, {:error, posix, bin}} ->
+        Logger.warning(%{
+          msg: "Unable to remove zip json api_map_sql for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          reason: {:error, {posix, bin}}
+        })
+
+        :ok
+
+      {:d, {:aborted, reason}} ->
         {:error, {"Unable to insert in Mnesia", reason}}
     end
   end
