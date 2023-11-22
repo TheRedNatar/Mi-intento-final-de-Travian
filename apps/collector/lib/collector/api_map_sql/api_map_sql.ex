@@ -37,24 +37,30 @@ defmodule Collector.ApiMapSql do
 
   @impl true
   def clean(target_date, options) when is_map_key(options, "retention_period") do
-    oldest_date =
-      Date.add(target_date, -Map.fetch!(options, "retention_period")) |> Date.to_gregorian_days()
+    # oldest_date =
+    #   Date.add(target_date, -Map.fetch!(options, "retention_period")) |> Date.to_gregorian_days()
 
-    match_head = {:_, :"$1", :_, :_}
-    guard = [{:<, :"$1", oldest_date}]
-    result = [:"$1"]
-    match_specification = [{match_head, guard, result}]
+    # match_head = {:_, :"$1", :_, :_}
+    # guard = [{:<, :"$1", oldest_date}]
+    # result = [:"$1"]
+    # match_specification = [{match_head, guard, result}]
 
-    func = fn ->
-      :mnesia.select(@table_name, match_specification)
-      |> Enum.each(fn date_to_delete -> :mnesia.delete({@table_name, date_to_delete}) end)
-    end
+    # func = fn ->
+    #   :mnesia.select(@table_name, match_specification)
+    #   |> Enum.each(fn date_to_delete -> :mnesia.delete({@table_name, date_to_delete}) end)
+    # end
 
-    case :mnesia.activity(:sync_transaction, func) do
-      :ok -> :ok
+    # case :mnesia.activity(:sync_transaction, func) do
+    #   :ok -> :ok
+    #   {:atomic, :ok} -> :ok
+    #   error = {:aborted, _reason} -> {:error, error}
+    # end
+
+    case :mnesia.clear_table(@table_name) do
       {:atomic, :ok} -> :ok
       error = {:aborted, _reason} -> {:error, error}
     end
+
   end
 
   @impl true
