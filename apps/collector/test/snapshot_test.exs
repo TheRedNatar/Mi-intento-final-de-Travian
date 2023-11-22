@@ -218,7 +218,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
       }
     ]
 
-    assert(error_rows == [{:error, ~c"broken line, not enought comas"}])
+    assert(error_rows == [{:error, 'broken line, not enought comas'}])
     assert(length(output_rows) == length(expected_rows))
     for x <- expected_rows, do: assert(x in output_rows)
   end

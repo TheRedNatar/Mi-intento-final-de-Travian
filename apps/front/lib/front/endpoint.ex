@@ -7,8 +7,7 @@ defmodule Front.Endpoint do
   @session_options [
     store: :cookie,
     key: "_front_key",
-    signing_salt: "gJFwtUL/",
-    same_site: "Lax"
+    signing_salt: "L0m09PI4"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
@@ -21,7 +20,7 @@ defmodule Front.Endpoint do
     at: "/",
     from: :front,
     gzip: false,
-    only: Front.static_paths()
+    only: ~w(assets fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

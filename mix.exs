@@ -31,7 +31,6 @@ defmodule MyTravian.MixProject do
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:benchee, "~> 1.0", only: :dev},
       {:flow, "~> 1.0"},
-      {:temp, "~> 0.4.7"},
       {:ex_doc, "~> 0.24", only: :dev, runtime: false}
     ]
   end

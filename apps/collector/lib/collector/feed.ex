@@ -106,14 +106,6 @@ defmodule Collector.Feed do
   end
 
   @doc """
-  Generate snapshot's name
-  """
-  def gen_snapshot_name(server_id, target_date, feed_module) do
-    {table_name, _} = feed_module.options()
-    "#{Date.to_string(target_date)}_#{server_id}_#{table_name}"
-  end
-
-  @doc """
   List the table modules that push to Mnesia.
   """
   def list_table_modules() do
