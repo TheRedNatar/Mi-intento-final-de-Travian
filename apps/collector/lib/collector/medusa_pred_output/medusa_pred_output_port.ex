@@ -17,7 +17,7 @@ defmodule Collector.MedusaPredOutput.Port do
     medusa_server = "#{model_dir}/#{server}"
     medusa_model = "#{model_dir}/#{model}"
 
-    env = [{'PYTHONPATH', String.to_charlist(python_path)}]
+    env = [{~c"PYTHONPATH", String.to_charlist(python_path)}]
 
     options = [
       :binary,

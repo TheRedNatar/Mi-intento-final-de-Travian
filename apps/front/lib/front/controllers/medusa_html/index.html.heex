@@ -1,0 +1,19 @@
+<div class="medusa-index-wrapper">
+  <p id="last_update" class="trn-last-update animate-last-update">
+    Last update <b><%= @last_update %></b>
+  </p>
+  <ul class="trn-index">
+    <%= for s <-  @servers do %>
+      <li class="trn-index_li">
+        <.link
+          href={~p"/medusa/#{TTypes.server_id_to_path(s)}?position_x=0&position_y=0"}
+          ,
+          method="get"
+          class="trn-a"
+        >
+          <%= String.slice(s, 8..-13) %>
+        </.link>
+      </li>
+    <% end %>
+  </ul>
+</div>
