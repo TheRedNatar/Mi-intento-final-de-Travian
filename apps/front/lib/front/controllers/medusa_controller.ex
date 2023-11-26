@@ -2,9 +2,12 @@ defmodule Front.MedusaController do
   use Front, :controller
 
   def index(conn, _params) do
-    servers = get_servers!()
-    last_update = Front.Utils.get_target_date!(hd(servers))
-    render(conn, "index.html", servers: servers, last_update: last_update)
+    case get_servers!() do
+      [] -> render(conn, "index.html", servers: [], last_update: Date.utc_today())
+      servers -> 
+	last_update = Front.Utils.get_target_date!(hd(servers))
+	render(conn, "index.html", servers: servers, last_update: last_update)
+    end
   end
 
   def select(
