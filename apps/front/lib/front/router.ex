@@ -17,7 +17,6 @@ defmodule Front.Router do
   scope "/", Front do
     pipe_through :browser
 
-    get "/", PageController, :home
     get "/medusa", MedusaController, :index
     get "/medusa/:server_id", MedusaController, :select
   end
