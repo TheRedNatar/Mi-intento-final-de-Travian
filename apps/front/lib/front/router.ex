@@ -21,14 +21,12 @@ defmodule Front.Router do
     get "/medusa/:server_id", MedusaController, :select
   end
 
-  # Other scopes may use custom stacks.
   scope "/api", Front do
     pipe_through :api
     get "/servers", Api.ServerController, :index
-    get "/mapsql/:server_id", Api.MapSQLController, :show
+    get "/mapsql/:server_id", Api.MapSQLController, :index
     get "/mapsql/:server_id/:date", Api.MapSQLController, :show
-    get "/zip/mapsql/:server_id", Api.Zip.MapSQLController, :show
-    get "/zip/mapsql/:server_id/:date", Api.Zip.MapSQLController, :show
+    get "/mapsql/:server_id/:date/:zip", Api.MapSQLController, :show
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
