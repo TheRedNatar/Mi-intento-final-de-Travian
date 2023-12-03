@@ -1,7 +1,17 @@
 defmodule Front.Utils do
-  def eval_param_zip("true"), do: {:ok, true}
-  def eval_param_zip("false"), do: {:ok, false}
-  def eval_param_zip(_), do: {:erro, :badarg}
+
+
+  def eval_param_zip(param_zip) do
+    cleaned_zip = param_zip
+    |> String.trim()
+    |> String.downcase()
+
+    case cleaned_zip do
+      "true" -> {:ok, true}
+      "false" -> {:ok, false}
+      _ -> {:error, :badarg}
+    end
+  end
 
   def eval_param_date(param_target_date), do: Date.from_iso8601(param_target_date)
 
@@ -32,5 +42,14 @@ defmodule Front.Utils do
     else
       x -> {:error, x}
     end
+  end
+
+  def available_dates(server_id, table_name) do
+
+    pattern = {:api_map_sql, :_, server_id, :_}
+    func = fn -> :mnesia.match_object(pattern) end
+    dates = for {_, gregorian_date, _, _} <- :mnesia.activity(:sync_transaction, func), do: Date.from_gregorian_days(gregorian_date)
+
+    {:ok, Enum.sort(dates, {:desc, Date})}
   end
 end
