@@ -16,10 +16,10 @@ module.exports = {
       colors: {
         brand: "#FD4F00",
         'trn0': "#b20d30",
-        'trn1': "#952323",
-        'trn2': "#A73121",
-        'trn3': "#DAD4B5",
-        'trn4': "#F2E8C6",
+        'trn1': "#e4e7eb",
+        'trn2': "#f3f4f6",
+        'trn3': "#cccccc",
+        'trn4': "#141414",
       }
     },
   },

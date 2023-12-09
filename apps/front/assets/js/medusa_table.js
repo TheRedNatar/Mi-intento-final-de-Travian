@@ -34,7 +34,10 @@ import {DataTable, exportCSV} from "../vendor/simple-datatables"
       columns: columnOptions,
       perPageSelect: false,
       searchable: false,
-      perPage: 30
+      paging: false,
+      scrollY: "60vh",
+      rownavigation: true,
+      tabIndex: 1
   }
 
   const dataTable = new DataTable("#medusa_table", options)

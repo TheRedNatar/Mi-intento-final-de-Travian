@@ -17,11 +17,9 @@
     justify-content: space-evenly;
     align-items: baseline;
     align-items: center;
+    padding: 1.5vw;
 }
 
-.medusa-options-container {
-    border: 8px double var(--main-color-grey-dark);
-}
 
 .medusa-options-container-origin {
     display: flex;
@@ -35,18 +33,29 @@
     margin: 0 15px 0;
 }
 
+.medusa-options-container-origin-points {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
 
 :root {
     --main-color-red: #b20d30;
-    --main-color-grey: #f3f4f6;
+    --main-color-grey: #e4e7eb;
+    --main-color-grey-white: #f3f4f6;
     --main-color-grey-dark: #cccccc;
+    --main-color-black: #141414;
     --main-font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 
 body {
-    background-color: var(--main-color-grey);
+    background-color: var(--main-color-red);
     font-family: var(--main-font-family);
+    color: var(--main-color-grey)
 }
 
 .medusa-index-wrapper {
@@ -57,7 +66,6 @@ body {
     list-style-type: none;
     margin: 0 auto;
     padding: 0 20px;
-    border-left: solid var(--main-color-red);
 }
 
 .trn-index_li {
@@ -69,23 +77,21 @@ body {
     text-transform: uppercase;
     color: white;
     background-color: var(--main-color-red);
-    max-height: 3rem;
-    min-height: 3rem;
-    border-radius: 5px;
-    border: 8px double var(--main-color-grey-dark);
+    border: 5px double var(--main-color-grey-dark);
+    border-radius: 1px;
+    padding: 0px 3px;
     transition: all 0.3s ease;
 }
 
 .trn-button:hover {
-    background-color: #000;
-    border-radius: 8px;
-    border-color: #000;
+    background-color: var(--main-color-grey-dark);
+    color: var(--main-color-red);
     transition: all 0.3s ease;
 }
 
 .trn-input {
-  border: 2px solid var(--main-color-red);
-  border-radius: 2px;
+  border: 1px solid var(--main-color-grey);
+  border-radius: 1px;
   font-family: var(--main-font-family);
   background-color: transparent;
   width: 5rem;
@@ -93,14 +99,14 @@ body {
 
 .trn-a {
     position: relative;
-    color: var(--main-color-red);
+    color: var(--main-color-grey);
     text-transform: uppercase;
     text-decoration: none;
 }
 
 
 .trn-a:hover {
-    color: #000;
+    color: var(--main-color-black);
 }
 
 .trn-a::before {
@@ -111,7 +117,7 @@ body {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #000;
+  background-color: var(--main-color-black);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -119,6 +125,10 @@ body {
 .trn-a:hover::before {
   transform: scaleX(1);
 }
+
+
+
+
 
 
 
@@ -135,10 +145,13 @@ body {
 
 
 
+.datatable-table {
+    margin: 0 auto;
+}
+
 .datatable-table > thead > tr > th {
   padding: 5px 20px;
   font-size: 1.1rem;
-  color: var(--main-color-red);
   vertical-align: bottom;
   text-transform: uppercase;
   border-width: 0px 0px 2px 0px;
@@ -155,17 +168,30 @@ body {
 
 .datatable-table > tbody > tr:hover > td {
   background-color: var(--main-color-grey-dark);
+  color: var(--main-color-red);
 }
 
-.trn-table thead tr th {
-  padding: 5px 20px;
-  font-size: 1.1rem;
+.datatable-table > tbody > tr:hover > td > a {
   color: var(--main-color-red);
-  vertical-align: bottom;
-  text-transform: uppercase;
-  border-width: 0px 0px 2px 0px;
-  border-style: solid;
 }
+
+.datatable-table > tbody > tr:hover > td > a:hover {
+  color: var(--main-color-black);
+}
+
+/* .datatable-wrapper { */
+/*     display: flex; */
+/*     flex-direction: column; */
+/* } */
+/* .datatable-container { */
+/*     display: flex; */
+/*     justify-content: center; */
+/* } */
+
+/* .datatable-pagination-list{ */
+/*     display: flex; */
+/*     gap: 10px; */
+/* } */
 
 
 
@@ -188,7 +214,7 @@ label.custom-input input::placeholder{
     text-transform: uppercase;
     margin: min(8vh, 25px) auto;
     padding: 0 20px;
-    color: #000;
+    color: var(--main-color-grey);
     position: relative;
 }
 
@@ -200,8 +226,8 @@ label.custom-input input::placeholder{
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #000;
-  background: #000;
+  background-color: var(--main-color-grey);
+  background: var(--main-color-grey);
   transition: transform 0.3s ease;
   transform: scaleX(1);
 
@@ -224,13 +250,13 @@ label.custom-input input::placeholder{
 
 @keyframes animate-last-update {
   0% {
-      color: var(--main-color-red);
+      color: var(--main-color-black);
   }
 }
 
 @keyframes animate-underline {
   0% {
-      color: var(--main-color-red);
+      color: var(--main-color-black);
       transform: scaleX(0);
   }
 }
