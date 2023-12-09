@@ -36,21 +36,17 @@
 }
 
 
-
-
-/*mine*/
-
-
 :root {
     --main-color-red: #b20d30;
-    --main-color-grey: #f2f2f2;
+    --main-color-grey: #f3f4f6;
     --main-color-grey-dark: #cccccc;
-    --main-font-family: 'open sans',sans-serif;
+    --main-font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 
 body {
     background-color: var(--main-color-grey);
+    font-family: var(--main-font-family);
 }
 
 .medusa-index-wrapper {

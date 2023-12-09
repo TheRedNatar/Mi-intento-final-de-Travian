@@ -15,6 +15,11 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
+        'trn0': "#b20d30",
+        'trn1': "#952323",
+        'trn2': "#A73121",
+        'trn3': "#DAD4B5",
+        'trn4': "#F2E8C6",
       }
     },
   },
