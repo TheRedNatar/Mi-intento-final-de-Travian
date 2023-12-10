@@ -2,35 +2,35 @@
   <div class="medusa-options-wrapper">
     <button class="trn-button" id="button-csv">Export to CSV</button>
     <div class="medusa-options-container-origin">
-        <button class="trn-button" id="button-origin">New origin point</button>
-	<p>--></p>
-          <ul class="medusa-options-container-origin-points">
-            <li>
-	      <label for="x">X</label>
-              <input
-                class="trn-input"
-                type="number"
-                max="200"
-                min="-200"
-                id="position-x"
-		name="x"
-                value={"#{@position_x}"}
-              />
-            </li>
-            <li>
-	      <label for="y">Y</label>
-              <input
-                class="trn-input"
-                type="number"
-                max="200"
-                min="-200"
-                id="position-y"
-		name="y"
-                value={"#{@position_y}"}
-              />
-            </li>
-          </ul>
-      </div>
+      <button class="trn-button" id="button-origin">New origin point</button>
+      <p>--></p>
+      <ul class="medusa-options-container-origin-points">
+        <li>
+          <label for="x">X</label>
+          <input
+            class="trn-input"
+            type="number"
+            max="200"
+            min="-200"
+            id="position-x"
+            name="x"
+            value={"#{@position_x}"}
+          />
+        </li>
+        <li>
+          <label for="y">Y</label>
+          <input
+            class="trn-input"
+            type="number"
+            max="200"
+            min="-200"
+            id="position-y"
+            name="y"
+            value={"#{@position_y}"}
+          />
+        </li>
+      </ul>
+    </div>
   </div>
 
   <table id="medusa_table" class="trn-table">
@@ -53,7 +53,9 @@
       <%= for row <- @rows do %>
         <tr>
           <td>
-            <.link href={URI.parse(row.player_url)} class="trn-a font-bold italic"><%= row.player_name %></.link>
+            <.link href={URI.parse(row.player_url)} class="trn-a font-bold italic">
+              <%= row.player_name %>
+            </.link>
           </td>
           <td><%= row.player_url %></td>
           <td>
@@ -62,7 +64,7 @@
             </.link>
           </td>
           <td><%= row.alliance_url %></td>
-          <td><%= row.total_population %> </td>
+          <td><%= row.total_population %></td>
           <td><%= row.total_villages %></td>
           <td><%= trunc(Float.round(distance_to_COM(@position_x, @position_y, row))) %></td>
           <td><%= inspect([{1, 0}, {2, 3}]) %></td>
