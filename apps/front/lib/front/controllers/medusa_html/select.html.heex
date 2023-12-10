@@ -1,34 +1,35 @@
 <div class="medusa-select-wrapper">
   <div class="medusa-options-wrapper">
-    <button class="trn-button medusa-options-container" id="button-csv">Export to CSV</button>
-    <div class="medusa-options-container">
-      <div class="medusa-options-container-origin">
+    <button class="trn-button" id="button-csv">Export to CSV</button>
+    <div class="medusa-options-container-origin">
+      <button class="trn-button" id="button-origin">New origin point</button>
+      <p>--></p>
+      <ul class="medusa-options-container-origin-points">
         <li>
-          <ul class="trn-ul">
-            <li>
-              <input
-                class="trn-input"
-                type="number"
-                max="200"
-                min="-200"
-                id="position-x"
-                value={"#{@position_x}"}
-              />
-            </li>
-            <li>
-              <input
-                class="trn-input"
-                type="number"
-                max="200"
-                min="-200"
-                id="position-y"
-                value={"#{@position_y}"}
-              />
-            </li>
-          </ul>
+          <label for="x">X</label>
+          <input
+            class="trn-input"
+            type="number"
+            max="200"
+            min="-200"
+            id="position-x"
+            name="x"
+            value={"#{@position_x}"}
+          />
         </li>
-        <button class="trn-button" id="button-origin">New origin point</button>
-      </div>
+        <li>
+          <label for="y">Y</label>
+          <input
+            class="trn-input"
+            type="number"
+            max="200"
+            min="-200"
+            id="position-y"
+            name="y"
+            value={"#{@position_y}"}
+          />
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -52,11 +53,13 @@
       <%= for row <- @rows do %>
         <tr>
           <td>
-            <.link href={URI.parse(row.player_url)} class="trn-a"><%= row.player_name %></.link>
+            <.link href={URI.parse(row.player_url)} class="trn-a font-bold italic">
+              <%= row.player_name %>
+            </.link>
           </td>
           <td><%= row.player_url %></td>
           <td>
-            <.link href={URI.parse(row.alliance_url)} class="trn-a">
+            <.link href={URI.parse(row.alliance_url)} class="trn-a font-bold italic">
               <%= row.alliance_name %>
             </.link>
           </td>
