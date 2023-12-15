@@ -23,15 +23,40 @@ import {DataTable, exportCSV} from "../vendor/simple-datatables"
       {select: 3, type: "html", hidden: true},
       {select: 4, type: "number"},
       {select: 5, type: "number"},
-      {select: 6, type: "number"},
+      {select: 6, type: "number", numeric: true},
       {select: 7, type: "string", hidden: true},
       {select: 8, type: "string"},
       {select: 9, type: "string"},
-      {select: 10, type: "number"}
+      {select: 10, type: "number", numeric: true, sort: "desc"}
   ]
+
+  let classes = {
+        active: "datatable-active",
+        bottom: "datatable-bottom",
+        container: "datatable-container",
+        cursor: "datatable-cursor",
+        dropdown: "datatable-dropdown",
+        ellipsis: "datatable-ellipsis",
+        empty: "datatable-empty",
+        headercontainer: "trn-header-container",
+        info: "datatable-info",
+        input: "datatable-input",
+        loading: "datatable-loading",
+        pagination: "datatable-pagination",
+        paginationList: "datatable-pagination-list",
+        search: "datatable-search",
+        selector: "datatable-selector",
+        sorter: "datatable-sorter",
+        table: "datatable-table",
+        top: "datatable-top",
+        wrapper: "datatable-wrapper"
+  }
+
+
 
   let options = {
       columns: columnOptions,
+      classes: classes,
       perPageSelect: false,
       searchable: false,
       paging: false,
@@ -39,6 +64,8 @@ import {DataTable, exportCSV} from "../vendor/simple-datatables"
       rownavigation: true,
       tabIndex: 1
   }
+
+
 
   const dataTable = new DataTable("#medusa_table", options)
 
