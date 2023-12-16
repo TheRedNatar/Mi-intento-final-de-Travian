@@ -72,13 +72,15 @@ body {
     margin: 10px 0;
 }
 
+.trn-button--double-border {
+    border: 5px double var(--main-color-grey-dark);
+    border-radius: 1px;
+}
 
 .trn-button {
     text-transform: uppercase;
     color: white;
     background-color: var(--main-color-red);
-    border: 5px double var(--main-color-grey-dark);
-    border-radius: 1px;
     padding: 0px 3px;
     transition: all 0.3s ease;
 }
