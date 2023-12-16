@@ -1,4 +1,4 @@
-import {DataTable, exportCSV} from "../vendor/simple-datatables"
+import {DataTable, exportCSV} from "../vendor/simple-datatables_8_0_0"
 
 
   const position_x_input = document.querySelector("#position-x")
@@ -46,7 +46,7 @@ import {DataTable, exportCSV} from "../vendor/simple-datatables"
         paginationList: "datatable-pagination-list",
         search: "datatable-search",
         selector: "datatable-selector",
-        sorter: "datatable-sorter",
+        sorter: "trn-button",
         table: "datatable-table",
         top: "datatable-top",
         wrapper: "datatable-wrapper"
