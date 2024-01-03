@@ -59,9 +59,9 @@ defmodule Collector.GenCollector do
           "retention_period" => retention_period_api_map_sql
         }),
       Logger.debug(%{msg: "Mnesia tables cleaned"}),
-      {:ok, urls} <- :travianmap.get_urls()
+      {:ok, servers} <- :travianmap.get_servers()
     ) do
-      results = Collector.DAG.launch_collection(root_folder, urls, target_date, launch_options)
+      results = Collector.DAG.launch_collection(root_folder, servers, target_date, launch_options)
 
       log_result = fn {:error, reason} ->
         Logger.warning(%{

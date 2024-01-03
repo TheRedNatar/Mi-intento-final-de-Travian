@@ -23,10 +23,10 @@ defmodule CollectorArchTest do
     target_date = Date.utc_today()
     tomorrow = Date.add(target_date, 1)
     attemps = 1
-    min = 1_000
-    max = 2_000
 
-    assert(:ok == Collector.DAG.run(root_folder, server_id, target_date, attemps, min, max))
+    server_metadata = %{"url" => server_id}
+
+    assert(:ok == Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps))
 
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
@@ -45,7 +45,7 @@ defmodule CollectorArchTest do
 
     ##### Next Day
 
-    assert(:ok == Collector.DAG.run(root_folder, server_id, tomorrow, attemps, min, max))
+    assert(:ok == Collector.DAG.run(root_folder, server_id, tomorrow, server_metadata, attemps))
 
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), tomorrow))
     assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), tomorrow))
@@ -65,10 +65,9 @@ defmodule CollectorArchTest do
     target_date = Date.utc_today()
     server_id = "https://no_exists.travian.com"
     attemps = 1
-    min = 1_000
-    max = 2_000
+    server_metadata = %{"url" => server_id}
 
-    {:error, _reason} = Collector.DAG.run(root_folder, server_id, target_date, attemps, min, max)
+    {:error, _reason} = Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps)
 
     assert(!Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
     assert(!Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))

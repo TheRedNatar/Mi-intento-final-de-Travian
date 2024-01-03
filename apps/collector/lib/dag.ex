@@ -9,16 +9,16 @@ defmodule Collector.DAG do
           root_folder :: String.t(),
           server_id :: TTypes.server_id(),
           target_date :: Date.t(),
-          attemps :: pos_integer(),
-          min :: pos_integer(),
-          max :: pos_integer
+          server_metadata :: :travianmap_map.village_record(),
+          attemps :: pos_integer()
         ) :: :ok | {:error, any()}
-  def run(root_folder, server_id, target_date, attemps, min, max) do
+  def run(root_folder, server_id, target_date, server_metadata, attemps) do
     Logger.debug(%{
       msg: "Starting full Collector.DAG for #{server_id} at #{target_date}",
       server_id: server_id,
       target_date: target_date,
       target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+      server_metadata: server_metadata,
       current_dt: DateTime.utc_now()
     })
 
@@ -40,7 +40,7 @@ defmodule Collector.DAG do
         {:error, reason}
 
       :ok ->
-        case run_without_fetch(root_folder, server_id, target_date) do
+        case run_without_fetch(root_folder, server_id, target_date, server_metadata) do
           {:error, reason} ->
             Logger.error(%{
               msg: "Unable to run internal DAG for #{server_id} at #{target_date}",
@@ -62,12 +62,13 @@ defmodule Collector.DAG do
   @spec run_without_fetch(
           root_folder :: String.t(),
           server_id :: TTypes.server_id() | {:archive, TTypes.server_id()},
+          server_metadata :: :travianmap_map.village_record(),
           target_date :: Date.t()
         ) :: :ok | {:error, any()}
-  def run_without_fetch(root_folder, {:archive, server_id}, target_date),
-    do: run_without_fetch(root_folder, server_id, target_date)
+  def run_without_fetch(root_folder, {:archive, server_id}, target_date, server_metadata),
+    do: run_without_fetch(root_folder, server_id, target_date, server_metadata)
 
-  def run_without_fetch(root_folder, server_id, target_date) do
+  def run_without_fetch(root_folder, server_id, target_date, server_metadata) do
     Logger.debug(%{
       msg: "Starting internal Collector.DAG for #{server_id} at #{target_date}",
       server_id: server_id,
@@ -76,114 +77,25 @@ defmodule Collector.DAG do
       current_dt: DateTime.utc_now()
     })
 
+    options = %{
+      "server_metadata" => server_metadata,
+      "medusa_gen_port" => Collector.MedusaPredOutput.GenPort
+    }
+
+    pa_run = fn feed_module ->
+      Collector.Utils.run_with_debug(root_folder, server_id, target_date, feed_module, options)
+    end
+
     with(
-      {:a, :ok} <-
-        {:a, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.Snapshot)},
-      Logger.debug(%{
-        msg: "Snapshot finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:b, :ok} <-
-        {:b, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.AggPlayers)},
-      Logger.debug(%{
-        msg: "AggPlayers finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:c, :ok} <-
-        {:c, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.AggServer)},
-      Logger.debug(%{
-        msg: "AggServer finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:d, :ok} <-
-        {:d,
-         Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.MedusaPredInput)},
-      Logger.debug(%{
-        msg: "MedusaPredInput finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:e, :ok} <-
-        {:e, Collector.Feed.run_feed(root_folder, server_id, target_date, Collector.MedusaTrain)},
-      Logger.debug(%{
-        msg: "MedusaTrain finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:f, :ok} <-
-        {:f,
-         Collector.Feed.run_feed(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.MedusaPredOutput,
-           %{"medusa_gen_port" => Collector.MedusaPredOutput.GenPort}
-         )},
-      Logger.debug(%{
-        msg: "MedusaPredOutput finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:g, :ok} <-
-        {:g,
-         Collector.Feed.run_feed(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.SMedusaPred
-         )},
-      Logger.debug(%{
-        msg: "SMedusaPred finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:h, :ok} <-
-        {:h,
-         Collector.Feed.run_feed(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.MedusaScore
-         )},
-      Logger.debug(%{
-        msg: "MedusaScore finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:i, :ok} <-
-        {:i,
-         Collector.Feed.run_feed(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.ApiMapSql
-         )},
-      Logger.debug(%{
-        msg: "ApiMapSql finished for #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      })
+      {1, :ok} <- {1, pa_run.(Collector.Snapshot)},
+      {2, :ok} <- {2, pa_run.(Collector.AggPlayers)},
+      {3, :ok} <- {3, pa_run.(Collector.AggServer)},
+      {4, :ok} <- {4, pa_run.(Collector.MedusaPredInput)},
+      {5, :ok} <- {5, pa_run.(Collector.MedusaTrain)},
+      {6, :ok} <- {6, pa_run.(Collector.MedusaPredOutput)},
+      {7, :ok} <- {7, pa_run.(Collector.SMedusaPred)},
+      {8, :ok} <- {8, pa_run.(Collector.MedusaScore)},
+      {9, :ok} <- {9, pa_run.(Collector.ApiMapSql)}
     ) do
       Logger.info(%{
         msg: "Collector.DAG finished for #{server_id} at #{target_date}",
@@ -224,52 +136,14 @@ defmodule Collector.DAG do
       current_dt: DateTime.utc_now()
     })
 
+    pa_insert = fn feed_module ->
+      Collector.Utils.insert_with_debug(root_folder, server_id, target_date, feed_module, %{})
+    end
+
     with(
-      {:a, :ok} <-
-        {:a,
-         Collector.Feed.insert_in_table(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.SMedusaPred
-         )},
-      Logger.debug(%{
-        msg: "SMedusaPred inserted in Mnesia #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:b, :ok} <-
-        {:b,
-         Collector.Feed.insert_in_table(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.ApiMapSql
-         )},
-      Logger.debug(%{
-        msg: "ApiMapSql inserted in Mnesia #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      }),
-      {:c, :ok} <-
-        {:c,
-         Collector.Feed.insert_in_table(
-           root_folder,
-           server_id,
-           target_date,
-           Collector.SServer
-         )},
-      Logger.debug(%{
-        msg: "SServer inserted in Mnesia #{server_id} at #{target_date}",
-        server_id: server_id,
-        target_date: target_date,
-        target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
-        current_dt: DateTime.utc_now()
-      })
+      {1, :ok} <- {1, pa_insert.(Collector.SMedusaPred)},
+      {2, :ok} <- {2, pa_insert.(Collector.ApiMapSql)},
+      {3, :ok} <- {3, pa_insert.(Collector.SServer)}
     ) do
       Logger.info(%{
         msg: "Push to Mnesia done for #{server_id} at #{target_date}",
@@ -296,106 +170,27 @@ defmodule Collector.DAG do
 
   @spec launch_collection(
           root_folder :: String.t(),
-          servers_list :: [TTypes.server_id()],
+          server_list :: [{:ok, :travianmap_map.village_record()} | {:error, [binary()]}],
           target_date :: Date.t(),
           launch_options :: map()
         ) :: [:ok | {:error, any()}]
-  def launch_collection(root_folder, servers_list, target_date, launch_options) do
-    f = fn server_id ->
+  def launch_collection(root_folder, server_list, target_date, launch_options) do
+    f = fn server_metadata ->
+      server_id = Map.fetch!(server_metadata, :url)
+
       run(
         root_folder,
         server_id,
         target_date,
-        launch_options[:attemps],
-        launch_options[:min],
-        launch_options[:max]
+        server_metadata,
+        launch_options[:attemps]
       )
     end
 
-    Flow.from_enumerable(servers_list, max_demand: 1, stages: launch_options[:stages])
+    Enum.filter(server_list, fn {atom, _} -> atom == :ok end)
+    |> Enum.map(&elem(&1, 1))
+    |> Flow.from_enumerable(max_demand: 1, stages: launch_options[:stages])
     |> Flow.map(f)
     |> Enum.to_list()
-  end
-
-  @spec reload(root_folder :: String.t(), server_id :: TTypes.server_id()) :: :ok
-  def reload(root_folder, server_id) do
-    available_dates =
-      Storage.list_dates(root_folder, server_id, Collector.RawSnapshot.options())
-      |> Enum.sort({:asc, Date})
-
-    for date <- available_dates, do: run_without_fetch(root_folder, server_id, date)
-    :ok
-  end
-
-  def feed_reload(root_folder, server_id, feed) do
-    available_dates =
-      Storage.list_dates(root_folder, server_id, Collector.RawSnapshot.options())
-      |> Enum.sort({:asc, Date})
-
-    for date <- available_dates, do: Collector.Feed.run_feed(root_folder, server_id, date, feed)
-    :ok
-  end
-
-  @spec full_flow_reload!(root_folder :: String.t(), max_demand :: pos_integer()) :: :ok
-  def full_flow_reload!(root_folder, max_demand \\ 1) do
-    # Reload first active servers
-    Storage.list_servers(root_folder)
-    |> Flow.from_enumerable(max_demand: max_demand)
-    |> Flow.map(fn server_id -> reload(root_folder, server_id) end)
-    |> Enum.to_list()
-
-    # just for triggering Flow
-
-    # Then reload archive
-    Storage.list_servers(root_folder, :archive)
-    |> Enum.map(fn server_id -> {:archive, server_id} end)
-    |> Flow.from_enumerable(max_demand: max_demand)
-    |> Flow.map(fn server_id -> reload(root_folder, server_id) end)
-    |> Enum.to_list()
-
-    :ok
-  end
-
-  def full_feed_reload!(root_folder, feed, max_demand \\ 1) do
-    # Reload first active servers
-    Storage.list_servers(root_folder)
-    |> Flow.from_enumerable(max_demand: max_demand)
-    |> Flow.map(fn server_id -> feed_reload(root_folder, server_id, feed) end)
-    |> Enum.to_list()
-
-    # just for triggering Flow
-
-    # Then reload archive
-    Storage.list_servers(root_folder, :archive)
-    |> Enum.map(fn server_id -> {:archive, server_id} end)
-    |> Flow.from_enumerable(max_demand: max_demand)
-    |> Flow.map(fn server_id -> feed_reload(root_folder, server_id, feed) end)
-    |> Enum.to_list()
-
-    :ok
-  end
-
-  defp retry(f, min, max, attemps) when min <= max do
-    retry(f, min, max, attemps, 0, nil)
-  end
-
-  defp retry(_f, _min, _max, attemps, attemps, error) do
-    {:error, {:max_retries, error}}
-  end
-
-  defp retry(f, min, max, attemps, tries, _error) when tries < attemps do
-    case f.() do
-      :ok ->
-        :ok
-
-      {:error, reason} ->
-        # sleep = compute_sleep(min, max)
-        # :timer.sleep(sleep)
-        retry(f, min, max, attemps, tries + 1, reason)
-    end
-  end
-
-  defp compute_sleep(min, max) when max >= min do
-    :rand.uniform(max - min) + min
   end
 end

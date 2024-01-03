@@ -41,3 +41,6 @@ erl_crash.dump
 
 # Ignore node folder
 node_modules/*
+
+# Ignore .devenv
+.devenv

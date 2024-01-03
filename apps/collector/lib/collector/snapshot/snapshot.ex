@@ -132,7 +132,7 @@ defmodule Collector.Snapshot do
           {[t()], [any()]}
   def process_rows(raw_snapshot, server_id) do
     {raw_rows, error_rows} =
-      :travianmap.parse_map(raw_snapshot, :no_filter)
+      :travianmap.parse_map(raw_snapshot)
       |> Enum.split_with(fn {atom, _} -> atom == :ok end)
 
     rows = Enum.map(raw_rows, fn {:ok, row} -> create_row(server_id, row) end)
@@ -146,32 +146,27 @@ defmodule Collector.Snapshot do
     Storage.store(root_folder, server_id, snapshot_errors_options(), encoded, target_date)
   end
 
-  defp create_row(
-         server_id,
-         {map_id, x_position, y_position, tribe, village_server_id, village_name,
-          player_server_id, player_name, alliance_server_id, alliance_name, population, region,
-          is_capital, is_city, has_harbor, victory_points}
-       ) do
+  defp create_row(server_id, village_record) do
     %__MODULE__{
-      map_id: map_id,
-      x: x_position,
-      y: y_position,
-      tribe: tribe,
-      village_id: make_village_id(server_id, village_server_id),
-      village_server_id: village_server_id,
-      village_name: village_name,
-      player_id: make_player_id(server_id, player_server_id),
-      player_server_id: player_server_id,
-      player_name: player_name,
-      alliance_id: make_alliance_id(server_id, alliance_server_id),
-      alliance_server_id: alliance_server_id,
-      alliance_name: alliance_name,
-      population: population,
-      region: region,
-      is_capital: is_capital,
-      is_city: is_city,
-      has_harbor: has_harbor,
-      victory_points: victory_points
+      map_id: village_record[:grid_position],
+      x: village_record[:x_position],
+      y: village_record[:y_position],
+      tribe: village_record[:tribe],
+      village_id: make_village_id(server_id, village_record[:village_id]),
+      village_server_id: village_record[:village_id],
+      village_name: village_record[:village_name],
+      player_id: make_player_id(server_id, village_record[:player_id]),
+      player_server_id: village_record[:player_id],
+      player_name: village_record[:player_name],
+      alliance_id: make_alliance_id(server_id, village_record[:alliance_id]),
+      alliance_server_id: village_record[:alliance_id],
+      alliance_name: village_record[:alliance_name],
+      population: village_record[:population],
+      region: village_record[:region],
+      is_capital: village_record[:is_capital],
+      is_city: village_record[:is_city],
+      has_harbor: village_record[:has_harbor],
+      victory_points: village_record[:victory_points]
     }
   end
 

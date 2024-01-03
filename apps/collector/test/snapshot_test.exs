@@ -189,7 +189,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
     server_id = "server_x"
 
     raw_snapshot =
-      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE');
+      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',NULL);
 INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     {output_rows, error_rows} = Collector.Snapshot.process_rows(raw_snapshot, server_id)
@@ -218,7 +218,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
       }
     ]
 
-    assert(error_rows == [{:error, ~c"broken line, not enought comas"}])
+    assert(error_rows == [{:error, {:no_schema_available, 11}}])
     assert(length(output_rows) == length(expected_rows))
     for x <- expected_rows, do: assert(x in output_rows)
   end
@@ -270,7 +270,7 @@ INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',1
   test "Snapshot.run() creates a snapshot_errors table of target_date in case raw_snapshot of target_date has malformed rows",
        %{tmp_dir: root_folder} do
     raw_snapshot =
-      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE');
+      "INSERT INTO `x_world` VALUES (27,-174,200,3,39983,'New village',13,'Masbro',251,'ÖFKE',NULL);
 INSERT INTO `x_world` VALUES (115,-86,200,1,39368,'02',9808,'Aeirdun',235,'AP',104,NULL,FALSE,NULL,NULL,NULL);"
 
     target_date = Date.utc_today()
