@@ -88,14 +88,15 @@ defmodule Collector.DAG do
 
     with(
       {1, :ok} <- {1, pa_run.(Collector.Snapshot)},
-      {2, :ok} <- {2, pa_run.(Collector.AggPlayers)},
-      {3, :ok} <- {3, pa_run.(Collector.AggServer)},
-      {4, :ok} <- {4, pa_run.(Collector.MedusaPredInput)},
-      {5, :ok} <- {5, pa_run.(Collector.MedusaTrain)},
-      {6, :ok} <- {6, pa_run.(Collector.MedusaPredOutput)},
-      {7, :ok} <- {7, pa_run.(Collector.SMedusaPred)},
-      {8, :ok} <- {8, pa_run.(Collector.MedusaScore)},
-      {9, :ok} <- {9, pa_run.(Collector.ApiMapSql)}
+      {2, :ok} <- {2, pa_run.(Collector.ServerMetadata)},
+      {3, :ok} <- {3, pa_run.(Collector.AggPlayers)},
+      {4, :ok} <- {4, pa_run.(Collector.AggServer)},
+      {5, :ok} <- {5, pa_run.(Collector.MedusaPredInput)},
+      {6, :ok} <- {6, pa_run.(Collector.MedusaTrain)},
+      {7, :ok} <- {7, pa_run.(Collector.MedusaPredOutput)},
+      {8, :ok} <- {8, pa_run.(Collector.SMedusaPred)},
+      {9, :ok} <- {9, pa_run.(Collector.MedusaScore)},
+      {10, :ok} <- {10, pa_run.(Collector.ApiMapSql)}
     ) do
       Logger.info(%{
         msg: "Collector.DAG finished for #{server_id} at #{target_date}",

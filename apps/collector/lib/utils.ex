@@ -1,0 +1,94 @@
+defmodule Collector.Utils do
+  require Logger
+
+  @moduledoc false
+
+  @milliseconds_in_day 24 * 60 * 60 * 1000
+
+  @spec time_until_hour(t :: Time.t()) :: non_neg_integer()
+  def time_until_hour(t) do
+    now = Time.utc_now()
+
+    case Time.compare(t, now) do
+      :eq -> 0
+      :gt -> Time.diff(t, now, :millisecond)
+      :lt -> @milliseconds_in_day + Time.diff(t, now, :millisecond)
+    end
+  end
+
+  @spec bin_to_zip_bin(content :: binary(), zip_name :: binary) ::
+          {:ok, binary()} | {:error, any()}
+  def bin_to_zip_bin(content, zip_name) do
+    with(
+      {:ok, tmp_dir} <- Temp.mkdir(),
+      {:ok, {_filename, zip_bin}} <-
+        :zip.zip(~c"output.zip", [{String.to_charlist(zip_name), content}], [
+          :memory,
+          {:cwd, String.to_charlist(tmp_dir)}
+        ]),
+      {:ok, _} <- File.rm_rf(tmp_dir)
+    ) do
+      {:ok, zip_bin}
+    else
+      error -> error
+    end
+  end
+
+  def run_with_debug(root_folder, server_id, target_date, feed_module, options) do
+    case Collector.Feed.run_feed(root_folder, server_id, target_date, feed_module, options) do
+      :ok ->
+        Logger.debug(%{
+          msg: "#{feed_module} finished for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          feed_module: feed_module
+        })
+
+        :ok
+
+      {:error, reason} ->
+        Logger.error(%{
+          msg: "Error running #{feed_module} for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          reason: reason,
+          feed_module: feed_module
+        })
+
+        {:error, reason}
+    end
+  end
+
+  def insert_with_debug(root_folder, server_id, target_date, feed_module, options \\ %{}) do
+    case Collector.Feed.insert_in_table(root_folder, server_id, target_date, options, feed_module) do
+      :ok ->
+        Logger.debug(%{
+          msg: "#{feed_module} finished for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          feed_module: feed_module
+        })
+
+        :ok
+
+      {:error, reason} ->
+        Logger.error(%{
+          msg: "Error running #{feed_module} for #{server_id} at #{target_date}",
+          server_id: server_id,
+          target_date: target_date,
+          target_dt: DateTime.new!(target_date, Time.new!(0, 0, 0)),
+          current_dt: DateTime.utc_now(),
+          reason: reason,
+          feed_module: feed_module
+        })
+
+        {:error, reason}
+    end
+  end
+end

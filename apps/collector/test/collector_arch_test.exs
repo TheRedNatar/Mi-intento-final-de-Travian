@@ -7,7 +7,7 @@ defmodule CollectorArchTest do
     :ok = Application.ensure_started(:collector)
     :ok = Collector.Scripts.set_up_mnesia([Node.self()], Node.self())
     on_exit(fn -> wait_on_stop() end)
-    %{server_id: "https://ts4.x1.america.travian.com"}
+    %{server_id: "https://ts30.x3.europe.travian.com"}
   end
 
   defp wait_on_stop() do
@@ -26,10 +26,13 @@ defmodule CollectorArchTest do
 
     server_metadata = %{"url" => server_id}
 
-    assert(:ok == Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps))
+    assert(
+      :ok == Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps)
+    )
 
     assert(Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
+    assert(Storage.exist?(root_folder, server_id, Collector.ServerMetadata.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggPlayers.options(), target_date))
     assert(Storage.exist?(root_folder, server_id, Collector.AggServer.options(), target_date))
 
@@ -67,7 +70,8 @@ defmodule CollectorArchTest do
     attemps = 1
     server_metadata = %{"url" => server_id}
 
-    {:error, _reason} = Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps)
+    {:error, _reason} =
+      Collector.DAG.run(root_folder, server_id, target_date, server_metadata, attemps)
 
     assert(!Storage.exist?(root_folder, server_id, Collector.RawSnapshot.options(), target_date))
     assert(!Storage.exist?(root_folder, server_id, Collector.Snapshot.options(), target_date))
